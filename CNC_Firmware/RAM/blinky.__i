@@ -1,0 +1,6 @@
+-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork 
+-I C:\Keil_v5\ARM\RV31\INC
+-I C:\Keil_v5\ARM\CMSIS\Include
+-I C:\Keil_v5\ARM\Inc\ST\STM32F4xx
+-D__UVISION_VERSION="515" -DHSE_VALUE="8000000" -DVECT_TAB_SRAM -DSTM32F40_41xxx
+-o .\ram\blinky.o --omf_browse .\ram\blinky.crf --depend .\ram\blinky.d "Blinky.c"
