@@ -1,0 +1,144 @@
+.left-col {
+    float: left;
+    width: 20%;
+    padding-left: 35px;
+    padding-right: 35px;
+    box-sizing: border-box;
+}
+.right-col {
+    float: right;
+    width: 80%;
+}
+.left-section {
+    float: left;
+    width: 50%;
+}
+.plotContainer {
+    border: 2px solid #e1e3e4;
+    padding: 10px;
+}
+.right-section {
+    float: right;
+    width: 49%;
+    border: 2px solid #e1e3e4;
+    height: 398px;
+    overflow-y: scroll;
+}
+.bottom-section {
+    border: 2px solid #e1e3e4;
+    width: 100%;
+    margin-top: 10px;
+    height: 300px;
+    overflow-y: scroll;
+}
+.coordinates-section {
+    font-weight: bold;
+    font-size: 20px;
+}
+.coordinates-section > div {
+    padding: 3px;
+    border: 2px solid #e1e3e4;
+    margin-top: 10px;
+    color: #353535;
+
+}
+.title-section {
+    font-weight: bold;
+    font-size: 15px;
+    border-bottom: 1px solid;
+    padding-bottom: 9px;
+    color: #353535;
+}
+.zero-machine-section {
+    margin-top: 10px;
+}
+.settings-section {
+    margin-top: 10px;
+}
+.settings-section > select {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 2px;
+    border: 2px solid #e1e3e4;
+    padding: 7px;
+    font-size: 16px;
+
+}
+.splindle-settings {
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 15px;
+    border-bottom: 1px solid;
+    padding-bottom: 9px;
+    color: #353535;
+}
+#generatedDivs > div > span {
+    color: red;
+}
+.butttons-section {
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 15px;
+}
+.butttons-section table {
+    width: 100%;
+}
+.butttons-section td {
+    text-align: center;
+}
+.butttons-section button {
+    width: 50px;
+    height: 40px;
+    border-radius: 4px;
+    background: #e1e3e4;
+    margin-top: 10px;
+}
+.manual-cnc-control {
+    margin-top: 40px;
+    font-weight: bold;
+    font-size: 15px;
+    border-bottom: 1px solid;
+    padding-bottom: 9px;
+    color: #353535;
+}
+.bottom-buttons-section {
+    margin-top: 10px;
+    float: right;
+}
+.bottom-buttons-section > button {
+    margin-right: 10px;
+    height: 30px;
+}
+.gcodeLineCounter {
+    color: #cc0000;
+}
+.cf:before, .cf:after {
+    content: "";
+    display: table;
+}
+.cf:after {
+    clear: both;
+}
+.cf {
+    zoom: 1;
+}
+#generatedDivs {
+    position: relative;
+}
+#lineCounterContainer {
+    position: absolute;
+}
+#gcodeLinesContainer {
+    position: absolute;
+    margin-left: 60px;
+}
+@media screen and (max-width: 1400px)  {
+    .left-col {
+        width: 30%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .right-col {
+        width: 70%;
+    }
+}
