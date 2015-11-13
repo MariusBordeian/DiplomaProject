@@ -1,4 +1,6 @@
-package cnc;
+package com.servlet;
+
+import com.Scheduler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -6,18 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Random;
 
 /**
- * Created by Andrei Ostafciuc on 05-Nov-15.
+ * Created by Andrei on 11/5/2015.
  */
-public class Controller extends HttpServlet {
-    public static float x=0;
-    public static float y=0;
-    public static float z=0;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class Controller extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String load = request.getParameter("load");
         String action = request.getParameter("action");
         PrintWriter out = response.getWriter();
@@ -26,8 +23,7 @@ public class Controller extends HttpServlet {
         } else {
             if(action!=null) {
                 if (action.equals("getSpindlePosition")) {
-                    HashMap<String,Float> map=getPosition();
-                    String coordinatesJSON="{\"X\":"+map.get("X")+",\"Y\":"+map.get("Y")+",\"Z\":"+map.get("Z")+"}";
+                    String coordinatesJSON="{\"X\":"+ Scheduler.coordinates.getX()+",\"Y\":"+Scheduler.coordinates.getY()+",\"Z\":"+Scheduler.coordinates.getZ()+"}";
                     out.print(coordinatesJSON);
                     // get position of the spindle
                 } else if (action.equals("alterPosition")) {
@@ -39,14 +35,7 @@ public class Controller extends HttpServlet {
             }
         }
     }
-    public HashMap<String,Float> getPosition(){
-        HashMap<String,Float> map=new HashMap<String, Float>();
-        Random random=new Random();
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        map.put("X",x--);
-        map.put("Y",y--);
-        map.put("Z",z--);
-        return map;
     }
 }
-

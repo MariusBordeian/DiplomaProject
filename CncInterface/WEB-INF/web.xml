@@ -5,12 +5,15 @@
          version="3.1">
     <servlet>
         <servlet-name>cncinterface</servlet-name>
-        <servlet-class>cnc.Controller</servlet-class>
+        <servlet-class>com.servlet.Controller</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>cncinterface</servlet-name>
-        <url-pattern>/interface</url-pattern>
+        <url-pattern>/GUI</url-pattern>
     </servlet-mapping>
 
+    <listener>
+        <listener-class>com.SchedulerContextListener</listener-class>
+    </listener>
 </web-app>
