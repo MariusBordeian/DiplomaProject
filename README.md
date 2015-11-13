@@ -6,6 +6,7 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 
 ::TODO
  - Global pz on STM.
+ - initialize (px, py, pz) with last known coords.
  - Scale Select for Increment Buttons
  - SVG Paint (lines only)
  - Merge Upload Buttons into one ::Upload File (*.svg, *.gnc)
