@@ -157,7 +157,7 @@
 
     function generateDivs(gcode) {
         var lines = gcode.split("\n");
-        var pattern = new RegExp("(G01 X)([0-9]*.[0-9]*)( Y)([0-9]*.[0-9]*)( Z)([0-9]*.[0-9]*)*");
+        var pattern = new RegExp("^(G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?");
         var lineCounter = 0;
         $("#gcodeLinesContainer").html("");
         $("#lineCounterContainer").html("");
