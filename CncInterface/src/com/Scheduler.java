@@ -20,7 +20,7 @@ public class Scheduler
         final Random randomGen=new Random();
         Runnable watchingTask = new Runnable() {
             public void run() {
-                coordinates=new Coordinates(randomGen.nextFloat(),randomGen.nextFloat(),randomGen.nextFloat());
+                coordinates=new Coordinates(randomGen.nextFloat(),randomGen.nextFloat(),10);
             }
         };
 
