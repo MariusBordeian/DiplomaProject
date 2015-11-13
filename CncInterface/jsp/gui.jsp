@@ -262,7 +262,7 @@
 
     function ajaxCall() {
         $.ajax({
-            url: "/TestServlet/myServlet?load=whatever&action=getSpindlePosition",
+            url: "/CNC/GUI?load=whatever&action=getSpindlePosition",
             method: "get"
         }).done(function (msg) {
             var coordinates = JSON.parse(msg);
@@ -275,7 +275,7 @@
     }
     function alterPosition(axis, dir) {
         $.ajax({
-            url: "/CncServlet/interface?load=whatever&action=alterPosition&axis" + axis + "&dir=" + dir,
+            url: "/CNC/GUI?load=whatever&action=alterPosition&axis" + axis + "&dir=" + dir,
             method: "get"
         }).done(function (msg) {
         }).fail(function (msg) {
