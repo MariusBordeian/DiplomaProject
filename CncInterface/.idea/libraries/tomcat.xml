@@ -1,24 +1,24 @@
 <component name="libraryTable">
   <library name="tomcat">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/annotations-api.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/catalina-ant.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/catalina-ha.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/catalina-tribes.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/catalina.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/ecj-4.4.2.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/el-api.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/jasper-el.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/jasper.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/jsp-api.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/servlet-api.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/tomcat-api.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/tomcat-coyote.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/tomcat-dbcp.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/tomcat-jdbc.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/tomcat-util.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/tomcat7-websocket.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../apache-tomcat-7.0.65-windows-x64/apache-tomcat-7.0.65/lib/websocket-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/annotations-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/catalina-ant.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/catalina-ha.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/catalina-tribes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/catalina.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/ecj-4.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/el-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/jasper-el.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/jasper.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/jsp-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/servlet-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/tomcat-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/tomcat-coyote.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/tomcat-dbcp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/tomcat-jdbc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/tomcat-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/tomcat7-websocket.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../apache-tomcat-7.0.59/lib/websocket-api.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
