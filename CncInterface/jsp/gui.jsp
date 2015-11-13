@@ -34,9 +34,9 @@
                 <option>Feed Rate : 500</option>
             </select>
             <select>
-                <option>Distance : 3</option>
+          <%--      <option>Distance : 3</option>
                 <option>Distance : 4</option>
-                <option>Distance : 5</option>
+                <option>Distance : 5</option>--%>
             </select>
         </div>
         <div class="manual-cnc-control">
