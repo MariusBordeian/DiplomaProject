@@ -10,12 +10,16 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 
 
 ::TODO
- - Global pz on STM.
+ - remote onDemand start STM to listen on serial
  - implement G00 Ploting on the WebGUI [*FIX*]
- - initialize (px, py, pz) with last known coords.
+ - SVG2GCode.py from commandline
  - Scale Select for Increment Buttons
  - SVG Paint (lines only)
  - Merge Upload Buttons into one ::Upload File (*.svg, *.gnc)
  - Rename Feed Rate to Machine Speed of movement
  - Check "Distance" from "Machine Settings" Div.
+ - move Serial Communication from Python Script to Server on Java
  - Android App.
+ - Concurent Client's Access (for more than one client acccessing the Server and Machine)
+ - initialize (px, py, pz) with last known coords.
+ - <strike>Global pz on STM.</strike>
