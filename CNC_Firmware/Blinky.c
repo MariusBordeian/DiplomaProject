@@ -408,6 +408,46 @@ void run(char axa, int nrOfSteps) {
 	}
 }
 
+void lineZ(long newZ) {
+	long nrOfSteps=newZ-pz; // dz
+	uint32_t delay = 460;
+	uint32_t i = 0;
+
+	if (nrOfSteps > 0) {
+		GPIO_ResetBits(GPIOE, GPIO_Pin_2); // dir CW +
+	} else {
+		GPIO_SetBits(GPIOE, GPIO_Pin_2);	 // dir CCW -
+	}
+	nrOfSteps = fabs(nrOfSteps);
+
+	if (nrOfSteps >= 800) {
+		for (i = 0; i < nrOfSteps; i++) {
+			if (i <= 400) {
+				delay--;
+			} else if (i >= nrOfSteps - 400) {
+				delay++;
+			}			
+			GPIO_SetBits(GPIOE, GPIO_Pin_3);
+			TM_DelayMicros(delay);
+			GPIO_ResetBits(GPIOE, GPIO_Pin_3);
+			TM_DelayMicros(delay);
+		}
+	} else {
+		for (i = 0; i < nrOfSteps; i++) {
+			if (i <= nrOfSteps / 2) {
+				delay--;
+			} else {
+				delay++;
+			}
+			GPIO_SetBits(GPIOE, GPIO_Pin_3);
+			TM_DelayMicros(delay);
+			GPIO_ResetBits(GPIOE, GPIO_Pin_3);
+			TM_DelayMicros(delay);
+		}
+	}
+	pz = newZ;
+}
+
 void line(float newx, float newy) {
 	long dx = newx - px;
 	long dy = newy - py;
@@ -599,7 +639,7 @@ int main (void) {
 					} else {
 						//	px=0; py=getNumberOfSteps(20);
 						//	drawCircle(getNumberOfSteps(0), getNumberOfSteps(20), getNumberOfSteps(20));
-						run(Z, getNumberOfSteps(dest[0]));
+						lineZ(getNumberOfSteps(dest[0]));
 					}
 
 					sprintf(serialCoordinates, "X:%f#Y:%f#Z:%f", getMM(px), getMM(py), getMM(pz));	// as above about the '#'
