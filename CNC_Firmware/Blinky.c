@@ -44,6 +44,7 @@ uint32_t step_delay = 460;	// the delay between motor's steps in the line(*funct
 
 float px, py, pz; // global positions on every specific axe
 
+volatile uint32_t msTicks;		// counts 1ms timeTicks		// SysTick_Handler(*function*) related
 // Global declarations END
 
 int getNrOfDelim(char src[], char delim) {
@@ -174,7 +175,6 @@ void TM_DelayMillis(uint32_t millis) {
 	while (millis--);
 }
 
-volatile uint32_t msTicks;		// counts 1ms timeTicks		
 void SysTick_Handler(void) {	// SysTick_Handler
 	msTicks++;
 }
