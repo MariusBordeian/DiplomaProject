@@ -59,22 +59,24 @@ int getNrOfDelim(char src[], char delim) {
 
 int getNumbers(char src[], double dest[]) {
 	char *splitedArray;
+	int capacity = 3;		// sizeof(dest)/sizeof(double) || dest.Count
 	int nrOfDelims = 0;
 	int i = 0;
 	dest[0] = 0;
 	dest[1] = 0;
+	dest[2] = 0;
 	nrOfDelims = getNrOfDelim(src, '#');
 	if (nrOfDelims == 0) {
 		dest[0] = atof(src);
 	}
 	else {
 		splitedArray = strtok(src, "#");
-		while (splitedArray != NULL) {
+		while (i<capacity && splitedArray != NULL) {
 			dest[i++] = atof(splitedArray);
 			splitedArray = strtok(NULL, "#");
 		}
 	}
-	return nrOfDelims;
+	return nrOfDelims+1;
 }
 
 void spindle(int state) {
@@ -582,8 +584,9 @@ void drawCircle2(int x, int y, float r) {
 }
 
 int main (void) {
-	double dest[2] = {0};
+	double dest[3] = {0};
 	uint16_t c;
+	int nrOfCoordinatesReceived = 0;
 	char buffer[256];
 	char serialCoordinates[256];
 	GPIO_ResetBits(GPIOC, GPIO_Pin_8);
@@ -628,21 +631,32 @@ int main (void) {
 	while (1) {
 		btns = BTN_Get();		// Read button states
 		if (btns != (1UL << 0)) {
-		} else {
-			TM_USART_Puts(USART1, "Hello#world\n");	// '#' is mandatory as a special character that server (aka RPi2) checks for to send coords for the line function from the GCode
-			px = 0; py = 0; pz = 0;
+			
+		} 
+		else 
+		{
+			TM_USART_Puts(USART1, "#Awake\n");	// '#' is mandatory as a special character that server (aka RPi2) checks for to send coords for the line function from the GCode
 			while (1) {
 				c = TM_USART_Gets(USART1, buffer, 256);
-				if (c) {
-					if ( getNumbers(buffer, dest)) {
+				if (c) 
+				{
+					nrOfCoordinatesReceived = getNumbers(buffer, dest);
+					if ( nrOfCoordinatesReceived == 2) 
+					{
 						line(getNumberOfSteps(dest[0]), getNumberOfSteps(dest[1]));
-					} else {
-						//	px=0; py=getNumberOfSteps(20);
-						//	drawCircle(getNumberOfSteps(0), getNumberOfSteps(20), getNumberOfSteps(20));
+					} 
+					else if ( nrOfCoordinatesReceived == 1) 
+					{
 						lineZ(getNumberOfSteps(dest[0]));
+					} 
+					else if (nrOfCoordinatesReceived == 3) 
+					{
+						px = getNumberOfSteps(dest[0]); 
+						py = getNumberOfSteps(dest[1]); 
+						pz = getNumberOfSteps(dest[2]);
 					}
 
-					sprintf(serialCoordinates, "X:%f#Y:%f#Z:%f", getMM(px), getMM(py), getMM(pz));	// as above about the '#'
+					sprintf(serialCoordinates, "%f#%f#%f", getMM(px), getMM(py), getMM(pz));	// as above about the '#'
 
 					TM_USART_Puts(USART1, serialCoordinates);
 				}

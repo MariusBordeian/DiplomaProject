@@ -21,5 +21,5 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
  - move Serial Communication from Python Script to Server on Java
  - Android App.
  - Concurent Client's Access (for more than one client acccessing the Server and Machine)
- - initialize (px, py, pz) with last known coords.
+ - <strike>initialize (px, py, pz) with last known coords.</strike>
  - <strike>Global pz on STM.</strike>
