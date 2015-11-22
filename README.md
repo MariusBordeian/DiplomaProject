@@ -11,7 +11,6 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 
 ::TODO
  - remote onDemand start STM to listen on serial
- - implement G00 Ploting on the WebGUI [*FIX*]
  - SVG2GCode.py from commandline
  - Scale Select for Increment Buttons
  - SVG Paint (lines only)
@@ -21,5 +20,6 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
  - move Serial Communication from Python Script to Server on Java
  - Android App.
  - Concurent Client's Access (for more than one client acccessing the Server and Machine)
+ - <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>
  - <strike>initialize (px, py, pz) with last known coords.</strike>
  - <strike>Global pz on STM.</strike>
