@@ -157,7 +157,7 @@
 
     function generateDivs(gcode) {
         var lines = gcode.split("\n");
-        var pattern = new RegExp("(G01 X)([0-9]*.[0-9]*)( Y)([0-9]*.[0-9]*)( Z)([0-9]*.[0-9]*)*");
+        var pattern = /^(G00|G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
         var lineCounter = 0;
         $("#gcodeLinesContainer").html("");
         $("#lineCounterContainer").html("");
@@ -165,9 +165,6 @@
         for (var i = 0; i < lines.length; i++) {
             if (pattern.test(lines[i])) {
                 var coords1 = lines[i].split(" ");
-                var x = coords1[1].slice(1, coords1[1].length);
-                var y = coords1[2].slice(1, coords1[2].length);
-                var z = coords1[3].slice(1, coords1[3].length);
                 if (i == 0) {
                     var divElement = "<div class='gcodeLine' contenteditable='false' onClick=\"highlightElement(this)\">" + lines[i] + "</div>";
                 } else {
