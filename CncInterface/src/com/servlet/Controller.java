@@ -1,6 +1,6 @@
 package com.servlet;
 
-import com.Scheduler;
+import com.Serial.Communicator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +23,7 @@ public class Controller extends HttpServlet {
         } else {
             if(action!=null) {
                 if (action.equals("getSpindlePosition")) {
-                    String coordinatesJSON="{\"X\":"+ Scheduler.coordinates.getX()+",\"Y\":"+Scheduler.coordinates.getY()+",\"Z\":"+Scheduler.coordinates.getZ()+"}";
+                    String coordinatesJSON="{\"X\":"+ Communicator.coordinates.getX()+",\"Y\":"+Communicator.coordinates.getY()+",\"Z\":"+Communicator.coordinates.getZ()+"}";
                     out.print(coordinatesJSON);
                     // get position of the spindle
                 } else if (action.equals("alterPosition")) {

@@ -2,6 +2,8 @@ package com;
 /**
  * Created by Andrei on 11/8/2015.
  */
+import com.Serial.Communicator;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSessionAttributeListener;
@@ -12,19 +14,23 @@ import javax.servlet.http.HttpSessionListener;
 public class SchedulerContextListener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
 
-    private Scheduler scheduler;
-    // Public constructor is required by servlet spec
+
     public SchedulerContextListener() {
     }
 
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        this.scheduler = new Scheduler();
-        scheduler.startThread();
+        String serialPort="/dev/ttyAMA0";
+        Communicator communicator=new Communicator();
+        try {
+            communicator.connect(serialPort);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-       this.scheduler.stopThread();
+
     }
 
     // -------------------------------------------------------
