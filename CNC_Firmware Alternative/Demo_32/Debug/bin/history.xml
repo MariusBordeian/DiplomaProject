@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -g -nostartfiles -Map=Demo_32.map -O0 --gc-sections -LC:\CooCox\CoIDE\configuration\ProgramData\Demo_32 -TC:\CooCox\CoIDE\configuration\ProgramData\Demo_32/arm-gcc-link.ld -g">
+      <target file="Demo_32.elf" lastModified="13e0459647c">
+         <source file="..\obj\usb_core.o" lastModified="13e04472cb4"/>
+         <source file="..\obj\stm32_ub_usb_msc_host.o" lastModified="13e044a8cbc"/>
+         <source file="..\obj\usbh_hcs.o" lastModified="13e04472d5f"/>
+         <source file="..\obj\usbh_stdreq.o" lastModified="13e04472dcc"/>
+         <source file="..\obj\diskio.o" lastModified="13e044a8d1a"/>
+         <source file="..\obj\startup_stm32f4xx.o" lastModified="13e04472e68"/>
+         <source file="..\obj\stm32_ub_led.o" lastModified="13e0454919a"/>
+         <source file="..\obj\main.o" lastModified="13e045961ed"/>
+         <source file="..\obj\stm32_ub_fatfs.o" lastModified="13e044a8de5"/>
+         <source file="..\obj\stm32f4xx_rcc.o" lastModified="13e04472f91"/>
+         <source file="..\obj\usbh_msc_core.o" lastModified="13e04472ffe"/>
+         <source file="..\obj\usbh_core.o" lastModified="13e0447306b"/>
+         <source file="..\obj\stm32_ub_sdcard.o" lastModified="13e044730b9"/>
+         <source file="..\obj\stm32f4xx_gpio.o" lastModified="13e04473107"/>
+         <source file="..\obj\stm32_ub_usbdisk.o" lastModified="13e044a8e52"/>
+         <source file="..\obj\usbh_msc_scsi.o" lastModified="13e044731d2"/>
+         <source file="..\obj\system_stm32f4xx.o" lastModified="13e04473220"/>
+         <source file="..\obj\usbh_usr.o" lastModified="13e044a8eb0"/>
+         <source file="..\obj\usb_bsp.o" lastModified="13e044732db"/>
+         <source file="..\obj\stm32_ub_atadrive.o" lastModified="13e0447331a"/>
+         <source file="..\obj\ff.o" lastModified="13e04473413"/>
+         <source file="..\obj\usb_hcd.o" lastModified="13e04473471"/>
+         <source file="..\obj\usbh_msc_bot.o" lastModified="13e044734ce"/>
+         <source file="..\obj\usbh_ioreq.o" lastModified="13e0447352c"/>
+         <source file="..\obj\misc.o" lastModified="13e0447357a"/>
+         <source file="..\obj\usb_hcd_int.o" lastModified="13e044735f7"/>
+      </target>
+   </processor>
+</history>

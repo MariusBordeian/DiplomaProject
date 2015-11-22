@@ -34,9 +34,9 @@
                 <option>Feed Rate : 500</option>
             </select>
             <select>
-          <%--      <option>Distance : 3</option>
+				<option>Distance : 3</option>
                 <option>Distance : 4</option>
-                <option>Distance : 5</option>--%>
+                <option>Distance : 5</option>
             </select>
         </div>
         <div class="manual-cnc-control">
@@ -99,8 +99,9 @@
     </div>
 </div>
 <script>
-
-
+	var pattern = /^(G00|G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
+	var prevHighLithedKey;
+		
     $(document).ready(function () {
         $("#slider").slider({
             max: 30,
@@ -128,7 +129,7 @@
     }
     function openFileOption() {
         var file = document.getElementById("file1").click();
-
+		prevHighLithedKey = null;
     }
     function zeroMachine() {
         $("#xCoord").html("0.00000");
@@ -157,20 +158,21 @@
 
     function generateDivs(gcode) {
         var lines = gcode.split("\n");
-        var pattern = /^(G00|G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
         var lineCounter = 0;
         $("#gcodeLinesContainer").html("");
         $("#lineCounterContainer").html("");
-        debugger;
+		
+		var divElement = "<div class='gcodeLine' contenteditable='true' onClick=\"highlightElement(this)\">G00 X0.00000 Y0.00000</div>";
+        var lineNumberElement = "<div class='gcodeLineCounter'>" + lineCounter + ":</div>";
+		$("#gcodeLinesContainer").append(divElement);
+        $("#lineCounterContainer").append(lineNumberElement);
+		lineCounter++;
+        //debugger;
+		var gcodeLineRegex = /((?:G00|G01)\s(?:X|Z)-?\d*\.\d*(?:\sY-?\d*\.\d*(?:\sZ-?\d*\.\d*)?)?)/i;
         for (var i = 0; i < lines.length; i++) {
-            if (pattern.test(lines[i])) {
-                var coords1 = lines[i].split(" ");
-                if (i == 0) {
-                    var divElement = "<div class='gcodeLine' contenteditable='false' onClick=\"highlightElement(this)\">" + lines[i] + "</div>";
-                } else {
-                    var divElement = "<div class='gcodeLine' contenteditable='true' onClick=\"highlightElement(this)\">" + lines[i] + "</div>";
-                }
-
+			var currentLine = gcodeLineRegex.exec(lines[i]);
+            if (currentLine && currentLine[1]) {
+                var divElement = "<div class='gcodeLine' contenteditable='true' onClick=\"highlightElement(this)\">" + currentLine[1] + "</div>";
                 var lineNumberElement = "<div class='gcodeLineCounter'>" + lineCounter + ":</div>";
                 $("#gcodeLinesContainer").append(divElement);
                 $("#lineCounterContainer").append(lineNumberElement);
@@ -198,7 +200,6 @@
                 $("#lineCounterContainer").find("div")[$("#lineCounterContainer").find("div").length - 1].remove();
             } else {
                 //any other key
-                var pattern = new RegExp("(G01 X)([0-9]*.[0-9]*)( Y)([0-9]*.[0-9]*)( Z)([0-9]*.[0-9]*)*");
                 if ($(this).html() == "") {
                     object_ = $(this).next();
                     $(this).remove();
@@ -219,17 +220,31 @@
         });
     }
     //$(".gcodeLine").onfocus(highlightElement(this));
-
+	
     function highlightElement(obj) {
-        var coords1 = $(obj).prev().html().split(" ");
-        var coords2 = $(obj).html().split(" ");
-        var x1 = coords1[1];
-        var y1 = coords1[2];
-        var x2 = coords2[1];
-        var y2 = coords2[2];
-        var idKey = "line_" + x1 + y1 + x2 + y2;
-        $("line").attr("stroke", "black");
-        document.getElementById(idKey).setAttribute("stroke", "red");
+		if(prevHighLithedKey) {
+			document.getElementById(prevHighLithedKey).setAttribute("stroke", (prevHighLithedKey.indexOf("G01")>=0)?"black":"green");
+		}
+		var localPattern = /^(G00|G01)\s(?:X)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
+		var localPrev = $(obj).prev();
+		var matcher1 ;//= localPattern.exec(localPriv.html());
+		var matcher2 = localPattern.exec($(obj).html());
+		while ((localPrev.length > 0) && !(matcher1 = localPattern.exec(localPrev.html()))) {
+			localPrev = localPrev.prev();
+		}
+		if (matcher1 && matcher2) {
+			//var coords1 = $(obj).prev().html().split(" ");
+			//var coords2 = $(obj).html().split(" ");
+			if (matcher1[3] && matcher2[3]) {
+				var x1 = matcher1[2];
+				var y1 = matcher1[3];
+				var x2 = matcher2[2];
+				var y2 = matcher2[3];
+				var idKey = "line_"+matcher2[1]+"X" + x1 + "Y" + y1 + "X" + x2 + "Y" + y2;
+				prevHighLithedKey=idKey;
+				document.getElementById(idKey).setAttribute("stroke", "red");
+			}
+		}
     }
     function getSpindlePosition() {
         window.setInterval(function () {
@@ -240,13 +255,36 @@
     function plotObjectByGcode() {
         $("#plotArea").html("");
         var gcodeDivs = $("#generatedDivs").find("div");
-        for (var i = 1; i < gcodeDivs.length; i++) {
-            var coords1 = gcodeDivs[i - 1].innerHTML.split(" ");
-            var coords2 = gcodeDivs[i].innerHTML.split(" ");
-            var idKey = "line_" + coords1[1] + "" + coords1[2] + "" + coords2[1] + "" + coords2[2];
-            var lineSpecs = {x1: coords1[1].slice(1, coords1[1].length), y1: coords1[2].slice(1, coords1[2].length), x2: coords2[1].slice(1, coords2[1].length), y2: coords2[2].slice(1, coords2[2].length), stroke: 'black', 'stroke-width': 0.2, fill: 'red', id: idKey};
-            var line = makeSVG('line', lineSpecs);
-            $("#plotArea").append(line);
+		
+		var prevLine = pattern.exec(gcodeDivs[0].innerHTML);
+		var currentLine = pattern.exec(gcodeDivs[1].innerHTML);
+        var i = 1;
+		while (i < gcodeDivs.length) {
+			//var coords1 = gcodeDivs[i - 1].innerHTML.split(" ");
+            //var coords2 = gcodeDivs[i].innerHTML.split(" ");
+            if ((prevLine && prevLine[3]) && (currentLine && currentLine[3])) {
+				var coordx1 = prevLine[2];
+				var coordy1 = prevLine[3];
+				var coordx2 = currentLine[2];
+				var coordy2 = currentLine[3];
+				var idKey = "line_"+currentLine[1]+"X" + coordx1 + "Y" + coordy1 + "X" + coordx2 + "Y" + coordy2;
+				var lineSpecs = {x1: coordx1, y1: coordy1, x2: coordx2, y2: coordy2, stroke: (currentLine[1] == "G00")?'green':'black', 'stroke-width': 0.2, fill: 'red', id: idKey};
+				var line = makeSVG('line', lineSpecs);
+				$("#plotArea").append(line);
+				
+				prevLine=currentLine;
+				i++;
+				currentLine=pattern.exec(gcodeDivs[i].innerHTML);
+			} else if (currentLine && currentLine[3]) {
+				prevLine=currentLine;
+				i++;
+				currentLine=pattern.exec(gcodeDivs[i].innerHTML);
+				continue;
+			} else {
+				i++;
+				currentLine=pattern.exec(gcodeDivs[i].innerHTML);
+				continue;
+			}
         }
     }
 
