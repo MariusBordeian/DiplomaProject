@@ -10,6 +10,7 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 
 
 ::TODO
+ - move Serial Communication from Python Script to Server on Java
  - remote onDemand start STM to listen on serial
  - SVG2GCode.py from commandline
  - Scale Select for Increment Buttons
@@ -17,7 +18,6 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
  - Merge Upload Buttons into one ::Upload File (*.svg, *.gnc)
  - Rename Feed Rate to Machine Speed of movement
  - Check "Distance" from "Machine Settings" Div.
- - move Serial Communication from Python Script to Server on Java
  - Android App.
  - Concurent Client's Access (for more than one client acccessing the Server and Machine)
  - <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>

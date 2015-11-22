@@ -635,7 +635,7 @@ int main (void) {
 		} 
 		else 
 		{
-			TM_USART_Puts(USART1, "#Awake\n");	// '#' is mandatory as a special character that server (aka RPi2) checks for to send coords for the line function from the GCode
+			TM_USART_Puts(USART1, "#Awake\n");	// '#' and '\n' are mandatory as special characters that server (aka RPi2) checks for to send coords for the line function from the GCode
 			while (1) {
 				c = TM_USART_Gets(USART1, buffer, 256);
 				if (c) 
@@ -656,7 +656,7 @@ int main (void) {
 						pz = getNumberOfSteps(dest[2]);
 					}
 
-					sprintf(serialCoordinates, "%f#%f#%f", getMM(px), getMM(py), getMM(pz));	// as above about the '#'
+					sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
 
 					TM_USART_Puts(USART1, serialCoordinates);
 				}
