@@ -20,6 +20,9 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
  - Check "Distance" from "Machine Settings" Div.
  - Android App.
  - Concurent Client's Access (for more than one client acccessing the Server and Machine)
+ - Detachable motor wires using couplings
+ - Movement feedback (Movement obstruction detected using voltage variation)
+ - ??? Position tracking using optical sensors from mouse ???
  - <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>
  - <strike>initialize (px, py, pz) with last known coords.</strike>
  - <strike>Global pz on STM.</strike>
