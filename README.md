@@ -10,19 +10,19 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 
 
 ::TODO
- - move Serial Communication from Python Script to Server on Java
- - remote onDemand start STM to listen on serial
- - SVG2GCode.py from commandline
- - Scale Select for Increment Buttons
- - SVG Paint (lines only)
- - Merge Upload Buttons into one ::Upload File (*.svg, *.gnc)
- - Rename Feed Rate to Machine Speed of movement
- - Check "Distance" from "Machine Settings" Div.
- - Android App.
- - Concurent Client's Access (for more than one client acccessing the Server and Machine)
- - Detachable motor wires using couplings
- - Movement feedback (Movement obstruction detected using voltage variation)
- - ??? Position tracking using optical sensors from mouse ???
- - <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>
- - <strike>initialize (px, py, pz) with last known coords.</strike>
- - <strike>Global pz on STM.</strike>
+ - [ ] move Serial Communication from Python Script to Server on Java
+ - [ ] remote onDemand start STM to listen on serial
+ - [ ] SVG2GCode.py from commandline
+ - [ ] Scale Select for Increment Buttons
+ - [ ] SVG Paint (lines only)
+ - [ ] Merge Upload Buttons into one ::Upload File (*.svg, *.gnc)
+ - [ ] Rename Feed Rate to Machine Speed of movement
+ - [ ] Check "Distance" from "Machine Settings" Div.
+ - [ ] Android App.
+ - [ ] Concurent Client's Access (for more than one client acccessing the Server and Machine)
+ - [ ] Detachable motor wires using couplings
+ - [ ] Movement feedback (Movement obstruction detected using voltage variation)
+ - [ ] ??? Position tracking using optical sensors from mouse ???
+ - [x] <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>
+ - [x] <strike>initialize (px, py, pz) with last known coords.</strike>
+ - [x] <strike>Global pz on STM.</strike>
