@@ -69,7 +69,15 @@ int getNumbers(char src[], double dest[]) {
 	if (srcLen > 0) {
 		int i = 0;
 		for (i = 0; i < srcLen; i++) {
-			if (!((src[i] >= '0' && src[i] <= '9') || src[i]=='#')) {
+			if (!(
+						(src[i] >= '0' && src[i] <= '9') || 
+							src[i] == '#' || 
+							src[i] == '-' ||
+							src[i] == '.' ||
+							src[i] == ','
+						)
+				 ) 
+			{
 				return 0;
 			}
 		}
