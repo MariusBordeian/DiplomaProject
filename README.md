@@ -7,7 +7,10 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
  - SVG to contain *ONLY* Paths
  - ATM no arcs available (no G02|G03 implemented), all paths shall be "exploded" into lines (G01)
 
-
+::Documentation_Notes
+ - <b>Prototip</b>
+ - "Concluzii si Dezvoltari Ulterioare" (Concluzii	: Utilizari, etc.; 
+										 Dezvoltari	: Schimbi capul si cu mici adaptari la *core* - endless possibilities)
 
 ::TODO
  - [ ] move Serial Communication from Python Script to Server on Java
