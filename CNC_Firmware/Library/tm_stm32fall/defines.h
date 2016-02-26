@@ -31,5 +31,6 @@
 /* Put your global defines for all libraries here used in your project */
 
 #define STM32F407VG
+#define STM32F40XX
 
 #endif

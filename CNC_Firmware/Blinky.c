@@ -62,10 +62,10 @@ int getNumbers(char src[], double dest[]) {
 	int capacity = 3;		// sizeof(dest)/sizeof(double) || dest.Count
 	int nrOfDelims = 0;
 	int i = 0;
+	int srcLen = strlen(src);
 	dest[0] = 0;
 	dest[1] = 0;
 	dest[2] = 0;
-	int srcLen = strlen(src);
 	if (srcLen > 0) {
 		int i = 0;
 		for (i = 0; i < srcLen; i++) {
@@ -675,5 +675,5 @@ int main (void) {
 			}
 		}
 	}
-}
+
 

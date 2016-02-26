@@ -2,11 +2,12 @@
 .\flash\tm_stm32f4_usart.o: Library\tm_stm32fall\tm_stm32f4_usart.h
 .\flash\tm_stm32f4_usart.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\flash\tm_stm32f4_usart.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx.h
-.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\CMSIS\Include\core_cm4.h
+.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm4.h
 .\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h
-.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h
-.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\CMSIS\Include\core_cm4_simd.h
+.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
+.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
+.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
+.\flash\tm_stm32f4_usart.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmSimd.h
 .\flash\tm_stm32f4_usart.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\system_stm32f4xx.h
 .\flash\tm_stm32f4_usart.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_conf.h
 .\flash\tm_stm32f4_usart.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h
