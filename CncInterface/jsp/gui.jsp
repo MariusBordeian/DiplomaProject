@@ -92,7 +92,7 @@
                           <button onclick="generateDivs()">Generate Divs</button>--%>
             <input type="file" id="file1" onchange="readFile(this)" style="display:none">
             <button onclick="plotObjectByGcode()">Save changes</button>
-            <!-- <button onclick="openFileOption()">Upload SVG</button> -->
+            <button onclick="openFileOption()">Upload SVG</button>
             <button onclick="openFileOption()">Upload GCode</button>
             <button onclick="sendToCNC()" id="SendCNCButton">Send to CNC</button>
         </div>

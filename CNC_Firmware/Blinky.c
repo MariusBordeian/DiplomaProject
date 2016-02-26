@@ -61,40 +61,49 @@ int getNumbers(char src[], double dest[]) {
 	char *splitedArray;
 	int capacity = 3;		// sizeof(dest)/sizeof(double) || dest.Count
 	int nrOfDelims = 0;
+	int srcLen = 0;
 	int i = 0;
-	int srcLen = strlen(src);
+		
 	dest[0] = 0;
 	dest[1] = 0;
 	dest[2] = 0;
+	
+	srcLen = strlen(src);
+	
 	if (srcLen > 0) {
-		int i = 0;
 		for (i = 0; i < srcLen; i++) {
 			if (!(
 						(src[i] >= '0' && src[i] <= '9') || 
+							src[i] == '.' ||
+							src[i] == ',' ||
 							src[i] == '#' || 
 							src[i] == '-' ||
-							src[i] == '.' ||
-							src[i] == ','
+							src[i] == '\n'
 						)
 				 ) 
 			{
 				return 0;
 			}
 		}
-	}
-
-	nrOfDelims = getNrOfDelim(src, '#');
-	if (nrOfDelims == 0) {
-		dest[0] = atof(src);
-	}
-	else {
-		splitedArray = strtok(src, "#");
-		while (i<capacity && splitedArray != NULL) {
-			dest[i++] = atof(splitedArray);
-			splitedArray = strtok(NULL, "#");
+		
+		nrOfDelims = getNrOfDelim(src, '#');
+		if (nrOfDelims == 0) {
+			dest[0] = atof(src);
 		}
+		else {
+			i = 0;
+			splitedArray = strtok(src, "#");
+			while (i<capacity && splitedArray != NULL) {
+				dest[i++] = atof(splitedArray);
+				splitedArray = strtok(NULL, "#");
+			}
+		}
+		return nrOfDelims+1;
 	}
-	return nrOfDelims+1;
+	else
+	{
+		return 0;
+	}
 }
 
 void spindle(int state) {
