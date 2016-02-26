@@ -65,6 +65,16 @@ int getNumbers(char src[], double dest[]) {
 	dest[0] = 0;
 	dest[1] = 0;
 	dest[2] = 0;
+	int srcLen = strlen(src);
+	if (srcLen > 0) {
+		int i = 0;
+		for (i = 0; i < srcLen; i++) {
+			if (!((src[i] >= '0' && src[i] <= '9') || src[i]=='#')) {
+				return 0;
+			}
+		}
+	}
+
 	nrOfDelims = getNrOfDelim(src, '#');
 	if (nrOfDelims == 0) {
 		dest[0] = atof(src);
@@ -629,36 +639,38 @@ int main (void) {
 	TM_USART_Init(USART1, TM_USART_PinsPack_2, 115200);
 
 	while (1) {
-		btns = BTN_Get();		// Read button states
-		if (btns != (1UL << 0)) {
-			
-		} 
-		else 
-		{
-			TM_USART_Puts(USART1, "#Awake\n");	// '#' and '\n' are mandatory as special characters that server (aka RPi2) checks for to send coords for the line function from the GCode
-			while (1) {
-				c = TM_USART_Gets(USART1, buffer, 256);
-				if (c) 
-				{
-					nrOfCoordinatesReceived = getNumbers(buffer, dest);
-					if ( nrOfCoordinatesReceived == 2) 
+			TM_USART_Puts(USART1, "@Ready\n");// '@' and '\n' are mandatory as special characters that server (aka RPi2) checks for to send coords for the line function from the GCode
+			c = TM_USART_Gets(USART1, buffer, 256);
+			if (c) {
+				while (1) {
+					if (c)
 					{
-						line(getNumberOfSteps(dest[0]), getNumberOfSteps(dest[1]));
-					} 
-					else if ( nrOfCoordinatesReceived == 1) 
-					{
-						lineZ(getNumberOfSteps(dest[0]));
-					} 
-					else if (nrOfCoordinatesReceived == 3) 
-					{
-						px = getNumberOfSteps(dest[0]); 
-						py = getNumberOfSteps(dest[1]); 
-						pz = getNumberOfSteps(dest[2]);
+						nrOfCoordinatesReceived = getNumbers(buffer, dest);
+						if (nrOfCoordinatesReceived == 2)
+						{
+							line(getNumberOfSteps(dest[0]), getNumberOfSteps(dest[1]));
+						}
+						else if (nrOfCoordinatesReceived == 1)
+						{
+							lineZ(getNumberOfSteps(dest[0]));
+						}
+						else if (nrOfCoordinatesReceived == 3)
+						{
+							px = getNumberOfSteps(dest[0]);
+							py = getNumberOfSteps(dest[1]);
+							pz = getNumberOfSteps(dest[2]);
+						}
+						else if (nrOfCoordinatesReceived == 0) 
+						{
+							break;
+						}
+
+						sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
+
+						TM_USART_Puts(USART1, serialCoordinates);
 					}
 
-					sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
-
-					TM_USART_Puts(USART1, serialCoordinates);
+					c = TM_USART_Gets(USART1, buffer, 256);
 				}
 			}
 		}
