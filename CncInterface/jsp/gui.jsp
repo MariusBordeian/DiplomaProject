@@ -45,9 +45,9 @@
         <div class="butttons-section cf">
             <table>
                 <tr>
-                    <td rowspan="4"><button onclick="manualOverride('X','-')">X-</button></td>
+                    <td rowspan="4"><button onclick="manualOverride('X','minus')">X-</button></td>
                     <td><button onclick="manualOverride('Z','+')">Z+</button></td>
-                    <td rowspan="4"><button onclick="manualOverride('X','+')">X+</button></td>
+                    <td rowspan="4"><button onclick="alterPosition('X','plus')">X+</button></td>
                 </tr>
                 <tr>
                     <td><button onclick="manualOverride('Y','+')">Y+</button></td>
@@ -92,9 +92,9 @@
                           <button onclick="generateDivs()">Generate Divs</button>--%>
             <input type="file" id="file1" onchange="readFile(this)" style="display:none">
             <button onclick="plotObjectByGcode()">Save changes</button>
-            <button onclick="openFileOption();return;">Upload SVG</button>
-            <button onclick="openFileOption();return;">Upload GCode</button>
-            <button onclick="sendToCNC()">Send to CNC</button>
+            <!-- <button onclick="openFileOption()">Upload SVG</button> -->
+            <button onclick="openFileOption()">Upload GCode</button>
+            <button onclick="sendToCNC()" id="SendCNCButton">Send to CNC</button>
         </div>
     </div>
 </div>
@@ -128,8 +128,8 @@
         }
     }
     function openFileOption() {
-        var file = document.getElementById("file1").click();
-		prevHighLithedKey = null;
+        resetInterface();
+		var file = document.getElementById("file1").click();
     }
     function zeroMachine() {
         $("#xCoord").html("0.00000");
@@ -152,6 +152,14 @@
         }
     }
 
+	function resetInterface() {
+		$("#plotArea").html("");
+		$("#gcodeLinesContainer").html("");
+        $("#lineCounterContainer").html("");
+		
+		prevHighLithedKey = null;
+	}
+	
     function sendToCNC() {
         getSpindlePosition();
     }
@@ -246,15 +254,27 @@
 			}
 		}
     }
+    var toggle=0;
+    var interval;
     function getSpindlePosition() {
-        window.setInterval(function () {
-            ajaxCall();
-        }, 24);
+
+        if (toggle % 2 == 0) {
+            interval = setInterval(function () {
+                ajaxCall();
+            }, 1000);
+            document.getElementById("SendCNCButton").innerHTML = "STOP";
+        } else {
+            clearInterval(interval);
+            document.getElementById("SendCNCButton").innerHTML = "Send to CNC";
+        }
+
+        toggle++;
     }
 
     function plotObjectByGcode() {
         $("#plotArea").html("");
-        var gcodeDivs = $("#generatedDivs").find("div");
+		
+		var gcodeDivs = $("#generatedDivs").find("div");
 		
 		var prevLine = pattern.exec(gcodeDivs[0].innerHTML);
 		var currentLine = pattern.exec(gcodeDivs[1].innerHTML);
@@ -300,17 +320,20 @@
             url: "/CNC/GUI?load=whatever&action=getSpindlePosition",
             method: "get"
         }).done(function (msg) {
-            var coordinates = JSON.parse(msg);
-            $("#xCoord").html(coordinates.X);
-            $("#yCoord").html(coordinates.Y);
-            $("#zCoord").html(coordinates.Z);
-            console.log(coordinates);
+            var coordinates = msg.split("#");
+            $("#xCoord").html(coordinates[0]);
+            $("#yCoord").html(coordinates[1]);
+            $("#zCoord").html(coordinates[2]);
+            console.log("Current position "+msg);
         }).fail(function (msg) {
         });
     }
     function alterPosition(axis, dir) {
+    var currentX=document.getElementById("xCoord").innerHTML;
+    var currentY=document.getElementById("yCoord").innerHTML;
+    var currentZ=document.getElementById("zCoord").innerHTML;
         $.ajax({
-            url: "/CNC/GUI?load=whatever&action=alterPosition&axis" + axis + "&dir=" + dir,
+            url: "/CNC/GUI?load=whatever&action=alterPosition&axis=" + axis + "&dir=" + dir+ "&currX=" + currentX + "&currY=" + currentY+ "&currZ=" + currentZ,
             method: "get"
         }).done(function (msg) {
         }).fail(function (msg) {

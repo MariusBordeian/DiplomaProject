@@ -20,7 +20,8 @@ public class SchedulerContextListener implements ServletContextListener,
 
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        String serialPort="/dev/ttyAMA0";
+        String serialPort="/dev/ttyS80";
+        System.setProperty("gnu.io.rxtx.SerialPorts",serialPort);
         Communicator communicator=new Communicator();
         try {
             communicator.connect(serialPort);
