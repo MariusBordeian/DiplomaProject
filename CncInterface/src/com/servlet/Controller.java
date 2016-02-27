@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by Andrei on 11/5/2015.
@@ -24,8 +27,7 @@ public class Controller extends HttpServlet {
             if(action!=null) {
                 if (action.equals("getSpindlePosition")) {
                     //String coordinatesJSON="{\"X\":"+ Communicator.coordinates.getX()+",\"Y\":"+Communicator.coordinates.getY()+",\"Z\":"+Communicator.coordinates.getZ()+"}";
-                    String linie=Communicator.linie;
-                    out.print(linie);
+                    out.print(Communicator.linie);
 
                     //out.print(linie);
                     // get position of the spindle
@@ -35,11 +37,11 @@ public class Controller extends HttpServlet {
                     String currX=request.getParameter("currX");
                     String currY=request.getParameter("currY");
                     String currZ=request.getParameter("currZ");
-                    System.out.println(axis);
+/*                    System.out.println(axis);
                     System.out.println(direction);
                     System.out.println(currX);
                     System.out.println(currY);
-                    System.out.println(currZ);
+                    System.out.println(currZ);*/
 
                     String commandLine="";
 
@@ -66,11 +68,14 @@ public class Controller extends HttpServlet {
                     Communicator.queue.add(commandLine);
                     //System.out.println(Communicator.queue.peek());// 10#10
                     // alter position of the spindle
+                } else if (action.equals("zeroMachine")){
+                    Communicator.queue.add("0.0\n");
+                    Communicator.queue.add("0.0#0.0\n");
                 }
             }
         }
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        Communicator.queue.addAll(Arrays.asList(request.getParameter("data").split(",")));
     }
 }

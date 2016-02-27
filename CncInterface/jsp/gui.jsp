@@ -45,18 +45,18 @@
         <div class="butttons-section cf">
             <table>
                 <tr>
-                    <td rowspan="4"><button onclick="manualOverride('X','minus')">X-</button></td>
-                    <td><button onclick="manualOverride('Z','+')">Z+</button></td>
+                    <td rowspan="4"><button onclick="alterPosition('X','minus')">X-</button></td>
+                    <td><button onclick="alterPosition('Z','plus')">Z+</button></td>
                     <td rowspan="4"><button onclick="alterPosition('X','plus')">X+</button></td>
                 </tr>
                 <tr>
-                    <td><button onclick="manualOverride('Y','+')">Y+</button></td>
+                    <td><button onclick="alterPosition('Y','plus')">Y+</button></td>
                 </tr>
                 <tr>
-                    <td><button onclick="manualOverride('Y','-')">Y-</button></td>
+                    <td><button onclick="alterPosition('Y','minus')">Y-</button></td>
                 </tr>
                 <tr>
-                    <td><button onclick="manualOverride('Z','-')">Z-</button></td>
+                    <td><button onclick="alterPosition('Z','minus')">Z-</button></td>
                 </tr>
             </table>
         </div>
@@ -88,7 +88,7 @@
         </div>
         <div class="bottom-buttons-section">
             <%--              <button onclick="plotObjectByGcode()">Plot</button>
-                          <button onclick="getSpindlePosition()">Get Coordinates</button>
+                          <button onclick="startPositionListener()">Get Coordinates</button>
                           <button onclick="generateDivs()">Generate Divs</button>--%>
             <input type="file" id="file1" onchange="readFile(this)" style="display:none">
             <button onclick="plotObjectByGcode()">Save changes</button>
@@ -111,7 +111,7 @@
                 $("#plotArea").css("zoom", ui.value);
             }
         });
-        zeroMachine();
+        //startPositionListener();
     });
 
     function manualOverride(axe,dir){
@@ -132,9 +132,13 @@
 		var file = document.getElementById("file1").click();
     }
     function zeroMachine() {
-        $("#xCoord").html("0.00000");
-        $("#yCoord").html("0.00000");
-        $("#zCoord").html("0.00000");
+        $.ajax({
+                    url: "/CNC/GUI?load=whatever&action=zeroMachine",
+                    method: "get"
+                }).done(function (msg) {
+                    getSpindlePosition();
+                }).fail(function (msg) {
+                });
     }
     function readFile(obj) {
         var file = obj.files[0];
@@ -161,7 +165,28 @@
 	}
 	
     function sendToCNC() {
-        getSpindlePosition();
+        var lineElements=document.getElementsByClassName("gcodeLine");
+        var toSendArray=[];
+        var matcher=[];
+        for(var i=0;i<lineElements.length;i++){
+            matcher=pattern.exec(lineElements[i].innerHTML);
+            if(!matcher[3]){
+                toSendArray.push(matcher[2]+"\n");
+            }else{
+                toSendArray.push(matcher[2]+"#"+matcher[3]+"\n");
+            }
+        }
+
+         $.ajax({
+                    url: "/CNC/GUI",
+                    type: 'POST',
+                    dataType:"application/json",
+                    data:'data='+toSendArray.toString()
+                }).done(function (msg) {
+                }).fail(function (msg) {
+                });
+
+
     }
 
     function generateDivs(gcode) {
@@ -254,21 +279,12 @@
 			}
 		}
     }
-    var toggle=0;
+
     var interval;
-    function getSpindlePosition() {
-
-        if (toggle % 2 == 0) {
-            interval = setInterval(function () {
-                ajaxCall();
-            }, 1000);
-            document.getElementById("SendCNCButton").innerHTML = "STOP";
-        } else {
-            clearInterval(interval);
-            document.getElementById("SendCNCButton").innerHTML = "Send to CNC";
-        }
-
-        toggle++;
+    function startPositionListener() {
+        interval = setInterval(function () {
+                getSpindlePosition();
+            }, 100);
     }
 
     function plotObjectByGcode() {
@@ -315,27 +331,32 @@
         return el;
     }
 
-    function ajaxCall() {
+    function getSpindlePosition() {
+
         $.ajax({
             url: "/CNC/GUI?load=whatever&action=getSpindlePosition",
             method: "get"
         }).done(function (msg) {
-            var coordinates = msg.split("#");
-            $("#xCoord").html(coordinates[0]);
-            $("#yCoord").html(coordinates[1]);
-            $("#zCoord").html(coordinates[2]);
-            console.log("Current position "+msg);
+            var coordinates="";
+            if(msg.indexOf("#")>-1){
+                coordinates = msg.split("#");
+                 $("#xCoord").html(coordinates[0]);
+                 $("#yCoord").html(coordinates[1]);
+                 $("#zCoord").html(coordinates[2]);
+            }
+            //console.log("Current position "+msg);
         }).fail(function (msg) {
         });
     }
     function alterPosition(axis, dir) {
-    var currentX=document.getElementById("xCoord").innerHTML;
-    var currentY=document.getElementById("yCoord").innerHTML;
-    var currentZ=document.getElementById("zCoord").innerHTML;
+        var currentX=document.getElementById("xCoord").innerHTML;
+        var currentY=document.getElementById("yCoord").innerHTML;
+        var currentZ=document.getElementById("zCoord").innerHTML;
         $.ajax({
             url: "/CNC/GUI?load=whatever&action=alterPosition&axis=" + axis + "&dir=" + dir+ "&currX=" + currentX + "&currY=" + currentY+ "&currZ=" + currentZ,
             method: "get"
         }).done(function (msg) {
+
         }).fail(function (msg) {
         });
     }

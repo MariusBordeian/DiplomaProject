@@ -5,9 +5,7 @@ import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -24,9 +22,29 @@ public class Communicator implements Runnable{
     public InputStream in;
     public OutputStream out;
     public Random rand=new Random();
-    StringBuilder lineBuffer = new StringBuilder("");
+    CharSequence lineBuffer = new StringBuffer();
 
     public Communicator() {
+    }
+
+    public void run() { // TO DO explicist restart thread when serial is broken
+        BufferedReader br=new BufferedReader(new InputStreamReader(this.in));
+        String auxLine;
+
+        try {
+            while((auxLine=br.readLine())!=null) {
+                // to do : match with previous line
+                linie=auxLine;
+                if(!queue.isEmpty()){
+                    String toSend=queue.remove();
+                    //System.out.println("Am trimis : "+toSend);
+                    byte[] bytes=toSend.getBytes();
+                    out.write(bytes);
+                }
+            }
+        } catch( IOException e ) {
+            e.printStackTrace();
+        }
     }
 
     public void connect( String portName ) throws Exception {
@@ -60,38 +78,5 @@ public class Communicator implements Runnable{
 
 
 
-    public void run() { // TO DO explicist restart thread when serial is broken
-        byte[] buffer = new byte[ 1024 ];
-        boolean precessed = false;
-        int len = -1;
 
-        try {
-            while( ( len = this.in.read( buffer ) ) > -1 ) {
-                lineBuffer.append(new String(buffer,0,len));
-                if(lineBuffer.indexOf("\n") > -1){
-                    linie=lineBuffer.toString();
-                    // to do : match with previous line
-                    if(linie.length() > 1 && !linie.contains("@")){
-                        System.out.println("Am primit : "+linie);
-                    }
-                    if(!queue.isEmpty()){
-                        String toSend=queue.remove();
-                        System.out.println("Am trimis : "+toSend);
-                        byte[] bytes=toSend.getBytes();
-                        out.write(bytes);
-                        precessed = true;
-                    }
-                    else if (precessed) {
-                        String toSend="done";
-                        byte[] bytes=toSend.getBytes();
-                        out.write(bytes);
-                        precessed = false;
-                    }
-                    lineBuffer = new StringBuilder("");
-                }
-            }
-        } catch( IOException e ) {
-            e.printStackTrace();
-        }
-    }
 }
