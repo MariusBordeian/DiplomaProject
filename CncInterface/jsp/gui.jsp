@@ -111,7 +111,7 @@
                 $("#plotArea").css("zoom", ui.value);
             }
         });
-        //startPositionListener();
+        startPositionListener();
     });
 
     function manualOverride(axe,dir){
