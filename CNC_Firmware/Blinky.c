@@ -42,7 +42,9 @@ int MM_PER_SEGMENT = 10; // static arc(*function*) related
 
 uint32_t step_delay = 460;	// the delay between motor's steps in the line(*function*)
 
-float px, py, pz; // global positions on every specific axe
+float px = 0, 
+			py = 0, 
+			pz = 0; // global positions on every specific axe
 
 volatile uint32_t msTicks;		// counts 1ms timeTicks		// SysTick_Handler(*function*) related
 // Global declarations END
@@ -643,8 +645,8 @@ int main (void) {
 	
 	/* System init */
 	SystemInit();
-	LED_Init();
-	BTN_Init();
+	//LED_Init();
+	//BTN_Init();
 
 	/* Configure PB12 as interrupt */
 	//Configure_PB12();
@@ -656,41 +658,37 @@ int main (void) {
 	TM_USART_Init(USART1, TM_USART_PinsPack_2, 115200);
 
 	while (1) {
-			TM_USART_Puts(USART1, "@Ready\n");// '@' and '\n' are mandatory as special characters that server (aka RPi2) checks for to send coords for the line function from the GCode
-			c = TM_USART_Gets(USART1, buffer, 256);
-			if (c) {
-				while (1) {
-					if (c)
-					{
-						nrOfCoordinatesReceived = getNumbers(buffer, dest);
-						if (nrOfCoordinatesReceived == 2)
-						{
-							line(getNumberOfSteps(dest[0]), getNumberOfSteps(dest[1]));
-						}
-						else if (nrOfCoordinatesReceived == 1)
-						{
-							lineZ(getNumberOfSteps(dest[0]));
-						}
-						else if (nrOfCoordinatesReceived == 3)
-						{
-							px = getNumberOfSteps(dest[0]);
-							py = getNumberOfSteps(dest[1]);
-							pz = getNumberOfSteps(dest[2]);
-						}
-						else if (nrOfCoordinatesReceived == 0) 
-						{
-							break;
-						}
+			sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
 
-						sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
-
-						TM_USART_Puts(USART1, serialCoordinates);
-					}
-
-					c = TM_USART_Gets(USART1, buffer, 256);
+			TM_USART_Puts(USART1, serialCoordinates);
+			
+			while (1) 
+			{
+				c = TM_USART_Gets(USART1, buffer, 256);
+				if (c) 
+				{
+					break;
+				}
+				else
+				{
+					TM_USART_Puts(USART1, serialCoordinates);
 				}
 			}
-		}
-	}
-
-
+			
+			nrOfCoordinatesReceived = getNumbers(buffer, dest);
+			if (nrOfCoordinatesReceived == 2)
+			{
+				line(getNumberOfSteps(dest[0]), getNumberOfSteps(dest[1]));
+			}
+			else if (nrOfCoordinatesReceived == 1)
+			{
+				lineZ(getNumberOfSteps(dest[0]));
+			}
+			else if (nrOfCoordinatesReceived == 3)
+			{
+				px = getNumberOfSteps(dest[0]);
+				py = getNumberOfSteps(dest[1]);
+				pz = getNumberOfSteps(dest[2]);
+			}
+	}			
+}

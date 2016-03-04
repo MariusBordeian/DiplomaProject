@@ -74,7 +74,7 @@ I (.\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h)(0x54DDBFC2)
 I (.\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h)(0x54DDBFC4)
 I (.\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h)(0x54DDBFC4)
 I (LED.h)(0x53467066)
-F (.\Blinky.c)(0x56D08FFE)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I ".\Library\STM32F4xx_StdPeriph_Driver\inc" -I ".\Library\tm_stm32fall"-I D:\non-Cloud\Git\DiplomaProject\CNC_Firmware\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="515" -D_RTE_ -DSTM32F407xx -DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o .\flash\blinky.o --omf_browse .\flash\blinky.crf --depend .\flash\blinky.d)
+F (.\Blinky.c)(0x56D191D8)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I ".\Library\STM32F4xx_StdPeriph_Driver\inc" -I ".\Library\tm_stm32fall"-I D:\non-Cloud\Git\DiplomaProject\CNC_Firmware\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="515" -D_RTE_ -DSTM32F407xx -DHSE_VALUE="8000000" -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx-o .\flash\blinky.o --omf_browse .\flash\blinky.crf --depend .\flash\blinky.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x54C29A18)
 I (.\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx.h)(0x550370B2)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm4.h)(0x5625FD5C)
