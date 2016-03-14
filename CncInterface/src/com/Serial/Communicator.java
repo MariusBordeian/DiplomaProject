@@ -1,23 +1,24 @@
 package com.Serial;
 
-import com.Coordinates;
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by pi on 14/11/15.
  */
 public class Communicator implements Runnable{
 
-   // public static Coordinates coordinates=new Coordinates();
+    // public static Coordinates coordinates=new Coordinates();
     public static String linie="";
-    public static Queue<String> queue=new LinkedList<String>();
+    public static ConcurrentLinkedQueue<String> queue=new ConcurrentLinkedQueue<String>();
+    SerialPort serialPort;
 
     public InputStream in;
     public OutputStream out;
@@ -29,21 +30,65 @@ public class Communicator implements Runnable{
 
     public void run() { // TO DO explicist restart thread when serial is broken
         BufferedReader br=new BufferedReader(new InputStreamReader(this.in));
-        String auxLine;
-
+        handShake(br);
+        System.out.println("Am facut handshake ! ---------------------------------------------------------");
         try {
-            while((auxLine=br.readLine())!=null) {
-                // to do : match with previous line
-                linie=auxLine;
-                if(!queue.isEmpty()){
-                    String toSend=queue.remove();
-                    //System.out.println("Am trimis : "+toSend);
-                    byte[] bytes=toSend.getBytes();
-                    out.write(bytes);
+            while(!br.ready()){}
+            br.skip(1000000);
+        } catch (IOException e) {
+        }
+        System.out.println("Teoretic am golit bufferul  ! ---------------------------------------------------------");
+        String currentLine;
+        while(true){
+            if(!queue.isEmpty()){
+                System.out.println("Sunt pe cale sa trimit ceva  ! ---------------------------------------------------------");
+                try {
+                    out.write(queue.remove().getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                waitForResponse(br);
+            }
+        }
+    }
+    public void waitForResponse(BufferedReader br){
+        System.out.println("Astept sa primesc ceva ! ---------------------------------------------------------");
+        String line="";
+        while(true){
+            try {
+                if(br.ready()) {
+                    line = br.readLine();
+                }
+            } catch (IOException e) {
+
+            }
+            if(!line.isEmpty() &&  line.contains("#")){
+                System.out.println(linie);
+                linie=line;
+                break;
+            }
+        }
+    }
+    public void handShake(BufferedReader br){
+        String line="";
+        String patternString = "\\d+.\\d+#\\d+.\\d+#\\d+.\\d+";
+        Pattern pattern = Pattern.compile(patternString);
+        while(true){
+            try {
+                if(br.ready()){
+                    line = br.readLine();
+                }
+            } catch (IOException e) {
+            }
+            Matcher matcher = pattern.matcher(line);
+            if(matcher.matches()){
+                try {
+                    linie=line;
+                    out.write("HandShake\n".getBytes());
+                    break;
+                } catch (IOException e) {
                 }
             }
-        } catch( IOException e ) {
-            e.printStackTrace();
         }
     }
 
@@ -59,7 +104,7 @@ public class Communicator implements Runnable{
             CommPort commPort = portIdentifier.open( this.getClass().getName(), timeout );
 
             if( commPort instanceof SerialPort) {
-                SerialPort serialPort = ( SerialPort )commPort;
+                serialPort = ( SerialPort )commPort;
 
                 serialPort.setSerialPortParams( 115200,
                         SerialPort.DATABITS_8,

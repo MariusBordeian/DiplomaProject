@@ -27,6 +27,7 @@ public class Controller extends HttpServlet {
             if(action!=null) {
                 if (action.equals("getSpindlePosition")) {
                     //String coordinatesJSON="{\"X\":"+ Communicator.coordinates.getX()+",\"Y\":"+Communicator.coordinates.getY()+",\"Z\":"+Communicator.coordinates.getZ()+"}";
+
                     out.print(Communicator.linie);
 
                     //out.print(linie);
