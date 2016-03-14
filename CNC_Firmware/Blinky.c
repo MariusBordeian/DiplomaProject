@@ -612,12 +612,31 @@ void drawCircle2(int x, int y, float r) {
 	}
 }
 
+uint16_t c;
+char buffer[256];
+char serialCoordinates[256];
+
+void handShake()
+{
+		sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
+		while (1) 
+		{
+			c = TM_USART_Gets(USART1, buffer, 256);
+			if (c) 
+			{
+				break;
+			}
+			else
+			{
+				TM_USART_Puts(USART1, serialCoordinates);
+			}
+		}
+}
+
 int main (void) {
-	double dest[3] = {0};
-	uint16_t c;
-	int nrOfCoordinatesReceived = 0;
-	char buffer[256];
-	char serialCoordinates[256];
+	double dest[3] = {0};	
+	int nrOfCoordinatesReceived = 0;	
+	
 	GPIO_ResetBits(GPIOC, GPIO_Pin_8);
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
@@ -657,24 +676,11 @@ int main (void) {
 	/* Initialize USART1 at 115200 baud, TX: PB6, RX: PB7 */
 	TM_USART_Init(USART1, TM_USART_PinsPack_2, 115200);
 
-	while (1) {
-			sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
-
-			TM_USART_Puts(USART1, serialCoordinates);
-			
-			while (1) 
-			{
-				c = TM_USART_Gets(USART1, buffer, 256);
-				if (c) 
-				{
-					break;
-				}
-				else
-				{
-					TM_USART_Puts(USART1, serialCoordinates);
-				}
-			}
-			
+	handShake();
+	//TM_USART_Puts(USART1, serialCoordinates);
+	while(1){
+		c = TM_USART_Gets(USART1, buffer, 256);
+		if(c){
 			nrOfCoordinatesReceived = getNumbers(buffer, dest);
 			if (nrOfCoordinatesReceived == 2)
 			{
@@ -690,5 +696,8 @@ int main (void) {
 				py = getNumberOfSteps(dest[1]);
 				pz = getNumberOfSteps(dest[2]);
 			}
-	}			
-}
+			sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
+			TM_USART_Puts(USART1, serialCoordinates);
+		}
+	}	
+}	
