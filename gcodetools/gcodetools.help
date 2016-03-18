@@ -1,0 +1,161 @@
+Usage: gcodetools.py [options] SVGfile
+
+Options:
+  -h, --help            show this help message and exit
+  --id=IDS              id attribute of object to manipulate
+  -d DIRECTORY, --directory=DIRECTORY
+                        Directory for gcode file
+  -f FILE, --filename=FILE
+                        File name
+  --add-numeric-suffix-to-filename=ADD_NUMERIC_SUFFIX_TO_FILENAME
+                        Add numeric suffix to filename
+  --Zscale=ZSCALE       Scale factor Z
+  --Zoffset=ZOFFSET     Offset along Z
+  -s ZSAFE, --Zsafe=ZSAFE
+                        Z above all obstacles
+  -z ZSURFACE, --Zsurface=ZSURFACE
+                        Z of the surface
+  -c ZDEPTH, --Zdepth=ZDEPTH
+                        Z depth of cut
+  --Zstep=ZSTEP         Z step of cutting
+  -p FEED, --feed=FEED  Feed rate in unit/min
+  --biarc-tolerance=BIARC_TOLERANCE
+                        Tolerance used when calculating biarc interpolation.
+  --biarc-max-split-depth=BIARC_MAX_SPLIT_DEPTH
+                        Defines maximum depth of splitting while approximating
+                        using biarcs.
+  --path-to-gcode-order=PATH_TO_GCODE_ORDER
+                        Defines cutting order path by path or layer by layer.
+  --path-to-gcode-depth-function=PATH_TO_GCODE_DEPTH_FUNCTION
+                        Path to gcode depth function.
+  --path-to-gcode-sort-paths=PATH_TO_GCODE_SORT_PATHS
+                        Sort paths to reduse rapid distance.
+  --comment-gcode=COMMENT_GCODE
+                        Comment Gcode
+  --comment-gcode-from-properties=COMMENT_GCODE_FROM_PROPERTIES
+                        Get additional comments from Object Properties
+  --tool-diameter=TOOL_DIAMETER
+                        Tool diameter used for area cutting
+  --max-area-curves=MAX_AREA_CURVES
+                        Maximum area curves for each area
+  --area-inkscape-radius=AREA_INKSCAPE_RADIUS
+                        Area curves overlaping (depends on tool diameter
+                        [0,0.9])
+  --area-tool-overlap=AREA_TOOL_OVERLAP
+                        Radius for preparing curves using inkscape
+  --unit=UNIT           Units
+  --active-tab=ACTIVE_TAB
+                        Defines which tab is active
+  --area-fill-angle=AREA_FILL_ANGLE
+                        Fill area with lines heading this angle
+  --area-fill-shift=AREA_FILL_SHIFT
+                        Shift the lines by tool d * shift
+  --area-fill-method=AREA_FILL_METHOD
+                        Filling method either zig-zag or spiral
+  --area-find-artefacts-diameter=AREA_FIND_ARTEFACTS_DIAMETER
+                        Artefacts seeking radius
+  --area-find-artefacts-action=AREA_FIND_ARTEFACTS_ACTION
+                        Artefacts action type
+  --auto_select_paths=AUTO_SELECT_PATHS
+                        Select all paths if nothing is selected.
+  --loft-distances=LOFT_DISTANCES
+                        Distances between paths.
+  --loft-direction=LOFT_DIRECTION
+                        Direction of loft's interpolation.
+  --loft-interpolation-degree=LOFT_INTERPOLATION_DEGREE
+                        Which interpolation use to loft the paths smooth
+                        interpolation or staright.
+  --min-arc-radius=MIN_ARC_RADIUS
+                        All arc having radius less than minimum will be
+                        considered as straight line
+  --engraving-sharp-angle-tollerance=ENGRAVING_SHARP_ANGLE_TOLLERANCE
+                        All angles thar are less than engraving-sharp-angle-
+                        tollerance will be thought sharp
+  --engraving-max-dist=ENGRAVING_MAX_DIST
+                        Distanse from original path where engraving is not
+                        needed (usualy it's cutting tool diameter)
+  --engraving-newton-iterations=ENGRAVING_NEWTON_ITERATIONS
+                        Number of sample points used to calculate distance
+  --engraving-draw-calculation-paths=ENGRAVING_DRAW_CALCULATION_PATHS
+                        Draw additional graphics to debug engraving path
+  --engraving-cutter-shape-function=ENGRAVING_CUTTER_SHAPE_FUNCTION
+                        Cutter shape function z(w). Ex. cone: w.
+  --lathe-width=LATHE_WIDTH
+                        Lathe width
+  --lathe-fine-cut-width=LATHE_FINE_CUT_WIDTH
+                        Fine cut width
+  --lathe-fine-cut-count=LATHE_FINE_CUT_COUNT
+                        Fine cut count
+  --lathe-create-fine-cut-using=LATHE_CREATE_FINE_CUT_USING
+                        Create fine cut using
+  --lathe-x-axis-remap=LATHE_X_AXIS_REMAP
+                        Lathe X axis remap
+  --lathe-z-axis-remap=LATHE_Z_AXIS_REMAP
+                        Lathe Z axis remap
+  --lathe-rectangular-cutter-width=LATHE_RECTANGULAR_CUTTER_WIDTH
+                        Rectangular cutter width
+  --create-log=LOG_CREATE_LOG
+                        Create log files
+  --log-filename=LOG_FILENAME
+                        Create log files
+  --orientation-points-count=ORIENTATION_POINTS_COUNT
+                        Orientation points count
+  --tools-library-type=TOOLS_LIBRARY_TYPE
+                        Create tools definition
+  --dxfpoints-action=DXFPOINTS_ACTION
+                        dxfpoint sign toggle
+  --help-language=HELP_LANGUAGE
+                        Open help page in webbrowser.
+  --offset-radius=OFFSET_RADIUS
+                        Offset radius
+  --offset-step=OFFSET_STEP
+                        Offset step
+  --offset-draw-clippend-path=OFFSET_DRAW_CLIPPEND_PATH
+                        Draw clipped path
+  --offset-just-get-distance=OFFSET_JUST_GET_DISTANCE
+                        Don't do offset just get distance
+  --arrangement-material-width=ARRANGEMENT_MATERIAL_WIDTH
+                        Materials width for arrangement
+  --arrangement-population-count=ARRANGEMENT_POPULATION_COUNT
+                        Genetic algorithm populations count
+  --arrangement-inline-test=ARRANGEMENT_INLINE_TEST
+                        Use C-inline test (some additional packets will be
+                        needed)
+  --postprocessor=POSTPROCESSOR
+                        Postprocessor command.
+  --postprocessor-custom=POSTPROCESSOR_CUSTOM
+                        Postprocessor custom command.
+  --graffiti-max-seg-length=GRAFFITI_MAX_SEG_LENGTH
+                        Graffiti maximum segment length.
+  --graffiti-min-radius=GRAFFITI_MIN_RADIUS
+                        Graffiti minimal connector's radius.
+  --graffiti-start-pos=GRAFFITI_START_POS
+                        Graffiti Start position (x;y).
+  --graffiti-create-linearization-preview=GRAFFITI_CREATE_LINEARIZATION_PREVIEW
+                        Graffiti create linearization preview.
+  --graffiti-create-preview=GRAFFITI_CREATE_PREVIEW
+                        Graffiti create preview.
+  --graffiti-preview-size=GRAFFITI_PREVIEW_SIZE
+                        Graffiti preview's size.
+  --graffiti-preview-emmit=GRAFFITI_PREVIEW_EMMIT
+                        Preview's paint emmit (pts/s).
+  --in-out-path=IN_OUT_PATH
+                        Create in-out paths
+  --in-out-path-do-not-add-reference-point=IN_OUT_PATH_DO_NOT_ADD_REFERENCE_POINT
+                        Just add reference in-out point
+  --in-out-path-point-max-dist=IN_OUT_PATH_POINT_MAX_DIST
+                        In-out path max distance to reference point
+  --in-out-path-type=IN_OUT_PATH_TYPE
+                        In-out path type
+  --in-out-path-len=IN_OUT_PATH_LEN
+                        In-out path length
+  --in-out-path-replace-original-path=IN_OUT_PATH_REPLACE_ORIGINAL_PATH
+                        Replace original path
+  --in-out-path-radius=IN_OUT_PATH_RADIUS
+                        In-out path radius for round path
+  --plasma-prepare-corners=PLASMA_PREPARE_CORNERS
+                        Prepare corners
+  --plasma-prepare-corners-distance=PLASMA_PREPARE_CORNERS_DISTANCE
+                        Stepout distance for corners
+  --plasma-prepare-corners-tolerance=PLASMA_PREPARE_CORNERS_TOLERANCE
+                        Maximum angle for corner (0-180 deg)
