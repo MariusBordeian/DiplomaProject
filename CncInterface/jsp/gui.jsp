@@ -59,6 +59,13 @@
                     <td><button onclick="alterPosition('Z','minus')">Z-</button></td>
                 </tr>
             </table>
+            <div>
+            <button onclick="alterIScale('minus')">-</button>
+            <input type="number" id="iScale" value=1>
+            <button onclick="alterIScale('plus')">+</button>
+
+
+            </div>
         </div>
     </div>
     <div class="right-col">
@@ -113,7 +120,17 @@
         });
         startPositionListener();
     });
-
+    function alterIScale(type){
+        var currentScale=document.getElementById("iScale").value;
+        switch(type){
+            case "plus":
+                document.getElementById("iScale").value=currentScale-0+1;
+            break;
+            case "minus":
+                document.getElementById("iScale").value=currentScale-0-1;
+            break;
+        }
+    }
     function manualOverride(axe,dir){
         var increment=0;
         if(dir=="+"){
@@ -352,8 +369,9 @@
         var currentX=document.getElementById("xCoord").innerHTML;
         var currentY=document.getElementById("yCoord").innerHTML;
         var currentZ=document.getElementById("zCoord").innerHTML;
+        var incrementScale=document.getElementById("iScale").value;
         $.ajax({
-            url: "/CNC/GUI?load=whatever&action=alterPosition&axis=" + axis + "&dir=" + dir+ "&currX=" + currentX + "&currY=" + currentY+ "&currZ=" + currentZ,
+            url: "/CNC/GUI?load=whatever&action=alterPosition&axis=" + axis + "&dir=" + dir+ "&currX=" + currentX + "&currY=" + currentY+ "&currZ=" + currentZ+"&incrementScale="+incrementScale,
             method: "get"
         }).done(function (msg) {
 

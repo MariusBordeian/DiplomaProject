@@ -33,15 +33,16 @@ public class Communicator implements Runnable{
         handShake(br);
         System.out.println("Am facut handshake ! ---------------------------------------------------------");
         try {
-            while(!br.ready()){}
-            br.skip(1000000);
+            while(br.ready()){
+                br.read();
+            }
         } catch (IOException e) {
         }
         System.out.println("Teoretic am golit bufferul  ! ---------------------------------------------------------");
         String currentLine;
         while(true){
             if(!queue.isEmpty()){
-                System.out.println("Sunt pe cale sa trimit ceva  ! ---------------------------------------------------------");
+                System.out.println("Sunt pe cale sa trimit "+queue.peek()+"  ! ---------------------------------------------------------");
                 try {
                     out.write(queue.remove().getBytes());
                 } catch (IOException e) {

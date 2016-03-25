@@ -38,41 +38,43 @@ public class Controller extends HttpServlet {
                     String currX=request.getParameter("currX");
                     String currY=request.getParameter("currY");
                     String currZ=request.getParameter("currZ");
-/*                    System.out.println(axis);
-                    System.out.println(direction);
-                    System.out.println(currX);
-                    System.out.println(currY);
-                    System.out.println(currZ);*/
-
+                    String incrementScale=request.getParameter("incrementScale");
+                    Integer incrementScaleInt=1;
+                    try {
+                        incrementScaleInt = Integer.parseInt(incrementScale);
                     String commandLine="";
 
                     if(axis.equals("X")){
                         if(direction.equals("plus")){
-                            commandLine=(Float.parseFloat(currX)+1)+"#"+currY+"\n";
+                            commandLine=(Float.parseFloat(currX)+incrementScaleInt)+"#"+currY+"\n";
                         }else{
-                            commandLine=(Float.parseFloat(currX)-1)+"#"+currY+"\n";
+                            commandLine=(Float.parseFloat(currX)-incrementScaleInt)+"#"+currY+"\n";
                         };
                     }else if(axis.equals("Y")){
                         if(direction.equals("plus")){
-                            commandLine=currX+"#"+(Float.parseFloat(currY)+1)+"\n";
+                            commandLine=currX+"#"+(Float.parseFloat(currY)+incrementScaleInt)+"\n";
                         }else{
-                            commandLine=currX+"#"+(Float.parseFloat(currY)-1)+"\n";
+                            commandLine=currX+"#"+(Float.parseFloat(currY)-incrementScaleInt)+"\n";
                         };
                     }else if(axis.equals("Z")){
                         if(direction.equals("plus")){
-                            commandLine=(Float.parseFloat(currZ)+1)+"\n";
+                            commandLine=(Float.parseFloat(currZ)+incrementScaleInt)+"\n";
                         }else{
-                            commandLine=(Float.parseFloat(currZ)-1)+"\n";
+                            commandLine=(Float.parseFloat(currZ)-incrementScaleInt)+"\n";
                         };
                     }
                     //System.out.println(commandLine);
                     Communicator.queue.add(commandLine);
                     //System.out.println(Communicator.queue.peek());// 10#10
                     // alter position of the spindle
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                 } else if (action.equals("zeroMachine")){
                     Communicator.queue.add("0.0\n");
                     Communicator.queue.add("0.0#0.0\n");
                 }
+
             }
         }
     }
