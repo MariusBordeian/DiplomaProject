@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity  {
     private StringRequest getSpindleRequest;
     private Integer incrementScale = 1;
 
+    private boolean connected = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -160,28 +162,30 @@ public class MainActivity extends AppCompatActivity  {
                                     // get user input and set it to result
                                     IP = "http://" + input.getText().toString();
                                     doGet(IP + "/CNC/GUI");
-                                    Toast.makeText(context, IP, Toast.LENGTH_SHORT).show();
-                                    getSpindleRequest = new StringRequest(Request.Method.GET, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition",
-                                            new Response.Listener<String>() {
-                                                @Override
-                                                public void onResponse(String response) {
-                                                    String[] coords= response.split("#");
-                                                    if(coords.length==3){
-                                                        coordsX.setText(coords[0]);
-                                                        coordsY.setText(coords[1]);
-                                                        coordsZ.setText(coords[2]);
+                                    if (connected) {
+                                        Toast.makeText(context, "Success on " + IP, Toast.LENGTH_SHORT).show();
+                                        getSpindleRequest = new StringRequest(Request.Method.GET, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition",
+                                                new Response.Listener<String>() {
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        String[] coords = response.split("#");
+                                                        if (coords.length == 3) {
+                                                            coordsX.setText(coords[0]);
+                                                            coordsY.setText(coords[1]);
+                                                            coordsZ.setText(coords[2]);
+                                                        }
+                                                        // Display the first 500 characters of the response string.
+                                                        //Log.d("Response is: ", response.substring(0, 500));
+                                                        //Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
                                                     }
-                                                    // Display the first 500 characters of the response string.
-                                                    //Log.d("Response is: ", response.substring(0, 500));
-                                                    //Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            Log.d("Request : ", IP + "/CNC/GUI?load=whatever&action=zeroMachine" + " That didn't work!");
-                                            Toast.makeText(context, IP + "/CNC/GUI?load=whatever&action=zeroMachine" + " That didn't work!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                                }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Log.d("Request : ", IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!");
+                                                Toast.makeText(context, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
                                 }
                             })
                             .setNegativeButton("Cancel",
@@ -214,12 +218,13 @@ public class MainActivity extends AppCompatActivity  {
                         // Display the first 500 characters of the response string.
                         //Log.d("Response is: ", response.substring(0, 500));
                         //Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                        connected = true;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Request : ", url + " That didn't work!");
-                Toast.makeText(context, url + " That didn't work!", Toast.LENGTH_SHORT).show();
+                Log.d("Request : ", "That did NOT work for " + url);
+                Toast.makeText(context, "That did NOT work for " + url, Toast.LENGTH_SHORT).show();
             }
         });
         // Add the request to the RequestQueue.

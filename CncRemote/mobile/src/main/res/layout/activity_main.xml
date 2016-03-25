@@ -8,7 +8,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:screenOrientation="portrait"
-    android:background="@android:color/background_light"
     tools:context="ro.project.diploma.cncremote.MainActivity" >
 
     <TextView
@@ -26,7 +25,6 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
         android:ems="10"
         android:id="@+id/text_X"
         android:layout_alignParentTop="true"
@@ -35,7 +33,8 @@
         android:textIsSelectable="false"
         android:textAlignment="center"
         android:clickable="false"
-        android:hint="please" />
+        android:hint="please"
+        android:inputType="none" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,7 +51,6 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
         android:ems="10"
         android:id="@+id/text_Y"
         android:layout_below="@+id/text_X"
@@ -61,7 +59,8 @@
         android:textAlignment="center"
         android:clickable="false"
         android:editable="false"
-        android:hint="set" />
+        android:hint="set"
+        android:inputType="none" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -78,7 +77,6 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
         android:ems="10"
         android:id="@+id/text_Z"
         android:layout_below="@+id/text_Y"
@@ -87,7 +85,8 @@
         android:textAlignment="center"
         android:clickable="false"
         android:editable="false"
-        android:hint="IP" />
+        android:hint="IP"
+        android:inputType="none" />
 
     <Button
         android:layout_width="wrap_content"
@@ -98,7 +97,7 @@
         android:longClickable="false"
         android:textStyle="bold"
         android:layout_below="@+id/text_Z"
-        android:layout_alignStart="@+id/textView2"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="23dp" />
 
     <Button
@@ -131,6 +130,7 @@
         android:onClick="alterPosition"
         android:layout_below="@+id/button_Xminus"
         android:layout_toEndOf="@+id/button_Xminus"
+        android:layout_centerHorizontal="true"
         android:longClickable="false"
         android:textStyle="bold" />
 
@@ -160,6 +160,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Increment Scale"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/button_Zplus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="+"
         android:id="@+id/scalePlus"
         android:layout_alignBaseline="@+id/incrementScale"
@@ -177,6 +187,7 @@
         android:numeric="integer"
         android:inputType="numberDecimal"
         android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
         android:layout_alignEnd="@+id/button_Yminus"
         android:layout_toEndOf="@+id/button_Zminus" />
 
@@ -203,13 +214,4 @@
         android:layout_centerHorizontal="true"
         android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Increment Scale"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/button_Zplus"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp" />
 </RelativeLayout>
