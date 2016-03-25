@@ -21,5 +21,11 @@
         android:id="@+id/ip_address"
         android:layout_gravity="center_vertical"
         android:layout_below="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_alignStart="@+id/textView"
+        android:clickable="true"
+        android:editable="true"
+        android:enabled="true"
+        android:focusable="true"
+        android:inputType="text"
+        android:selectAllOnFocus="true" />
 </RelativeLayout>

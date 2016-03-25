@@ -630,6 +630,8 @@ void handShake()
 			{
 				TM_USART_Puts(USART1, serialCoordinates);
 			}
+			
+			TM_DelayMillis(1000);
 		}
 }
 

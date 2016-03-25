@@ -7,7 +7,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ro.project.diploma.cncremote.MainActivity">
+    android:screenOrientation="portrait"
+    android:background="@android:color/background_light"
+    tools:context="ro.project.diploma.cncremote.MainActivity" >
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,11 +31,11 @@
         android:id="@+id/text_X"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="0.0000"
         android:editable="false"
         android:textIsSelectable="false"
         android:textAlignment="center"
-        android:clickable="false" />
+        android:clickable="false"
+        android:hint="please" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,11 +57,11 @@
         android:id="@+id/text_Y"
         android:layout_below="@+id/text_X"
         android:layout_centerHorizontal="true"
-        android:text="0.0000"
         android:textIsSelectable="false"
         android:textAlignment="center"
         android:clickable="false"
-        android:editable="false" />
+        android:editable="false"
+        android:hint="set" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,75 +83,116 @@
         android:id="@+id/text_Z"
         android:layout_below="@+id/text_Y"
         android:layout_centerHorizontal="true"
-        android:text="0.0000"
         android:textIsSelectable="false"
         android:textAlignment="center"
         android:clickable="false"
-        android:editable="false" />
+        android:editable="false"
+        android:hint="IP" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Y++"
         android:id="@+id/button_Yplus"
+        android:onClick="alterPosition"
+        android:longClickable="false"
+        android:textStyle="bold"
         android:layout_below="@+id/text_Z"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:layout_alignStart="@+id/textView2"
+        android:layout_marginTop="23dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="X++"
         android:id="@+id/button_Xplus"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/button_Yplus" />
+        android:onClick="alterPosition"
+        android:layout_below="@+id/button_Yplus"
+        android:layout_toEndOf="@+id/button_Yplus"
+        android:longClickable="false"
+        android:textStyle="bold" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="X--"
         android:id="@+id/button_Xminus"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/button_Yplus" />
+        android:onClick="alterPosition"
+        android:layout_below="@+id/button_Yplus"
+        android:layout_toStartOf="@+id/button_Yplus"
+        android:longClickable="false"
+        android:textStyle="bold" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Y--"
         android:id="@+id/button_Yminus"
-        android:layout_marginBottom="30dp"
-        android:layout_above="@+id/button_Zminus"
-        android:layout_centerHorizontal="true" />
+        android:onClick="alterPosition"
+        android:layout_below="@+id/button_Xminus"
+        android:layout_toEndOf="@+id/button_Xminus"
+        android:longClickable="false"
+        android:textStyle="bold" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Z++"
         android:id="@+id/button_Zplus"
-        android:layout_above="@+id/button_ZeroMachine"
-        android:layout_alignEnd="@+id/text_Z"
-        android:layout_marginBottom="30dp" />
+        android:onClick="alterPosition"
+        android:layout_below="@+id/button_Yminus"
+        android:layout_toEndOf="@+id/button_Yminus"
+        android:longClickable="false"
+        android:textStyle="bold" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Z--"
         android:id="@+id/button_Zminus"
-        android:layout_alignTop="@+id/button_Zplus"
-        android:layout_alignStart="@+id/text_Z" />
+        android:onClick="alterPosition"
+        android:layout_below="@+id/button_Yminus"
+        android:layout_toStartOf="@+id/button_Yminus"
+        android:longClickable="false"
+        android:textStyle="bold" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:visibility="invisible"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\u2714"
-        android:id="@+id/button_ManualCoords_apply"
-        android:hint="send manually edited coordinates to the machine"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/button_ZeroMachine"
-        android:layout_below="@+id/button_Zplus" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="+"
+        android:id="@+id/scalePlus"
+        android:layout_alignBaseline="@+id/incrementScale"
+        android:layout_alignStart="@+id/button_Zplus"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:padding="10sp"
+        android:onClick="setScale" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/incrementScale"
+        android:textAlignment="center"
+        android:numeric="integer"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/textView2"
+        android:layout_alignEnd="@+id/button_Yminus"
+        android:layout_toEndOf="@+id/button_Zminus" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="-"
+        android:id="@+id/scaleMinus"
+        android:layout_alignTop="@+id/incrementScale"
+        android:layout_alignBaseline="@+id/incrementScale"
+        android:layout_toStartOf="@+id/incrementScale"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:padding="10sp"
+        android:onClick="setScale" />
 
     <Button
         android:layout_width="wrap_content"
@@ -160,15 +203,13 @@
         android:layout_centerHorizontal="true"
         android:textStyle="bold" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:visibility="invisible"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\u2718"
-        android:id="@+id/button_ManualCoords_discard"
-        android:hint="discard manually edited coordinates"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/button_ZeroMachine"
-        android:layout_alignTop="@+id/button_ZeroMachine" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Increment Scale"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/button_Zplus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp" />
 </RelativeLayout>
