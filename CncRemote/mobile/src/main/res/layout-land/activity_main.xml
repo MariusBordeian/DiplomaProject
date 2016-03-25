@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ro.project.diploma.cncremote.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X : "
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/label_X"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/text_X"
+        android:layout_alignEnd="@+id/label_Y" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Y : "
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/label_Y"
+        android:textStyle="bold"
+        android:layout_alignParentStart="true"
+        android:layout_alignBaseline="@+id/text_Y" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Z : "
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/label_Z"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignBaseline="@+id/text_Z"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/text_X"
+        android:text="0.0000"
+        android:editable="false"
+        android:clickable="false"
+        android:inputType="none"
+        android:textIsSelectable="false"
+        android:textAlignment="center"
+        android:layout_toEndOf="@+id/label_X" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/text_Y"
+        android:text="0.0000"
+        android:textIsSelectable="false"
+        android:textAlignment="center"
+        android:layout_below="@+id/text_X"
+        android:layout_toEndOf="@+id/label_Y"
+        android:clickable="false"
+        android:editable="false" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/text_Z"
+        android:text="0.0000"
+        android:textIsSelectable="false"
+        android:textAlignment="center"
+        android:layout_below="@+id/text_Y"
+        android:layout_toEndOf="@+id/label_Z"
+        android:clickable="false"
+        android:editable="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Y++"
+        android:id="@+id/button_Yplus"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/button_ZeroMachine" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X++"
+        android:id="@+id/button_Xplus"
+        android:layout_alignTop="@+id/button_Yminus"
+        android:layout_toEndOf="@+id/button_Xminus" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X--"
+        android:id="@+id/button_Xminus"
+        android:layout_alignTop="@+id/button_Zminus"
+        android:layout_toEndOf="@+id/button_Yminus" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Y--"
+        android:id="@+id/button_Yminus"
+        android:layout_alignBottom="@+id/label_Z"
+        android:layout_toStartOf="@+id/button_Yplus" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Z++"
+        android:id="@+id/button_Zplus"
+        android:layout_below="@+id/button_Yminus"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Z--"
+        android:id="@+id/button_Zminus"
+        android:layout_alignTop="@+id/button_Zplus"
+        android:layout_alignEnd="@+id/text_Z" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:enabled="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\u2714"
+        android:id="@+id/button_ManualCoords_apply"
+        android:hint="send manually edited coordinates to the machine"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/button_ZeroMachine"
+        android:layout_alignTop="@+id/button_ZeroMachine"
+        android:visibility="invisible" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zero Machine (G92)"
+        android:id="@+id/button_ZeroMachine"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:enabled="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\u2718"
+        android:id="@+id/button_ManualCoords_discard"
+        android:hint="discard manually edited coordinates"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/button_ZeroMachine"
+        android:layout_alignTop="@+id/button_ZeroMachine"
+        android:visibility="invisible" />
+</RelativeLayout>
