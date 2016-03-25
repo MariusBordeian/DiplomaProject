@@ -13,19 +13,20 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 										 Dezvoltari	: Schimbi capul si cu mici adaptari la *core* - endless possibilities)
 
 ::TODO
- - [ ] move Serial Communication from Python Script to Server on Java
- - [ ] remote onDemand start STM to listen on serial
+ - [ ] Detachable motor wires using couplings
  - [ ] SVG2GCode.py from commandline
- - [ ] Scale Select for Increment Buttons
- - [ ] SVG Paint (lines only)
  - [ ] Merge Upload Buttons into one ::Upload File (*.svg, *.gnc)
  - [ ] Rename Feed Rate to Machine Speed of movement
  - [ ] Check "Distance" from "Machine Settings" Div.
- - [ ] Android App.
+ - [ ] Android Wear companion.
+ - [x] <strike>Android App.</strike>
  - [ ] Concurent Client's Access (for more than one client acccessing the Server and Machine)
- - [ ] Detachable motor wires using couplings
  - [ ] Movement feedback (Movement obstruction detected using voltage variation)
+ - [ ] SVG Paint (lines only, if free time will be available) 
  - [ ] ??? Position tracking using optical sensors from mouse ???
+ - [x] <strike>move Serial Communication from Python Script to Server on Java</strike>
+ - [x] <strike>remote-<b>ish</b> onDemand start STM to listen on serial</strike>
+ - [x] <strike>Scale Select for Increment Buttons</strike>
  - [x] <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>
  - [x] <strike>initialize (px, py, pz) with last known coords.</strike>
- - [x] <strike>Global pz on STM.</strike>
+ - [x] <strike>Global pos.Coords on STM.</strike>
