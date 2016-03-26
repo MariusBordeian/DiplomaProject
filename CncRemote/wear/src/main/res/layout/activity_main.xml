@@ -187,6 +187,19 @@
         android:padding="10dp"
         android:enabled="false" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="M"
+        android:enabled="false"
+        android:id="@+id/button_manual"
+        android:textAlignment="viewEnd"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/button_ZeroMachine"
+        android:onClick="controlMode" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -200,4 +213,16 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/text_Z"
         android:enabled="false" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="S"
+        android:id="@+id/button_sensors"
+        android:textAlignment="viewStart"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/button_ZeroMachine"
+        android:onClick="controlMode" />
 </RelativeLayout>

@@ -206,6 +206,20 @@
         android:onClick="setScale" />
 
     <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manual"
+        android:id="@+id/button_manual"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/button_ZeroMachine"
+        android:textSize="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/button_ZeroMachine"
+        android:enabled="false"
+        android:onClick="controlMode" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Zero Machine (G92)"
@@ -213,5 +227,21 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textStyle="bold" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sensors"
+        android:id="@+id/button_sensors"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/button_ZeroMachine"
+        android:textSize="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/button_ZeroMachine"
+        android:enabled="true"
+        android:onClick="controlMode" />
+
+
 
 </RelativeLayout>

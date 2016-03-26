@@ -1,6 +1,10 @@
 package ro.project.diploma.cncremote;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
@@ -19,7 +23,7 @@ import com.android.volley.toolbox.Volley;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends WearableActivity {
+public class MainActivity extends WearableActivity implements SensorEventListener {
     public final Context context = this;
 
     private static String IP = "http://192.168.1.143:15500";    // demo
@@ -31,6 +35,14 @@ public class MainActivity extends WearableActivity {
     private StringRequest getSpindleRequest;
     private Integer incrementScale = 1;
     private Integer delayBetweenSteps = 460; // minimum working delay!
+
+    private float mLastX, mLastY, mLastZ;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private final float NOISE = (float) 2.0;
+
+    private Timer timerUpdateSensorCoords;
+    private TimerTask updateSensorCoords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +90,9 @@ public class MainActivity extends WearableActivity {
                 }
             });
 
+            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
             doGet(IP + "/CNC/GUI");
             getSpindleRequest = new StringRequest(Request.Method.GET, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition",
                     new Response.Listener<String>() {
@@ -99,9 +114,25 @@ public class MainActivity extends WearableActivity {
                 public void onErrorResponse(VolleyError error) {
                     Log.d("Request : ", IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!");
                     Toast.makeText(context, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!", Toast.LENGTH_SHORT).show();
+                    IP = null;
+                    requestsQueue.cancelAll(Request.Priority.NORMAL);
+                    Toast.makeText(context, "Force Close and Restart your app!", Toast.LENGTH_SHORT).show();
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!findViewById(R.id.button_sensors).isEnabled())
+            mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        controlMode(findViewById(R.id.button_manual));
     }
 
     @Override
@@ -120,6 +151,18 @@ public class MainActivity extends WearableActivity {
     public void onExitAmbient() {
         updateDisplay();
         super.onExitAmbient();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        mLastX = event.values[0];
+        mLastY = event.values[1];
+        mLastZ = event.values[2];
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // nothing ATM
     }
 
     private void updateDisplay() {
@@ -201,4 +244,80 @@ public class MainActivity extends WearableActivity {
         //*/
     }
 
+    public void controlMode(View v) {
+        switch (v.getId()) {
+            case R.id.button_manual:
+                mSensorManager.unregisterListener(this);
+
+                if (timerUpdateSensorCoords != null && updateSensorCoords != null) {
+                    timerUpdateSensorCoords.cancel();
+                    updateSensorCoords.cancel();
+                    updateSensorCoords = null;
+                    timerUpdateSensorCoords.purge();
+                    timerUpdateSensorCoords = null;
+                }
+
+                findViewById(R.id.button_manual).setEnabled(false);
+                findViewById(R.id.button_sensors).setEnabled(true);
+
+                findViewById(R.id.button_Xminus).setEnabled(true);
+                findViewById(R.id.button_Xplus).setEnabled(true);
+                findViewById(R.id.button_Yminus).setEnabled(true);
+                findViewById(R.id.button_Yplus).setEnabled(true);
+                findViewById(R.id.button_Zminus).setEnabled(true);
+                findViewById(R.id.button_Zplus).setEnabled(true);
+                findViewById(R.id.button_ZeroMachine).setEnabled(true);
+                findViewById(R.id.scaleMinus).setEnabled(true);
+                findViewById(R.id.scalePlus).setEnabled(true);
+
+                findViewById(R.id.incrementScale).setEnabled(true);
+
+                break;
+            case R.id.button_sensors:
+                mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+                timerUpdateSensorCoords = new Timer();
+                updateSensorCoords = new TimerTask() {
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i("Coords\n", "X: " + mLastX + "\nY: " + mLastY + "\nZ: " + mLastZ + "");
+                                if (IP != null) {
+                                    incrementScale = 1;
+                                    incrementScaleView.setText("1");
+                                    if (mLastX > NOISE) {
+                                        alterPosition(findViewById(R.id.button_Xplus));
+                                    } else if (mLastX < -NOISE) {
+                                        alterPosition(findViewById(R.id.button_Xminus));
+                                    } else if (mLastY > NOISE) {
+                                        alterPosition(findViewById(R.id.button_Yminus));
+                                    } else if (mLastY < -NOISE) {
+                                        alterPosition(findViewById(R.id.button_Yplus));
+                                    }
+                                }
+                            }
+                        });
+                    }
+                };
+                timerUpdateSensorCoords.schedule(updateSensorCoords,0,1000);
+
+                findViewById(R.id.button_manual).setEnabled(true);
+                findViewById(R.id.button_sensors).setEnabled(false);
+
+                findViewById(R.id.button_Xminus).setEnabled(false);
+                findViewById(R.id.button_Xplus).setEnabled(false);
+                findViewById(R.id.button_Yminus).setEnabled(false);
+                findViewById(R.id.button_Yplus).setEnabled(false);
+                findViewById(R.id.button_Zminus).setEnabled(false);
+                findViewById(R.id.button_Zplus).setEnabled(false);
+                findViewById(R.id.button_ZeroMachine).setEnabled(false);
+                findViewById(R.id.scaleMinus).setEnabled(false);
+                findViewById(R.id.scalePlus).setEnabled(false);
+
+                findViewById(R.id.incrementScale).setEnabled(false);
+
+                break;
+        }
+    }
 }

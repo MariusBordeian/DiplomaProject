@@ -7,6 +7,10 @@ import android.content.DialogInterface;
 import android.content.Loader;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
     public final Context context = this;
 
     private static String IP;
@@ -50,6 +54,14 @@ public class MainActivity extends AppCompatActivity  {
     private Integer incrementScale = 1;
     private Integer delayBetweenSteps = 460; // minimum working delay!
 
+    private float mLastX, mLastY, mLastZ;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private final float NOISE = (float) 2.0;
+
+    private Timer timerUpdateSensorCoords;
+    private TimerTask updateSensorCoords;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -61,13 +73,13 @@ public class MainActivity extends AppCompatActivity  {
 
         connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        Timer t=new Timer();
-        TimerTask tt=new TimerTask() {
+        Timer timerSpindlePosition=new Timer();
+        TimerTask getSpindlePosition=new TimerTask() {
             public void run() {
                 if(IP!=null && getSpindleRequest!=null)
                     requestsQueue.add(getSpindleRequest);
             }};
-        t.schedule(tt,0,100);
+        timerSpindlePosition.schedule(getSpindlePosition,0,100);
 
         coordsX = (TextView) findViewById(R.id.text_X);
         coordsY = (TextView) findViewById(R.id.text_Y);
@@ -83,9 +95,25 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         if (!connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
             Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!findViewById(R.id.button_sensors).isEnabled())
+            mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        controlMode(findViewById(R.id.button_manual));
     }
 
     @Override
@@ -169,6 +197,18 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        mLastX = event.values[0];
+        mLastY = event.values[1];
+        mLastZ = event.values[2];
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // nothing ATM
+    }
+
     public void alterPosition(View v) {
         if (IP != null)
         {
@@ -236,4 +276,80 @@ public class MainActivity extends AppCompatActivity  {
         //*/
     }
 
+    public void controlMode(View v) {
+        switch (v.getId()) {
+            case R.id.button_manual:
+                mSensorManager.unregisterListener(this);
+
+                if (timerUpdateSensorCoords != null && updateSensorCoords != null) {
+                    timerUpdateSensorCoords.cancel();
+                    updateSensorCoords.cancel();
+                    updateSensorCoords = null;
+                    timerUpdateSensorCoords.purge();
+                    timerUpdateSensorCoords = null;
+                }
+
+                findViewById(R.id.button_manual).setEnabled(false);
+                findViewById(R.id.button_sensors).setEnabled(true);
+
+                findViewById(R.id.button_Xminus).setEnabled(true);
+                findViewById(R.id.button_Xplus).setEnabled(true);
+                findViewById(R.id.button_Yminus).setEnabled(true);
+                findViewById(R.id.button_Yplus).setEnabled(true);
+                findViewById(R.id.button_Zminus).setEnabled(true);
+                findViewById(R.id.button_Zplus).setEnabled(true);
+                findViewById(R.id.button_ZeroMachine).setEnabled(true);
+                findViewById(R.id.scaleMinus).setEnabled(true);
+                findViewById(R.id.scalePlus).setEnabled(true);
+
+                findViewById(R.id.incrementScale).setEnabled(true);
+
+                break;
+            case R.id.button_sensors:
+                mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+                timerUpdateSensorCoords = new Timer();
+                updateSensorCoords = new TimerTask() {
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i("Coords\n", "X: " + mLastX + "\nY: " + mLastY + "\nZ: " + mLastZ + "");
+                                if (IP != null) {
+                                    incrementScale = 1;
+                                    incrementScaleView.setText("1");
+                                    if (mLastX > NOISE) {
+                                        alterPosition(findViewById(R.id.button_Xplus));
+                                    } else if (mLastX < -NOISE) {
+                                        alterPosition(findViewById(R.id.button_Xminus));
+                                    } else if (mLastY > NOISE) {
+                                        alterPosition(findViewById(R.id.button_Yminus));
+                                    } else if (mLastY < -NOISE) {
+                                        alterPosition(findViewById(R.id.button_Yplus));
+                                    }
+                                }
+                            }
+                        });
+                    }
+                };
+                timerUpdateSensorCoords.schedule(updateSensorCoords,0,1000);
+
+                findViewById(R.id.button_manual).setEnabled(true);
+                findViewById(R.id.button_sensors).setEnabled(false);
+
+                findViewById(R.id.button_Xminus).setEnabled(false);
+                findViewById(R.id.button_Xplus).setEnabled(false);
+                findViewById(R.id.button_Yminus).setEnabled(false);
+                findViewById(R.id.button_Yplus).setEnabled(false);
+                findViewById(R.id.button_Zminus).setEnabled(false);
+                findViewById(R.id.button_Zplus).setEnabled(false);
+                findViewById(R.id.button_ZeroMachine).setEnabled(false);
+                findViewById(R.id.scaleMinus).setEnabled(false);
+                findViewById(R.id.scalePlus).setEnabled(false);
+
+                findViewById(R.id.incrementScale).setEnabled(false);
+
+                break;
+        }
+    }
 }
