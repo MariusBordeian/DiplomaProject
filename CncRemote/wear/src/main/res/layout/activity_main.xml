@@ -3,23 +3,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@android:style/Theme.DeviceDefault"
     tools:context="ro.project.diploma.cncremote.MainActivity"
     tools:deviceIds="wear">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="X : "
+        android:text="-"
         android:textSize="23sp"
         android:textAlignment="center"
         android:textIsSelectable="false"
-        android:id="@+id/label_X"
+        android:id="@+id/scaleMinus"
+        android:layout_alignBaseline="@+id/incrementScale"
+        android:layout_toStartOf="@+id/incrementScale"
+        android:textStyle="bold"
+        android:editable="false"
+        android:padding="10dp"
+        android:enabled="false"
+        android:onClick="setScale" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:id="@+id/incrementScale"
+        android:text="1"
+        android:editable="false"
+        android:textIsSelectable="false"
+        android:textAlignment="center"
+        android:layout_above="@+id/text_X"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/scalePlus"
+        android:textStyle="bold"
+        android:editable="false"
+        android:layout_alignBaseline="@+id/incrementScale"
+        android:layout_toEndOf="@+id/incrementScale"
+        android:padding="10dp"
+        android:onClick="setScale"
+        android:enabled="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/button_Xminus"
         android:layout_alignBaseline="@+id/text_X"
         android:layout_toStartOf="@+id/text_X"
         android:textStyle="bold"
-        android:clickable="false"
-        android:editable="false" />
+        android:editable="false"
+        android:onClick="alterPosition"
+        android:padding="10dp"
+        android:enabled="false" />
 
     <EditText
         android:layout_width="100sp"
@@ -29,26 +74,42 @@
         android:id="@+id/text_X"
         android:text="0.0000"
         android:editable="false"
-        android:numeric="signed"
         android:textIsSelectable="false"
         android:textAlignment="center"
         android:layout_above="@+id/text_Y"
-        android:layout_alignStart="@+id/text_Y"
-        android:clickable="false" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Y : "
+        android:text="+"
         android:textSize="23sp"
         android:textAlignment="center"
         android:textIsSelectable="false"
-        android:id="@+id/label_Y"
+        android:id="@+id/button_Xplus"
+        android:textStyle="bold"
+        android:editable="false"
+        android:layout_alignBaseline="@+id/text_X"
+        android:layout_toEndOf="@+id/text_X"
+        android:onClick="alterPosition"
+        android:padding="10dp"
+        android:enabled="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/button_Yminus"
         android:layout_alignBaseline="@+id/text_Y"
         android:layout_toStartOf="@+id/text_Y"
         android:textStyle="bold"
-        android:clickable="false"
-        android:editable="false" />
+        android:editable="false"
+        android:onClick="alterPosition"
+        android:padding="10dp"
+        android:enabled="false" />
 
     <EditText
         android:layout_width="100sp"
@@ -57,28 +118,44 @@
         android:ems="10"
         android:id="@+id/text_Y"
         android:text="0.0000"
-        android:numeric="signed"
         android:textIsSelectable="false"
         android:textAlignment="center"
-        android:layout_marginEnd="35dp"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
         android:clickable="false"
         android:editable="false" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Z : "
+        android:text="+"
         android:textSize="23sp"
         android:textAlignment="center"
         android:textIsSelectable="false"
-        android:id="@+id/label_Z"
+        android:id="@+id/button_Yplus"
+        android:textStyle="bold"
+        android:editable="false"
+        android:layout_alignBaseline="@+id/text_Y"
+        android:layout_toEndOf="@+id/text_Y"
+        android:onClick="alterPosition"
+        android:padding="10dp"
+        android:enabled="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/button_Zminus"
         android:layout_alignBaseline="@+id/text_Z"
         android:layout_toStartOf="@+id/text_Z"
         android:textStyle="bold"
-        android:clickable="false"
-        android:editable="false" />
+        android:editable="false"
+        android:onClick="alterPosition"
+        android:padding="10dp"
+        android:enabled="false" />
 
     <EditText
         android:layout_width="100sp"
@@ -87,11 +164,40 @@
         android:ems="10"
         android:id="@+id/text_Z"
         android:text="0.0000"
-        android:numeric="signed"
         android:textIsSelectable="false"
         android:textAlignment="center"
         android:layout_below="@+id/text_Y"
-        android:layout_alignStart="@+id/text_Y"
+        android:layout_centerHorizontal="true"
         android:clickable="false"
         android:editable="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/button_Zplus"
+        android:textStyle="bold"
+        android:editable="false"
+        android:layout_alignBaseline="@+id/text_Z"
+        android:layout_toEndOf="@+id/text_Z"
+        android:onClick="alterPosition"
+        android:padding="10dp"
+        android:enabled="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Z.M."
+        android:textSize="23sp"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:id="@+id/button_ZeroMachine"
+        android:textStyle="bold"
+        android:editable="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/text_Z"
+        android:enabled="false" />
 </RelativeLayout>

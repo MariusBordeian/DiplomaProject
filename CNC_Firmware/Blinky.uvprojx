@@ -500,11 +500,6 @@
           <GroupName>Source Files</GroupName>
           <Files>
             <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\LED.c</FilePath>
-            </File>
-            <File>
               <FileName>Blinky.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Blinky.c</FilePath>
@@ -545,11 +540,6 @@
               <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
             </File>
             <File>
-              <FileName>misc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
-            </File>
-            <File>
               <FileName>tm_stm32f4_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Library\tm_stm32fall\tm_stm32f4_usart.c</FilePath>
@@ -558,6 +548,11 @@
               <FileName>stm32f4xx_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\misc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1071,11 +1066,6 @@
           <GroupName>Source Files</GroupName>
           <Files>
             <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\LED.c</FilePath>
-            </File>
-            <File>
               <FileName>Blinky.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Blinky.c</FilePath>
@@ -1116,11 +1106,6 @@
               <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
             </File>
             <File>
-              <FileName>misc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
-            </File>
-            <File>
               <FileName>tm_stm32f4_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Library\tm_stm32fall\tm_stm32f4_usart.c</FilePath>
@@ -1129,6 +1114,11 @@
               <FileName>stm32f4xx_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\misc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1579,11 +1569,6 @@
           <GroupName>Source Files</GroupName>
           <Files>
             <File>
-              <FileName>LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\LED.c</FilePath>
-            </File>
-            <File>
               <FileName>Blinky.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Blinky.c</FilePath>
@@ -1624,11 +1609,6 @@
               <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_syscfg.c</FilePath>
             </File>
             <File>
-              <FileName>misc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
-            </File>
-            <File>
               <FileName>tm_stm32f4_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Library\tm_stm32fall\tm_stm32f4_usart.c</FilePath>
@@ -1637,6 +1617,11 @@
               <FileName>stm32f4xx_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Library\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\misc.c</FilePath>
             </File>
           </Files>
         </Group>

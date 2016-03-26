@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity  {
     private Button zeroMachine;
     private StringRequest getSpindleRequest;
     private Integer incrementScale = 1;
-
-    private boolean connected = false;
+    private Integer delayBetweenSteps = 460; // minimum working delay!
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,6 @@ public class MainActivity extends AppCompatActivity  {
                 if(IP!=null && getSpindleRequest!=null)
                     requestsQueue.add(getSpindleRequest);
             }};
-
         t.schedule(tt,0,100);
 
         coordsX = (TextView) findViewById(R.id.text_X);
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity  {
         zeroMachine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doGet(IP + "/CNC/GUI?load=whatever&action=zeroMachine");
+                doGet(IP + "/CNC/GUI?load=whatever&speed=" + delayBetweenSteps + "&action=zeroMachine");
             }
         });
 
@@ -97,54 +95,20 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
-    public void alterPosition(View v) {
-        if (IP != null)
-        {
-            String incrementStr = incrementScaleView.getText().toString();
-            switch (v.getId()) {
-                case R.id.button_Xminus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&incrementScale=" + incrementStr + "&axis=X&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Xplus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&incrementScale=" + incrementStr + "&axis=X&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Yminus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&incrementScale=" + incrementStr + "&axis=Y&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Yplus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&incrementScale=" + incrementStr + "&axis=Y&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Zminus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&incrementScale=" + incrementStr + "&axis=Z&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Zplus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&incrementScale=" + incrementStr + "&axis=Z&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-            }
-        }
-    }
-
-    public void setScale(View v) {
-        incrementScale = Integer.parseInt(incrementScaleView.getText().toString());
-        switch (v.getId()){
-            case R.id.scalePlus:
-                incrementScale++;
-                break;
-            case R.id.scaleMinus:
-                incrementScale--;
-                break;
-        }
-        incrementScaleView.setText(incrementScale.toString());
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.set_IP:
                 if (!connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
                     Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG);
                 } else {
+                    IP = null;
+                    getSpindleRequest = null;
+                    requestsQueue.cancelAll(Request.Priority.NORMAL);
+                    coordsX.setText("");
+                    coordsY.setText("");
+                    coordsZ.setText("");
+
                     LayoutInflater layoutInflater = LayoutInflater.from(context);
 
                     View promptView = layoutInflater.inflate(R.layout.ip, null);
@@ -162,30 +126,29 @@ public class MainActivity extends AppCompatActivity  {
                                     // get user input and set it to result
                                     IP = "http://" + input.getText().toString();
                                     doGet(IP + "/CNC/GUI");
-                                    if (connected) {
-                                        Toast.makeText(context, "Success on " + IP, Toast.LENGTH_SHORT).show();
-                                        getSpindleRequest = new StringRequest(Request.Method.GET, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition",
-                                                new Response.Listener<String>() {
-                                                    @Override
-                                                    public void onResponse(String response) {
+                                    getSpindleRequest = new StringRequest(Request.Method.GET, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition",
+                                            new Response.Listener<String>() {
+                                                @Override
+                                                public void onResponse(String response) {
+                                                    if (IP!=null) {
                                                         String[] coords = response.split("#");
                                                         if (coords.length == 3) {
                                                             coordsX.setText(coords[0]);
                                                             coordsY.setText(coords[1]);
                                                             coordsZ.setText(coords[2]);
                                                         }
-                                                        // Display the first 500 characters of the response string.
-                                                        //Log.d("Response is: ", response.substring(0, 500));
-                                                        //Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
                                                     }
-                                                }, new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                Log.d("Request : ", IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!");
-                                                Toast.makeText(context, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
+                                                    // Display the first 500 characters of the response string.
+                                                    //Log.d("Response is: ", response.substring(0, 500));
+                                                    //Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Log.d("Request : ", IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!");
+                                            Toast.makeText(context, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                 }
                             })
                             .setNegativeButton("Cancel",
@@ -206,6 +169,47 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    public void alterPosition(View v) {
+        if (IP != null)
+        {
+            String incrementStr = incrementScaleView.getText().toString();
+            switch (v.getId()) {
+                case R.id.button_Xminus:
+                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=X&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                    break;
+                case R.id.button_Xplus:
+                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=X&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                    break;
+                case R.id.button_Yminus:
+                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Y&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                    break;
+                case R.id.button_Yplus:
+                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Y&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                    break;
+                case R.id.button_Zminus:
+                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Z&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                    break;
+                case R.id.button_Zplus:
+                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Z&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                    break;
+            }
+        }
+    }
+
+    public void setScale(View v) {
+        incrementScale = Integer.parseInt(incrementScaleView.getText().toString());
+        switch (v.getId()){
+            case R.id.scalePlus:
+                incrementScale++;
+                break;
+            case R.id.scaleMinus:
+                if (incrementScale > 1)
+                    incrementScale--;
+                break;
+        }
+        incrementScaleView.setText(incrementScale.toString());
+    }
+
     private void doGet(final String url) {
         //*
         // Instantiate the RequestQueue.
@@ -218,11 +222,11 @@ public class MainActivity extends AppCompatActivity  {
                         // Display the first 500 characters of the response string.
                         //Log.d("Response is: ", response.substring(0, 500));
                         //Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
-                        connected = true;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                requestsQueue.cancelAll(Request.Priority.NORMAL);
                 Log.d("Request : ", "That did NOT work for " + url);
                 Toast.makeText(context, "That did NOT work for " + url, Toast.LENGTH_SHORT).show();
             }

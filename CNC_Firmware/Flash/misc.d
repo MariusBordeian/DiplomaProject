@@ -1,4 +1,4 @@
-.\flash\misc.o: Library\STM32F4xx_StdPeriph_Driver\src\misc.c
+.\flash\misc.o: misc.c
 .\flash\misc.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\flash\misc.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx.h
 .\flash\misc.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm4.h

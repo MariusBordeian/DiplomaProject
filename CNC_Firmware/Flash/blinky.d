@@ -1,5 +1,4 @@
 .\flash\blinky.o: Blinky.c
-.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\flash\blinky.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx.h
 .\flash\blinky.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm4.h
 .\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
@@ -36,12 +35,12 @@
 .\flash\blinky.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 .\flash\blinky.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
 .\flash\blinky.o: .\Library\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
-.\flash\blinky.o: LED.h
-.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
-.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-.\flash\blinky.o: .\Library\tm_stm32fall\defines.h
 .\flash\blinky.o: .\Library\tm_stm32fall\tm_stm32f4_disco.h
+.\flash\blinky.o: .\Library\tm_stm32fall\defines.h
 .\flash\blinky.o: .\Library\tm_stm32fall\tm_stm32f4_gpio.h
 .\flash\blinky.o: .\Library\tm_stm32fall\tm_stm32f4_usart.h
 .\flash\blinky.o: .\Library\tm_stm32fall\attributes.h
+.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\flash\blinky.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

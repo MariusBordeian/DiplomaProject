@@ -27,5 +27,7 @@
         android:enabled="true"
         android:focusable="true"
         android:inputType="text"
-        android:selectAllOnFocus="true" />
+        android:selectAllOnFocus="true"
+        android:layout_alignEnd="@+id/textView"
+        android:hint="xxx.xxx.xxx.xxx:port" />
 </RelativeLayout>
