@@ -15,18 +15,18 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 ::TODO
  - [ ] Detachable motor wires using couplings
  - [ ] SVG2GCode.py from commandline
- - [ ] Merge Upload Buttons into one ::Upload File (*.svg, *.gnc)
- - [ ] Rename Feed Rate to Machine Speed of movement
  - [ ] Check "Distance" from "Machine Settings" Div.
- - [ ] Android Wear companion.
+ - [ ] Single Upload Buttons ::Upload File (*.svg, *.gnc)
+ - [x] <strike>Rename Feed Rate to Machine Speed of movement</strike>
  - [x] <strike>Android App.</strike>
- - [ ] Concurent Client's Access (for more than one client acccessing the Server and Machine)
- - [ ] Movement feedback (Movement obstruction detected using voltage variation)
- - [ ] SVG Paint (lines only, if free time will be available) 
- - [ ] ??? Position tracking using optical sensors from mouse ???
+ - [x] <strike>Android Wear companion.</strike>
  - [x] <strike>move Serial Communication from Python Script to Server on Java</strike>
  - [x] <strike>remote-<b>ish</b> onDemand start STM to listen on serial</strike>
  - [x] <strike>Scale Select for Increment Buttons</strike>
  - [x] <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>
  - [x] <strike>initialize (px, py, pz) with last known coords.</strike>
  - [x] <strike>Global pos.Coords on STM.</strike>
+ - [ ] <strike>Concurent Client's Access (for more than one client acccessing the Server and Machine)</strike>
+ - [ ] <strike>Position tracking using optical sensors from mouse ???</strike>
+ - [ ] <strike>Movement feedback (Movement obstruction detected using voltage variation)</strike>
+ - [ ] <strike>SVG Paint (lines only, if free time will be available)</strike>
