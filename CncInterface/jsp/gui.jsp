@@ -28,10 +28,11 @@
             <span>Machine Settings</span>
         </div>
         <div class="settings-section">
-            <select>
-                <option>Feed Rate : 300</option>
-                <option>Feed Rate : 400</option>
-                <option>Feed Rate : 500</option>
+
+            <select id="speed">
+                <option value=460>Delay between steps : 460 &#181;s</option>
+                <option value=500>Delay between steps : 500 &#181;s</option>
+                <option value=600>Delay between steps : 600 &#181;s</option>
             </select>
             <select>
 				<option>Distance : 3</option>
@@ -149,8 +150,9 @@
 		var file = document.getElementById("file1").click();
     }
     function zeroMachine() {
+    var speed=document.getElementById("speed").value;
         $.ajax({
-                    url: "/CNC/GUI?load=whatever&action=zeroMachine",
+                    url: "/CNC/GUI?load=whatever&action=zeroMachine&speed="+speed,
                     method: "get"
                 }).done(function (msg) {
                     getSpindlePosition();
@@ -183,14 +185,15 @@
 	
     function sendToCNC() {
         var lineElements=document.getElementsByClassName("gcodeLine");
+        var speed=document.getElementById("speed").value;
         var toSendArray=[];
         var matcher=[];
         for(var i=0;i<lineElements.length;i++){
             matcher=pattern.exec(lineElements[i].innerHTML);
             if(!matcher[3]){
-                toSendArray.push(matcher[2]+"\n");
+                toSendArray.push(speed+"#"+matcher[2]+"\n");
             }else{
-                toSendArray.push(matcher[2]+"#"+matcher[3]+"\n");
+                toSendArray.push(speed+"#"+matcher[2]+"#"+matcher[3]+"\n");
             }
         }
 
@@ -370,8 +373,9 @@
         var currentY=document.getElementById("yCoord").innerHTML;
         var currentZ=document.getElementById("zCoord").innerHTML;
         var incrementScale=document.getElementById("iScale").value;
+        var speed=document.getElementById("speed").value;
         $.ajax({
-            url: "/CNC/GUI?load=whatever&action=alterPosition&axis=" + axis + "&dir=" + dir+ "&currX=" + currentX + "&currY=" + currentY+ "&currZ=" + currentZ+"&incrementScale="+incrementScale,
+            url: "/CNC/GUI?load=whatever&action=alterPosition&axis=" + axis + "&dir=" + dir+ "&currX=" + currentX + "&currY=" + currentY+ "&currZ=" + currentZ+"&incrementScale="+incrementScale+"&speed="+speed,
             method: "get"
         }).done(function (msg) {
 

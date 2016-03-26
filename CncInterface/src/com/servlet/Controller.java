@@ -39,6 +39,7 @@ public class Controller extends HttpServlet {
                     String currY=request.getParameter("currY");
                     String currZ=request.getParameter("currZ");
                     String incrementScale=request.getParameter("incrementScale");
+                    String speed=request.getParameter("speed");
                     Integer incrementScaleInt=1;
                     try {
                         incrementScaleInt = Integer.parseInt(incrementScale);
@@ -46,21 +47,21 @@ public class Controller extends HttpServlet {
 
                     if(axis.equals("X")){
                         if(direction.equals("plus")){
-                            commandLine=(Float.parseFloat(currX)+incrementScaleInt)+"#"+currY+"\n";
+                            commandLine=speed+"#"+(Float.parseFloat(currX)+incrementScaleInt)+"#"+currY+"\n";
                         }else{
-                            commandLine=(Float.parseFloat(currX)-incrementScaleInt)+"#"+currY+"\n";
+                            commandLine=speed+"#"+(Float.parseFloat(currX)-incrementScaleInt)+"#"+currY+"\n";
                         };
                     }else if(axis.equals("Y")){
                         if(direction.equals("plus")){
-                            commandLine=currX+"#"+(Float.parseFloat(currY)+incrementScaleInt)+"\n";
+                            commandLine=speed+"#"+currX+"#"+(Float.parseFloat(currY)+incrementScaleInt)+"\n";
                         }else{
-                            commandLine=currX+"#"+(Float.parseFloat(currY)-incrementScaleInt)+"\n";
+                            commandLine=speed+"#"+currX+"#"+(Float.parseFloat(currY)-incrementScaleInt)+"\n";
                         };
                     }else if(axis.equals("Z")){
                         if(direction.equals("plus")){
-                            commandLine=(Float.parseFloat(currZ)+incrementScaleInt)+"\n";
+                            commandLine=speed+"#"+(Float.parseFloat(currZ)+incrementScaleInt)+"\n";
                         }else{
-                            commandLine=(Float.parseFloat(currZ)-incrementScaleInt)+"\n";
+                            commandLine=speed+"#"+(Float.parseFloat(currZ)-incrementScaleInt)+"\n";
                         };
                     }
                     //System.out.println(commandLine);
@@ -71,8 +72,9 @@ public class Controller extends HttpServlet {
                         e.printStackTrace();
                     }
                 } else if (action.equals("zeroMachine")){
-                    Communicator.queue.add("0.0\n");
-                    Communicator.queue.add("0.0#0.0\n");
+                    String speed=request.getParameter("speed");
+                    Communicator.queue.add(speed+"#"+"0.0\n");
+                    Communicator.queue.add(speed+"#"+"0.0#0.0\n");
                 }
 
             }
