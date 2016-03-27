@@ -63,8 +63,24 @@ public class MainActivity extends WearableActivity implements SensorEventListene
             findViewById(R.id.button_Zplus).setEnabled(true);
             findViewById(R.id.button_Zminus).setEnabled(true);
             findViewById(R.id.button_ZeroMachine).setEnabled(true);
+
             findViewById(R.id.scaleMinus).setEnabled(true);
+            findViewById(R.id.scaleMinus).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    doGet(IP + "/CNC/GUI?load=whatever&action=toggleSpindle&state=off");
+                    return true;
+                }
+            });
+
             findViewById(R.id.scalePlus).setEnabled(true);
+            findViewById(R.id.scalePlus).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    doGet(IP + "/CNC/GUI?load=whatever&action=toggleSpindle&state=on");
+                    return true;
+                }
+            });
 
             Timer t = new Timer();
             TimerTask tt = new TimerTask() {
@@ -205,17 +221,19 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     }
 
     public void setScale(View v) {
-        incrementScale = Integer.parseInt(incrementScaleView.getText().toString());
-        switch (v.getId()){
-            case R.id.scalePlus:
-                incrementScale++;
-                break;
-            case R.id.scaleMinus:
-                if (incrementScale > 1)
-                    incrementScale--;
-                break;
+        if (!findViewById(R.id.button_manual).isEnabled()) {
+            incrementScale = Integer.parseInt(incrementScaleView.getText().toString());
+            switch (v.getId()) {
+                case R.id.scalePlus:
+                    incrementScale++;
+                    break;
+                case R.id.scaleMinus:
+                    if (incrementScale > 1)
+                        incrementScale--;
+                    break;
+            }
+            incrementScaleView.setText(incrementScale.toString());
         }
-        incrementScaleView.setText(incrementScale.toString());
     }
 
     private void doGet(final String url) {
@@ -267,8 +285,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                 findViewById(R.id.button_Zminus).setEnabled(true);
                 findViewById(R.id.button_Zplus).setEnabled(true);
                 findViewById(R.id.button_ZeroMachine).setEnabled(true);
-                findViewById(R.id.scaleMinus).setEnabled(true);
-                findViewById(R.id.scalePlus).setEnabled(true);
 
                 findViewById(R.id.incrementScale).setEnabled(true);
 
@@ -312,12 +328,11 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                 findViewById(R.id.button_Zminus).setEnabled(false);
                 findViewById(R.id.button_Zplus).setEnabled(false);
                 findViewById(R.id.button_ZeroMachine).setEnabled(false);
-                findViewById(R.id.scaleMinus).setEnabled(false);
-                findViewById(R.id.scalePlus).setEnabled(false);
 
                 findViewById(R.id.incrementScale).setEnabled(false);
 
                 break;
         }
     }
+
 }

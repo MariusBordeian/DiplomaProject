@@ -242,6 +242,11 @@
         android:enabled="true"
         android:onClick="controlMode" />
 
-
-
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spindle"
+        android:layout_alignBaseline="@+id/button_Xplus"
+        android:layout_centerHorizontal="true"
+        android:clickable="true" />
 </RelativeLayout>

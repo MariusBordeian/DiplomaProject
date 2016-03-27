@@ -20,7 +20,8 @@
         android:editable="false"
         android:padding="10dp"
         android:enabled="false"
-        android:onClick="setScale" />
+        android:onClick="setScale"
+        android:longClickable="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -48,6 +49,7 @@
         android:layout_toEndOf="@+id/incrementScale"
         android:padding="10dp"
         android:onClick="setScale"
+        android:longClickable="true"
         android:enabled="false" />
 
     <TextView
@@ -225,4 +227,5 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/button_ZeroMachine"
         android:onClick="controlMode" />
+
 </RelativeLayout>

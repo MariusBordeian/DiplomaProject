@@ -21,9 +21,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView coordsZ;
     private TextView incrementScaleView;
     private Button zeroMachine;
+    private Switch toggle;
     private StringRequest getSpindleRequest;
     private Integer incrementScale = 1;
     private Integer delayBetweenSteps = 460; // minimum working delay!
@@ -92,6 +97,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 doGet(IP + "/CNC/GUI?load=whatever&speed=" + delayBetweenSteps + "&action=zeroMachine");
+            }
+        });
+
+        toggle = (Switch) findViewById(R.id.spindle);
+        toggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Switch tg = (Switch) findViewById(R.id.spindle);
+                if (IP != null)
+                    if (!toggle.isChecked()) {
+                        doGet(IP + "/CNC/GUI?load=whatever&action=toggleSpindle&state=off");
+                        toggle.setChecked(false);
+                    }
+                    else {
+                        doGet(IP + "/CNC/GUI?load=whatever&action=toggleSpindle&state=on");
+                        toggle.setChecked(true);
+                    }
+                else
+                    toggle.setChecked(false);
             }
         });
 
@@ -160,10 +184,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                                 public void onResponse(String response) {
                                                     if (IP!=null) {
                                                         String[] coords = response.split("#");
-                                                        if (coords.length == 3) {
+                                                        if (coords.length == 4) {
                                                             coordsX.setText(coords[0]);
                                                             coordsY.setText(coords[1]);
                                                             coordsZ.setText(coords[2]);
+                                                            if (coords[3].equals("on")){
+                                                                toggle.setChecked(true);
+                                                            } else if (coords[3].equals("off")) {
+                                                                toggle.setChecked(false);
+                                                            }
                                                         }
                                                     }
                                                     // Display the first 500 characters of the response string.
@@ -266,6 +295,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (url.contains("toggleSpindle")){
+                    toggle.setChecked(false);
+                }
                 requestsQueue.cancelAll(Request.Priority.NORMAL);
                 Log.d("Request : ", "That did NOT work for " + url);
                 Toast.makeText(context, "That did NOT work for " + url, Toast.LENGTH_SHORT).show();
@@ -352,4 +384,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 break;
         }
     }
+
 }

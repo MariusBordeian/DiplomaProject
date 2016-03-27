@@ -110,12 +110,23 @@ int getNumbers(char src[], double dest[]) {
 							src[i] == ',' ||
 							src[i] == '#' || 
 							src[i] == '-' ||
+							src[i] == '@' ||
 							src[i] == '\n'
 						)
 				 ) 
 			{
 				return 0;
 			}
+		}
+		
+		if (srcLen == 3 && src[0] == '@')
+		{
+			if (src[1] == '0')
+				spindlePowerToggle(OFF);
+			else if (src[1] == '1')
+				spindlePowerToggle(ON);
+			
+			return 0;
 		}
 		
 		nrOfDelims = getNrOfDelim(src, '#');
