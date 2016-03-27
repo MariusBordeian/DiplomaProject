@@ -8,8 +8,8 @@ android {
         applicationId "ro.project.diploma.cncremote"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 5
-        versionName '1.7'
+        versionCode 7
+        versionName '1.9'
     }
     buildTypes {
         release {
