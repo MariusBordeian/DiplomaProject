@@ -43,6 +43,10 @@
         <div class="manual-cnc-control">
             <span>Manual Control</span>
         </div>
+         <div class="cf" style="margin-top:20px;margin-left:50px;">
+             <span style="">Toggle spindle</span>
+             <input style="" type="checkbox" onchange="toggleSpindle()"  id="toggleSpindle">
+         </div>
         <div class="butttons-section cf">
             <table>
                 <tr>
@@ -109,6 +113,7 @@
 <script>
 	var pattern = /^(G00|G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
 	var prevHighLithedKey;
+	var toggleSpindleCounter=0;
 		
     $(document).ready(function () {
         $("#slider").slider({
@@ -209,6 +214,22 @@
 
     }
 
+    function toggleSpindle(){
+    toggleSpindleCounter++;
+    var state="off";
+    if(toggleSpindleCounter%2==0){
+        state="off";
+        toggleSpindleCounter=0;
+    }else{
+        state="on";
+        toggleSpindleCounter=1;
+    }
+     $.ajax({
+                url: "/CNC/GUI?load=whatever&action=toggleSpindle&state="+state,
+                method: "get"
+            });
+
+    }
     function generateDivs(gcode) {
         var lines = gcode.split("\n");
         var lineCounter = 0;
@@ -363,6 +384,7 @@
                  $("#xCoord").html(coordinates[0]);
                  $("#yCoord").html(coordinates[1]);
                  $("#zCoord").html(coordinates[2]);
+                 $("#toggleSpindle").prop('checked',(coordinates[3]=="on"));
             }
             //console.log("Current position "+msg);
         }).fail(function (msg) {

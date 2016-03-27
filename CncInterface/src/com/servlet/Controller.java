@@ -17,9 +17,11 @@ import java.util.Queue;
  */
 
 public class Controller extends HttpServlet {
+    Boolean spindleRunning=false;
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String load = request.getParameter("load");
         String action = request.getParameter("action");
+
         PrintWriter out = response.getWriter();
         if (load == null) {
             request.getRequestDispatcher("/jsp/gui.jsp").forward(request, response);
@@ -28,11 +30,20 @@ public class Controller extends HttpServlet {
                 if (action.equals("getSpindlePosition")) {
                     //String coordinatesJSON="{\"X\":"+ Communicator.coordinates.getX()+",\"Y\":"+Communicator.coordinates.getY()+",\"Z\":"+Communicator.coordinates.getZ()+"}";
 
-                    out.print(Communicator.linie);
+                    out.print(Communicator.linie+"#"+(spindleRunning?"on":"off"));
 
                     //out.print(linie);
                     // get position of the spindle
-                } else if (action.equals("alterPosition")) {
+                }else if (action.equals("toggleSpindle")){
+                    String state=request.getParameter("state");
+                   if(state.equals("on")){
+                       Communicator.queue.add("@1\n");
+                       spindleRunning=true;
+                   }else {
+                       Communicator.queue.add("@0\n");
+                       spindleRunning=false;
+                   }
+                }else if (action.equals("alterPosition")) {
                     String axis = request.getParameter("axis");
                     String direction = request.getParameter("dir");
                     String currX=request.getParameter("currX");
