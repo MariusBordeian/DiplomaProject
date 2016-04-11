@@ -41,8 +41,12 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     private Sensor mAccelerometer;
     private final float NOISE = (float) 2.0;
 
+    private Timer t;
+    private TimerTask tt;
     private Timer timerUpdateSensorCoords;
     private TimerTask updateSensorCoords;
+
+    private ConnectivityManager connManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         setAmbientEnabled();
 
         requestsQueue = Volley.newRequestQueue(context);
-        ConnectivityManager connManager;
         connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (!connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
             Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG).show();
@@ -82,8 +85,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                 }
             });
 
-            Timer t = new Timer();
-            TimerTask tt = new TimerTask() {
+            t = new Timer();
+            tt = new TimerTask() {
                 public void run() {
                     if (IP != null && getSpindleRequest != null)
                         requestsQueue.add(getSpindleRequest);
@@ -143,12 +146,31 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         super.onResume();
         if (!findViewById(R.id.button_sensors).isEnabled())
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        if (connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
+            t = new Timer();
+            tt = new TimerTask() {
+                public void run() {
+                    if (IP != null && getSpindleRequest != null)
+                        requestsQueue.add(getSpindleRequest);
+                }
+            };
+            t.schedule(tt, 0, 100);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         controlMode(findViewById(R.id.button_manual));
+
+        if (t != null && updateSensorCoords != null) {
+            t.cancel();
+            tt.cancel();
+            tt = null;
+            t.purge();
+            t = null;
+        }
     }
 
     @Override
