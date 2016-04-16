@@ -119,7 +119,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                         public void onResponse(String response) {
                             if (IP != null) {
                                 String[] coords = response.split("#");
-                                if (coords.length == 4) {
+                                if (coords.length > 4) {
                                     coordsX.setText(coords[0]);
                                     coordsY.setText(coords[1]);
                                     coordsZ.setText(coords[2]);
