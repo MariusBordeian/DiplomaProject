@@ -257,7 +257,7 @@ class Effect:
         if original != result:
             self.document.write(sys.stdout)
 
-    def affect(self, args=sys.argv[1:], output=True):
+    def affect(self, args=sys.argv[1:], output=False):
         """Affect an SVG document with a callback effect"""
         self.svg_file = args[-1]
         self.getoptions(args)

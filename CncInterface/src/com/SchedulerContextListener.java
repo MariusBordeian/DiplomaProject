@@ -10,6 +10,10 @@ import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 public class SchedulerContextListener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
@@ -20,7 +24,18 @@ public class SchedulerContextListener implements ServletContextListener,
 
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        String serialPort="/dev/ttyS80";
+        Properties properties=new Properties();
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream(servletContextEvent.getServletContext().getRealPath("/config/config.properties"));
+            properties.load(input);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String serialPort=properties.getProperty("serialPort");
+
         Communicator communicator=new Communicator();
         try {
             communicator.connect(serialPort);

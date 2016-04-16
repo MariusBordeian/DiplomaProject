@@ -28,17 +28,33 @@
             <span>Machine Settings</span>
         </div>
         <div class="settings-section">
+            <div>
+                <label>zSafe : </label>
+                <input id="zSafe" type="number" min="0" value="0"/>
+            </div>
+            <div>
+                <label>zDepth : </label>
+                <input id="zDepth" type="number" value="0"/>
+            </div>
+            <div>
+                <label>zStep : </label>
+                <input id="zStep" type="number" value="0"/>
+            </div>
+            <div>
+                <label>zSurface : </label>
+                <input id="zSurface" type="number" value="0"/>
+            </div>
+            <div>
+                <label>Tool diameter  :</label>
+                <input id="toolDiameter" type="number" value="5"/>
+            </div>
 
             <select id="speed">
                 <option value=460>Delay between steps : 460 &#181;s</option>
                 <option value=500>Delay between steps : 500 &#181;s</option>
                 <option value=600>Delay between steps : 600 &#181;s</option>
             </select>
-            <select>
-				<option>Distance : 3</option>
-                <option>Distance : 4</option>
-                <option>Distance : 5</option>
-            </select>
+
         </div>
         <div class="manual-cnc-control">
             <span>Manual Control</span>
@@ -86,9 +102,6 @@
                     </div>
                 </div>
             </div>
-            <div class="right-section">
-
-            </div>
         </div>
         <div id="generatedDivs" class="bottom-section">
             <div id="gcodeLinesContainer">
@@ -102,10 +115,9 @@
             <%--              <button onclick="plotObjectByGcode()">Plot</button>
                           <button onclick="startPositionListener()">Get Coordinates</button>
                           <button onclick="generateDivs()">Generate Divs</button>--%>
-            <input type="file" id="file1" onchange="readFile(this)" style="display:none">
+            <div id="fileDiv"></div>
             <button onclick="plotObjectByGcode()">Save changes</button>
-            <button onclick="openFileOption()">Upload SVG</button>
-            <button onclick="openFileOption()">Upload GCode</button>
+            <button onclick="openFileOption()">Upload File (SVG/GCode)</button>
             <button onclick="sendToCNC()" id="SendCNCButton">Send to CNC</button>
         </div>
     </div>
@@ -114,7 +126,11 @@
 	var pattern = /^(G00|G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
 	var prevHighLithedKey;
 	var toggleSpindleCounter=0;
-		
+    var stateType={
+        off:"off",
+        on:"on"
+    };
+	var sendToCncStatus=stateType.off;
     $(document).ready(function () {
         $("#slider").slider({
             max: 30,
@@ -152,8 +168,11 @@
     }
     function openFileOption() {
         resetInterface();
-		var file = document.getElementById("file1").click();
+        document.getElementById("fileDiv").innerHTML="";
+        document.getElementById("fileDiv").innerHTML="<input type=\"file\" id=\"file1\" accept=\".ngc, .svg\"  onchange=\"readFile(this)\" style=\"display:none\">";
+        var file = document.getElementById("file1").click();
     }
+
     function zeroMachine() {
     var speed=document.getElementById("speed").value;
         $.ajax({
@@ -166,18 +185,55 @@
     }
     function readFile(obj) {
         var file = obj.files[0];
+        var extensionType={
+             svg:"svg",
+            gcode:"ngc"
+        };
         if (file) {
             var reader = new FileReader();
             reader.readAsText(file, "UTF-8");
-            reader.onload = function (evt) {
-                //console.log(evt.target.result);
-                generateDivs(evt.target.result);
-                plotObjectByGcode();
-            };
+
+            var fileNameComponents=file.name.split('.');
+            var extension=fileNameComponents[fileNameComponents.length-1];
+
+            if(extension==extensionType.svg){
+                reader.onload = function (evt) {
+                    var str=evt.target.result;
+                    var zSafe=$("#zSafe").val();
+                    var zDepth=$("#zDepth").val();
+                    var zStep=$("#zStep").val();
+                    var zSurface=$("#zSurface").val();
+                    var toolDiameter=$("#toolDiameter").val();
+
+
+                    $.ajax({
+                        url: "/CNC/GUI",
+                        type: 'POST',
+                        dataType:'application/x-www-form-urlencoded',
+                        data:'action=getGCodeFromSVGFile&zSafe='+zSafe+'&zDepth='+zDepth+'&zStep='+zStep+'&zSurface='+zSurface+'&toolDiameter='+toolDiameter+'&data='+encodeURIComponent(str)
+                    }).done(function (msg) {
+                        generateDivs(msg.responseText);
+                        plotObjectByGcode();
+                    }).fail(function (msg) {
+                        console.log("in fail!");
+                        generateDivs(msg.responseText);
+                        plotObjectByGcode();
+                    });
+                };
+            }
+            else if(extension==extensionType.gcode){
+                reader.onload = function (evt) {
+                    //console.log(evt.target.result);
+                    generateDivs(evt.target.result);
+                    plotObjectByGcode();
+                };
+            }
+
             reader.onerror = function (evt) {
                 console.log("error reading file");
             };
         }
+
     }
 
 	function resetInterface() {
@@ -189,45 +245,57 @@
 	}
 	
     function sendToCNC() {
-        var lineElements=document.getElementsByClassName("gcodeLine");
-        var speed=document.getElementById("speed").value;
-        var toSendArray=[];
-        var matcher=[];
-        for(var i=0;i<lineElements.length;i++){
-            matcher=pattern.exec(lineElements[i].innerHTML);
-            if(!matcher[3]){
-                toSendArray.push(speed+"#"+matcher[2]+"\n");
-            }else{
-                toSendArray.push(speed+"#"+matcher[2]+"#"+matcher[3]+"\n");
+        if(sendToCncStatus==stateType.off){
+            var lineElements=document.getElementsByClassName("gcodeLine");
+            var speed=document.getElementById("speed").value;
+            var toSendArray=[];
+            var matcher=[];
+            for(var i=0;i<lineElements.length;i++){
+                matcher=pattern.exec(lineElements[i].innerHTML);
+                if(!matcher[3]){
+                    toSendArray.push(speed+"#"+matcher[2]+"\n");
+                }else{
+                    toSendArray.push(speed+"#"+matcher[2]+"#"+matcher[3]+"\n");
+                }
             }
-        }
 
-         $.ajax({
+             $.ajax({
                     url: "/CNC/GUI",
                     type: 'POST',
                     dataType:"application/json",
-                    data:'data='+toSendArray.toString()
+                    data:'action=sendToCnc&data='+toSendArray.toString()
                 }).done(function (msg) {
+                    sendToCncStatus=!sendToCncStatus;
                 }).fail(function (msg) {
+                    //sendToCncStatus=!sendToCncStatus;
                 });
-
-
+        }else if(sendToCncStatus==stateType.on){
+            $.ajax({
+                url: "/CNC/GUI",
+                type: 'POST',
+                dataType:"application/json",
+                data:'action=stopCnc'
+            }).done(function (msg) {
+            }).fail(function (msg) {
+            });
+        }
     }
 
     function toggleSpindle(){
-    toggleSpindleCounter++;
-    var state="off";
-    if(toggleSpindleCounter%2==0){
-        state="off";
-        toggleSpindleCounter=0;
-    }else{
-        state="on";
-        toggleSpindleCounter=1;
-    }
-     $.ajax({
+
+        toggleSpindleCounter++;
+        var state=stateType.off;
+        if(toggleSpindleCounter%2==0){
+            state=stateType.off;
+            toggleSpindleCounter=0;
+        }else{
+            state=stateType.on;
+            toggleSpindleCounter=1;
+        }
+         $.ajax({
                 url: "/CNC/GUI?load=whatever&action=toggleSpindle&state="+state,
                 method: "get"
-            });
+         });
 
     }
     function generateDivs(gcode) {
@@ -253,8 +321,8 @@
                 lineCounter++;
             }
         }
-
-        $(".gcodeLine").keydown(function (event) {
+        gcodeLines=$(".gcodeLine");
+        gcodeLines.keydown(function (event) {
             var object_;
             if (event.which == 38) {
                 //arrow up
@@ -296,9 +364,14 @@
     //$(".gcodeLine").onfocus(highlightElement(this));
 	
     function highlightElement(obj) {
-		if(prevHighLithedKey) {
-			document.getElementById(prevHighLithedKey).setAttribute("stroke", (prevHighLithedKey.indexOf("G01")>=0)?"black":"green");
-		}
+        if (prevHighLithedKey) {
+            var prevSVGElement = document.getElementById(prevHighLithedKey);
+            prevSVGElement.setAttribute("stroke-width", "0.2");
+            if (sendToCncStatus == stateType.off) {
+                prevSVGElement.setAttribute("stroke", (prevHighLithedKey.indexOf("G01") >= 0) ? "black" : "green");
+            }
+        }
+
 		var localPattern = /^(G00|G01)\s(?:X)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
 		var localPrev = $(obj).prev();
 		var matcher1 ;//= localPattern.exec(localPriv.html());
@@ -316,7 +389,9 @@
 				var y2 = matcher2[3];
 				var idKey = "line_"+matcher2[1]+"X" + x1 + "Y" + y1 + "X" + x2 + "Y" + y2;
 				prevHighLithedKey=idKey;
-				document.getElementById(idKey).setAttribute("stroke", "red");
+                var currentSVGElement = document.getElementById(idKey);
+                currentSVGElement.setAttribute("stroke", "red");
+                currentSVGElement.setAttribute("stroke-width", "0.5");
 			}
 		}
     }
@@ -359,7 +434,8 @@
 				continue;
 			} else {
 				i++;
-				currentLine=pattern.exec(gcodeDivs[i].innerHTML);
+                if(i < gcodeDivs.length)
+				    currentLine=pattern.exec(gcodeDivs[i].innerHTML);
 				continue;
 			}
         }
@@ -371,6 +447,9 @@
             el.setAttribute(k, attrs[k]);
         return el;
     }
+    var lastCoords="";
+    var lastColoredLine=0;
+    var gcodeLines=[];
 
     function getSpindlePosition() {
 
@@ -378,13 +457,35 @@
             url: "/CNC/GUI?load=whatever&action=getSpindlePosition",
             method: "get"
         }).done(function (msg) {
+
+            if(lastCoords!=msg && sendToCncStatus==stateType.on){
+                lastCoords=msg;
+                highlightElement(gcodeLines[lastColoredLine]);
+                lastColoredLine++;
+            }else if(sendToCncStatus==stateType.off){
+                lastColoredLine=0;
+            }
+
+
             var coordinates="";
             if(msg.indexOf("#")>-1){
                 coordinates = msg.split("#");
-                 $("#xCoord").html(coordinates[0]);
-                 $("#yCoord").html(coordinates[1]);
-                 $("#zCoord").html(coordinates[2]);
-                 $("#toggleSpindle").prop('checked',(coordinates[3]=="on"));
+                if (coordinates.length > 3) {
+                    $("#xCoord").html(coordinates[0]);
+                    $("#yCoord").html(coordinates[1]);
+                    $("#zCoord").html(coordinates[2]);
+                    $("#toggleSpindle").prop('checked', (coordinates[3] == stateType.on));
+                    sendToCncStatus = coordinates[4];
+
+                    if (sendToCncStatus == stateType.on) {
+                        $("#generatedDivs *").style("pointer-events", "none");
+                        $("#SendCNCButton").html("Stop CNC");
+                    } else if (sendToCncStatus == stateType.off) {
+                        $("#generatedDivs *").style("pointer-events", "all");
+                        $("#SendCNCButton").html("Start CNC");
+                    }
+                }
+
             }
             //console.log("Current position "+msg);
         }).fail(function (msg) {
