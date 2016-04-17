@@ -478,10 +478,10 @@
                     sendToCncStatus = coordinates[4];
 
                     if (sendToCncStatus == stateType.on) {
-                        $("#generatedDivs *").style("pointer-events", "none");
+                        $("#generatedDivs *").css("pointer-events", "none");
                         $("#SendCNCButton").html("Stop CNC");
                     } else if (sendToCncStatus == stateType.off) {
-                        $("#generatedDivs *").style("pointer-events", "all");
+                        $("#generatedDivs *").css("pointer-events", "all");
                         $("#SendCNCButton").html("Start CNC");
                     }
                 }

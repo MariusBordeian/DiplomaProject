@@ -95,9 +95,9 @@ public class Controller extends HttpServlet {
         String filename = properties.getProperty("fileName");
         String gcodeTools = properties.getProperty("gcodeTools");
         String action = request.getParameter("action");
-        if (action.equals("sendToCnc")) {
+        if (action != null && action.equals("sendToCnc")) {
             Communicator.queue.addAll(Arrays.asList(request.getParameter("data").split(",")));
-        } else if (action.equals("getGCodeFromSVGFile")) {
+        } else if (action != null && action.equals("getGCodeFromSVGFile")) {
             String svgFileContent = request.getParameter("data");
             String zSafe = request.getParameter("zSafe");     //      "Z above all obstacles"
             String zDepth = request.getParameter("zDepth");       //      "Z depth of cut"
@@ -107,14 +107,33 @@ public class Controller extends HttpServlet {
             PrintWriter writer = new PrintWriter(receivedFilePath + "/"+filename+".svg", "UTF-8");
             writer.print(svgFileContent);
             writer.close();
-            Process p = Runtime.getRuntime().exec("python \"" + gcodeTools + "\" -f " + filename + ".ngc -d \"" + receivedFilePath + "\" --tool-diameter " + toolDiameter
+
+            String execStr = "\"" + gcodeTools + "\""
+                    + " -f " + filename + ".ngc"
+                    + " -d \"" + receivedFilePath + "\""
+                    + " --tool-diameter " + toolDiameter
                     + " --Zsafe " + zSafe
                     + " --Zsurface " + zSurface
                     + " --Zdepth " + zDepth
-                    + " --Zstep " + zStep +
-                    "  \"" + receivedFilePath + "/" + filename + ".svg\"");
-            while (p.isAlive()) {
-            }
+                    + " --Zstep " + zStep
+                    + "  \"" + receivedFilePath + "/" + filename + ".svg\"";
+            String[] execCommand = new String[] { "\"" + gcodeTools + "\"",
+                    "-f", filename + ".ngc",
+                    "-d", "\"" + receivedFilePath + "\"",
+                    "--tool-diameter", toolDiameter,
+                    "--Zsafe", zSafe,
+                    "--Zsurface", zSurface,
+                    " --Zdepth", zDepth,
+                    " --Zstep", zStep,
+                    "\"" + receivedFilePath + "/" + filename + ".svg\"" };
+
+            PrintWriter pipe = new PrintWriter(receivedFilePath + "/svg", "UTF-8");
+            pipe.print(execStr);
+            pipe.close();
+
+            File f = new File(receivedFilePath + "/gcode");
+            while (!f.exists() || !f.isFile()) {}
+            f.delete();
 
             BufferedReader br;
             StringBuilder gcodeContent = new StringBuilder();
@@ -136,7 +155,7 @@ public class Controller extends HttpServlet {
             }
 
             response.getWriter().write(gcodeContent.toString());
-        } else if (action.equals("stopCnc")) {
+        } else if (action != null && action.equals("stopCnc")) {
             Communicator.queue.clear();
         }
     }

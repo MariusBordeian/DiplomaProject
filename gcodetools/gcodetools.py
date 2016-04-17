@@ -3622,7 +3622,7 @@ class Gcodetools(inkex.Effect):
 
 		self.OptionParser.add_option("",   "--lathe-rectangular-cutter-width",action="store", type="float", 	dest="lathe_rectangular_cutter_width", default="4",		help="Rectangular cutter width")
 
-		self.OptionParser.add_option("",   "--create-log",					action="store", type="inkbool", 	dest="log_create_log", default=True,				help="Create log files")
+		self.OptionParser.add_option("",   "--create-log",					action="store", type="inkbool", 	dest="log_create_log", default=False,				help="Create log files")
 		self.OptionParser.add_option("",   "--log-filename",				action="store", type="string", 		dest="log_filename", default='gcodetools.log',					help="Create log files")
 
 		self.OptionParser.add_option("",   "--orientation-points-count",	action="store", type="string", 		dest="orientation_points_count", default="2",			help="Orientation points count")
