@@ -14,9 +14,9 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 
 ::TODO
  - [ ] Detachable motor wires using couplings
- - [ ] "Machine Settings" Params for SVG2GCode.py
  - [ ] redesign interface "/CNC/GUI"
  - [x] SVG2GCode.py from commandline
+ - [x] "Machine Settings" Params for SVG2GCode.py
  - [x] <strike>Single Upload Buttons ::Upload File (*.svg, *.gnc)</strike>
  - [x] <strike>Rename Feed Rate to Machine Speed of movement</strike>
  - [x] <strike>Android App.</strike>
