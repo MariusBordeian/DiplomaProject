@@ -166,9 +166,9 @@ void lineZ(long newZ) {
 	uint32_t i = 0;
 
 	if (nrOfSteps > 0) {
-		GPIO_ResetBits(GPIOE, GPIO_Pin_2); // dir CW +
-	} else {
 		GPIO_SetBits(GPIOE, GPIO_Pin_2);	 // dir CCW -
+	} else {
+		GPIO_ResetBits(GPIOE, GPIO_Pin_2); // dir CW  +
 	}
 	nrOfSteps = fabs(nrOfSteps);
 
