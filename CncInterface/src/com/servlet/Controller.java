@@ -108,7 +108,7 @@ public class Controller extends HttpServlet {
             writer.print(svgFileContent);
             writer.close();
 
-            String execStr = "\"" + gcodeTools + "\""
+            String execStr = "python \"" + gcodeTools + "\""
                     + " -f " + filename + ".ngc"
                     + " -d \"" + receivedFilePath + "\""
                     + " --tool-diameter " + toolDiameter
@@ -117,23 +117,36 @@ public class Controller extends HttpServlet {
                     + " --Zdepth " + zDepth
                     + " --Zstep " + zStep
                     + "  \"" + receivedFilePath + "/" + filename + ".svg\"";
-            String[] execCommand = new String[] { "\"" + gcodeTools + "\"",
+            String[] execCommand = new String[] {"python", gcodeTools ,
                     "-f", filename + ".ngc",
-                    "-d", "\"" + receivedFilePath + "\"",
+                    "-d", receivedFilePath ,
                     "--tool-diameter", toolDiameter,
                     "--Zsafe", zSafe,
                     "--Zsurface", zSurface,
                     " --Zdepth", zDepth,
                     " --Zstep", zStep,
-                    "\"" + receivedFilePath + "/" + filename + ".svg\"" };
-
+                     receivedFilePath + "/" + filename + ".svg" };
+            /*
             PrintWriter pipe = new PrintWriter(receivedFilePath + "/svg", "UTF-8");
             pipe.print(execStr);
             pipe.close();
+            */
 
+            //Process p = Runtime.getRuntime().exec(execStr);
+            ProcessBuilder pp=new ProcessBuilder(execCommand);
+            pp.redirectErrorStream(true);
+            Process p =pp.start();
+
+            try {
+                p.waitFor();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            /*
             File f = new File(receivedFilePath + "/gcode");
             while (!f.exists() || !f.isFile()) {}
             f.delete();
+            */
 
             BufferedReader br;
             StringBuilder gcodeContent = new StringBuilder();
