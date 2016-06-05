@@ -24,6 +24,7 @@
 #define X 'x'
 #define Y 'y'
 #define Z 'z'
+#define NRCOORD 3
 
 // Global declarations START
 uint32_t multiplier;	// ???
@@ -39,7 +40,7 @@ uint32_t delay = 460; /* stable minimum aka maximum speed
 							1600-> 60
 						*/
 uint16_t c;
-double dest[3] = {0};	
+double dest[NRCOORD] = {0};	
 int nrOfCoordinatesReceived = 0;	
 char serialCoordinates[256] = {0};
 char buffer[256] = {0};
@@ -91,7 +92,7 @@ int getNrOfDelim(char src[], char delim) {
 }
 int getNumbers(char src[], double dest[]) {
 	char *splitedArray;
-	int capacity = 4;		// sizeof(dest)/sizeof(double) || dest.Count
+	int capacity = NRCOORD;		// sizeof(dest)/sizeof(double) || dest.Count
 	int nrOfDelims = 0;
 	int srcLen = 0;
 	int i = 0;
@@ -139,7 +140,7 @@ int getNumbers(char src[], double dest[]) {
 		}
 		else {
 			i = 0;
-			while (i<capacity && splitedArray != NULL) {
+			while (i < capacity && splitedArray != NULL) {
 				dest[i++] = atof(splitedArray);
 				splitedArray = strtok(NULL, "#");
 			}
@@ -171,7 +172,7 @@ void lineZ(long newZ) {
 		GPIO_ResetBits(GPIOE, GPIO_Pin_2); // dir CW  +
 	}
 	nrOfSteps = fabs(nrOfSteps);
-
+/*
 	if (nrOfSteps >= 800) {
 		for (i = 0; i < nrOfSteps; i++) {
 			if (i <= 400) {
@@ -184,19 +185,19 @@ void lineZ(long newZ) {
 			GPIO_ResetBits(GPIOE, GPIO_Pin_3);
 			TM_DelayMicros(delay);
 		}
-	} else {
+	} else { */
 		for (i = 0; i < nrOfSteps; i++) {
-			if (i <= nrOfSteps / 2) {
+			/* if (i <= nrOfSteps / 2) {
 				delay--;
 			} else {
 				delay++;
-			}
+			} */
 			GPIO_SetBits(GPIOE, GPIO_Pin_3);
 			TM_DelayMicros(delay);
 			GPIO_ResetBits(GPIOE, GPIO_Pin_3);
-			TM_DelayMicros(delay);
+			// TM_DelayMicros(delay);
 		}
-	}
+  // }
 	pz = newZ;
 	delay = delay_backup;
 }
