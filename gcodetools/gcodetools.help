@@ -1,3 +1,18 @@
+python gcodetools.py -f output.ngc --tool-diameter 5 --Zsafe 30 --Zsurface 1 --Zdepth 0 --Zstep 1 C:\Users\mbord\Documents\GitHub\DiplomaProject\samples\AC_logo\logo_ac_lines2.svg
+
+--Zsafe     coordonata pe Z pentru G00
+--Zsurface  coordonata suprafetei piesei de decupat
+--Zdepth    coordonata pana unde intra freza
+--Zstep     pasul cu care intra 
+
+nr pasi = (Zsurface - Zdepth ) / Zstep 
+
+Zero machine (originea)  - este considerat punctul unde freza atinge palul 
+
+
+=================================================================================
+
+
 Usage: gcodetools.py [options] SVGfile
 
 Options:
