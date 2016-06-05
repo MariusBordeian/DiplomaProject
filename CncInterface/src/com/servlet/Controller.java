@@ -34,6 +34,8 @@ public class Controller extends HttpServlet {
             request.getRequestDispatcher("/jsp/gui.jsp").forward(request, response);
         } else {
             if (action != null) {
+                String speed = request.getParameter("speed");
+
                 if (action.equals("getSpindlePosition")) {
                     out.print(Communicator.linie + "#" + (spindleRunning ? "on" : "off") + "#" + (Communicator.queueIsEmpty ? "off" : "on"));
                 } else if (action.equals("toggleSpindle")) {
@@ -52,7 +54,7 @@ public class Controller extends HttpServlet {
                     String currY = request.getParameter("currY");
                     String currZ = request.getParameter("currZ");
                     String incrementScale = request.getParameter("incrementScale");
-                    String speed = request.getParameter("speed");
+
                     Integer incrementScaleInt;
                     try {
                         incrementScaleInt = Integer.parseInt(incrementScale);
@@ -82,9 +84,14 @@ public class Controller extends HttpServlet {
                         e.printStackTrace();
                     }
                 } else if (action.equals("zeroMachine")) {
-                    String speed = request.getParameter("speed");
                     Communicator.queue.add(speed + "#" + "0.0\n");
                     Communicator.queue.add(speed + "#" + "0.0#0.0\n");
+                } else if (action.equals("setCoords")) {
+                    String newX = request.getParameter("newX");
+                    String newY = request.getParameter("newY");
+                    String newZ = request.getParameter("newZ");
+
+                    Communicator.queue.add(speed + "#" + newX + "#" + newY + "#" + newZ + "\n");
                 }
 
             }

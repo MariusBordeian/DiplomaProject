@@ -50,6 +50,7 @@
             </div>
 
             <select id="speed">
+                <option value=300>Delay between steps : 300 &#181;s</option>
                 <option value=460>Delay between steps : 460 &#181;s</option>
                 <option value=500>Delay between steps : 500 &#181;s</option>
                 <option value=600>Delay between steps : 600 &#181;s</option>
@@ -505,6 +506,16 @@
         }).fail(function (msg) {
         });
     }
+    function setCoords(newX, newY, newZ) {
+            var speed=document.getElementById("speed").value;
+            $.ajax({
+                url: "/CNC/GUI?load=whatever&action=setCoords&newX=" + newX + "&newY=" + newY + "&newZ=" + newZ + "&speed=" + speed,
+                method: "get"
+            }).done(function (msg) {
+
+            }).fail(function (msg) {
+            });
+        }
 
 
 </script>
