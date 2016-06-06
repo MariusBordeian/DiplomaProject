@@ -115,37 +115,42 @@ public class Controller extends HttpServlet {
             writer.print(svgFileContent);
             writer.close();
 
-            String execStr = "python \"" + gcodeTools + "\""
-                    + " -f " + filename + ".ngc"
-                    + " -d \"" + receivedFilePath + "\""
-                    + " --tool-diameter " + toolDiameter
-                    + " --Zsafe " + zSafe
-                    + " --Zsurface " + zSurface
-                    + " --Zdepth " + zDepth
-                    + " --Zstep " + zStep
-                    + "  \"" + receivedFilePath + "/" + filename + ".svg\"";
+
             String[] execCommand = new String[] {"python", gcodeTools ,
                     "-f", filename + ".ngc",
                     "-d", receivedFilePath ,
                     "--tool-diameter", toolDiameter,
                     "--Zsafe", zSafe,
                     "--Zsurface", zSurface,
-                    " --Zdepth", zDepth,
-                    " --Zstep", zStep,
-                     receivedFilePath + "/" + filename + ".svg" };
+                    "--Zdepth", zDepth,
+                    "--Zstep", zStep,
+                     receivedFilePath + "/" + filename + ".svg",
+                    ">>",receivedFilePath+"/gcodeToolsErrors.log" };
+            String testCmd="python /home/pi/Desktop/DiplomaProject/gcodetools/gcodetools.py -f receivedFile.ngc -d /home/pi/Desktop/SVG2GCode --tool-diameter 5 --Zsafe 30 --Zsurface 3  --Zdepth 1  --Zstep 2 /home/pi/Desktop/SVG2GCode/receivedFile.svg >> /home/pi/Desktop/SVG2GCode/receivedFile.log";
             /*
             PrintWriter pipe = new PrintWriter(receivedFilePath + "/svg", "UTF-8");
             pipe.print(execStr);
             pipe.close();
             */
-
+//            python /home/pi/Desktop/DiplomaProject/gcodetools/gcodetools.py -f receivedFile.ngc -d /home/pi/Desktop/SVG2GCode --tool-diameter 5 --Zsafe 30 --Zsurface 3  --Zdepth 1  --Zstep 2 /home/pi/Desktop/SVG2GCode/receivedFile.svg
             //Process p = Runtime.getRuntime().exec(execStr);
-            ProcessBuilder pp=new ProcessBuilder(execCommand);
-            pp.redirectErrorStream(true);
-            Process p =pp.start();
+
+            ProcessBuilder pp1=new ProcessBuilder("rm -f "+ receivedFilePath + "/"+filename+".ngc > /home/pi/Desktop/SVG2GCode/receivedFile.log");
+            pp1.redirectErrorStream(true);
+            Process p1 =pp1.start();
 
             try {
-                p.waitFor();
+                p1.waitFor();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ProcessBuilder pp2=new ProcessBuilder(testCmd);
+            pp2.redirectErrorStream(true);
+            Process p2 =pp2.start();
+
+            try {
+                p2.waitFor();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
