@@ -33,6 +33,10 @@
                 <input id="zSafe" type="number" min="0" value="0"/>
             </div>
             <div>
+                <label>zSurface : </label>
+                <input id="zSurface" type="number" value="0"/>
+            </div>
+            <div>
                 <label>zDepth : </label>
                 <input id="zDepth" type="number" value="0"/>
             </div>
@@ -40,10 +44,7 @@
                 <label>zStep : </label>
                 <input id="zStep" type="number" value="0"/>
             </div>
-            <div>
-                <label>zSurface : </label>
-                <input id="zSurface" type="number" value="0"/>
-            </div>
+
             <div>
                 <label>Tool diameter  :</label>
                 <input id="toolDiameter" type="number" value="5"/>
@@ -54,6 +55,14 @@
                 <option value=460>Delay between steps : 460 &#181;s</option>
                 <option value=500>Delay between steps : 500 &#181;s</option>
                 <option value=600>Delay between steps : 600 &#181;s</option>
+                <option value=650>Delay between steps : 650 &#181;s</option>
+                <option value=700>Delay between steps : 700 &#181;s</option>
+                <option value=750>Delay between steps : 750 &#181;s</option>
+                <option value=800>Delay between steps : 800 &#181;s</option>
+                <option value=850>Delay between steps : 850 &#181;s</option>
+                <option value=900>Delay between steps : 900 &#181;s</option>
+                <option value=950>Delay between steps : 950 &#181;s</option>
+                <option value=1000>Delay between steps : 1000 &#181;s</option>
             </select>
 
         </div>
