@@ -16,8 +16,9 @@ import java.util.regex.Pattern;
 public class Communicator implements Runnable{
 
     // public static Coordinates coordinates=new Coordinates();
-    public static String linie="";
-    public static Boolean queueIsEmpty=true;
+    public static volatile Boolean spindleRunning = false;
+    public static volatile String linie="";
+    public static volatile Boolean queueIsEmpty=true;
     public static ConcurrentLinkedQueue<String> queue=new ConcurrentLinkedQueue<String>();
     SerialPort serialPort;
 
@@ -42,17 +43,16 @@ public class Communicator implements Runnable{
         System.out.println("Teoretic am golit bufferul  ! ---------------------------------------------------------");
         String currentLine;
         while(true){
-            if(!queue.isEmpty()){
-                queueIsEmpty=false;
-                System.out.println("Sunt pe cale sa trimit "+queue.peek()+"  ! ---------------------------------------------------------");
+	    queueIsEmpty=queue.isEmpty();
+            if(!queueIsEmpty){
+                System.out.println("Sunt pe cale sa trimit "+queue.size()+" "+queue.peek()+"  ! ---------------------------------------------------------");
                 try {
                     out.write(queue.remove().getBytes());
+		    //queueIsEmpty=queue.isEmpty();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 waitForResponse(br);
-            }else{
-                queueIsEmpty=true;
             }
         }
     }

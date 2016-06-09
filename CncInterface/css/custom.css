@@ -36,11 +36,9 @@
     font-size: 20px;
 }
 .coordinates-section > div {
-    padding: 3px;
-    border: 2px solid #e1e3e4;
+    padding: 3px 5px;
     margin-top: 10px;
     color: #353535;
-
 }
 .title-section {
     font-weight: bold;
@@ -51,6 +49,7 @@
 }
 .zero-machine-section {
     margin-top: 10px;
+	text-align: right;
 }
 .settings-section {
     margin-top: 10px;
@@ -65,12 +64,17 @@
 
 }
 .splindle-settings {
-    margin-top: 30px;
+    margin-top: 20px;
     font-weight: bold;
     font-size: 15px;
     border-bottom: 1px solid;
     padding-bottom: 9px;
     color: #353535;
+}
+.materialLoaderCenter{
+	margin-left: 600px !important;
+	margin-top: 200px !important;
+	display:none;
 }
 #generatedDivs > div > span {
     color: red;
@@ -93,8 +97,9 @@
     background: #e1e3e4;
     margin-top: 10px;
 }
+
 .manual-cnc-control {
-    margin-top: 40px;
+    margin-top: 20px;
     font-weight: bold;
     font-size: 15px;
     border-bottom: 1px solid;
@@ -103,12 +108,9 @@
 }
 .bottom-buttons-section {
     margin-top: 10px;
-    float: right;
+    text-align: right;
 }
-.bottom-buttons-section > button {
-    margin-right: 10px;
-    height: 30px;
-}
+
 .gcodeLineCounter {
     color: #cc0000;
 }
@@ -132,6 +134,16 @@
     position: absolute;
     margin-left: 60px;
 }
+.fix{
+	position:relative;
+	margin-top: 22px;
+}
+
+.fix . select-wrapper{
+	margin-top:10px;
+}
+
+
 @media screen and (max-width: 1400px)  {
     .left-col {
         width: 30%;
@@ -141,4 +153,19 @@
     .right-col {
         width: 70%;
     }
+}
+
+.scaleButtons{
+	margin-left: 40px;
+}
+
+.left-col-settings{
+	float:left;
+	width:49%;
+}
+
+.right-col-settings{
+	float:left;
+	width:49%;
+	margin-left:5px;
 }

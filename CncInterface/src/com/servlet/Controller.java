@@ -14,9 +14,10 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class Controller extends HttpServlet {
-    Boolean spindleRunning = false;
+   
     String receivedFilePath = "";
     Properties properties = null;
+
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (properties == null) {
@@ -37,15 +38,15 @@ public class Controller extends HttpServlet {
                 String speed = request.getParameter("speed");
 
                 if (action.equals("getSpindlePosition")) {
-                    out.print(Communicator.linie + "#" + (spindleRunning ? "on" : "off") + "#" + (Communicator.queueIsEmpty ? "off" : "on"));
+                    out.print(Communicator.linie + "#" + (Communicator.spindleRunning ? "on" : "off") + "#" + (Communicator.queueIsEmpty ? "off" : "on"));
                 } else if (action.equals("toggleSpindle")) {
                     String state = request.getParameter("state");
                     if (state.equals("on")) {
                         Communicator.queue.add("@1\n");
-                        spindleRunning = true;
+                        Communicator.spindleRunning = true;
                     } else {
                         Communicator.queue.add("@0\n");
-                        spindleRunning = false;
+                        Communicator.spindleRunning = false;
                     }
                 } else if (action.equals("alterPosition")) {
                     String axis = request.getParameter("axis");

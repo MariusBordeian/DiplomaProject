@@ -8,6 +8,16 @@
         <servlet-class>com.servlet.Controller</servlet-class>
     </servlet>
 
+  <servlet>
+        <servlet-name>WebSocketServlet</servlet-name>
+        <servlet-class>com.servlet.WSocket</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>WebSocketServlet</servlet-name>
+        <url-pattern>/ws</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>cncinterface</servlet-name>
         <url-pattern>/GUI</url-pattern>
