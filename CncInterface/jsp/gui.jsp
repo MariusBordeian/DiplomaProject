@@ -47,11 +47,11 @@
                         <span>Machine Position</span>
                     </div>
                     <div class="coordinates-section">
-                        <div class="card"><span>X: </span><span id="xCoord"></span>
+                        <div class="card"><span>X: </span><span id="xCoord" style="float: right;"></span>
                         </div>
-                        <div class="card"><span>Y: </span><span id="yCoord"></span>
+                        <div class="card"><span>Y: </span><span id="yCoord" style="float: right;"></span>
                         </div>
-                        <div class="card"><span>Z: </span><span id="zCoord"></span>
+                        <div class="card"><span>Z: </span><span id="zCoord" style="float: right;"></span>
                         </div>
                     </div>
                     <div class="zero-machine-section">
@@ -88,19 +88,11 @@
                         </div>
 						<div class="fix">
             <select id="speed">
-                <option value=300>300 &#181;s</option>
+                <option value=7500>7500 &#181;s</option>
                 <option value=460>460 &#181;s</option>
-                <option value=500>500 &#181;s</option>
-                <option value=600>600 &#181;s</option>
-                <option value=650>650 &#181;s</option>
-                <option value=700>700 &#181;s</option>
-                <option value=750>750 &#181;s</option>
-                <option value=800>800 &#181;s</option>
-                <option value=850>850 &#181;s</option>
-                <option value=900>900 &#181;s</option>
-                <option value=950>950 &#181;s</option>
-                <option value=1000>1000 &#181;s</option>
-							</select>
+                <option value=300>300 &#181;s</option>
+               <!--  <option value=50>50 &#181;s</option> -->
+			</select>
 							<label class="active" >Delay between steps : </label>
 						</div>	
 					</div>
@@ -151,7 +143,7 @@
                     </table>
                     <div class="scaleButtons cf">
                         <button onclick="alterIScale('minus')" class="btn-floating btn-large waves-effect waves-light">-</button>
-                        <input type="number" id="iScale" value=1>
+                        <input type="number" id="iScale" value=1 step="0.5">
                         <button onclick="alterIScale('plus')" class="btn-floating btn-large waves-effect waves-light">+</button>
                     </div>
                 </div>
@@ -252,10 +244,10 @@
             var currentScale = document.getElementById("iScale").value;
             switch (type) {
                 case "plus":
-                    document.getElementById("iScale").value = currentScale - 0 + 1;
+                    document.getElementById("iScale").value = currentScale - 0 + 0.5;
                     break;
                 case "minus":
-                    document.getElementById("iScale").value = currentScale - 0 - 1;
+                    document.getElementById("iScale").value = currentScale - 0 - 0.5;
                     break;
             }
         }
@@ -289,12 +281,13 @@
         }
 
         function zeroMachine() {
+            resetInterface();
             var speed = document.getElementById("speed").value;
             $.ajax({
                 url: "/CNC/GUI?load=whatever&action=zeroMachine&speed=" + speed,
                 method: "get"
             }).done(function(msg) {
-                getSpindlePosition();
+                //getSpindlePosition();
             }).fail(function(msg) {});
         }
 
@@ -644,41 +637,39 @@
 		ws.onmessage = function(message){
 			var msg=message.data;
 			console.log(lastColoredLine+" " +msg);
-
-		lastColoredLine++;
-
-		if (lastCoords.substring(0, lastCoords.lastIndexOf("#")) != msg.substring(0, msg.lastIndexOf("#")) 
-			&& sendToCncStatus == stateType.on) {
-                    
-                    highlightElement(gcodeLines[lastColoredLine+1]);
-                    
+            if(msg!="0.000000#0.000000#19.998750#off#off"){
+        		lastColoredLine++;
+        		if (lastCoords.substring(0, lastCoords.lastIndexOf("#")) != msg.substring(0, msg.lastIndexOf("#")) 
+        			&& sendToCncStatus == stateType.on) {   
+                            highlightElement(gcodeLines[lastColoredLine+1]);  
                 } 
-		
-		lastCoords = msg;
-                
-		var coordinates = "";
-                if (msg.indexOf("#") > -1) {
-                    coordinates = msg.split("#");
-                    if (coordinates.length > 3) {
-                        $("#xCoord").html(coordinates[0]);
-                        $("#yCoord").html(coordinates[1]);
-                        $("#zCoord").html(coordinates[2]);
-                        $("#toggleSpindle").prop('checked', (coordinates[3] == stateType.on));
-                        sendToCncStatus = coordinates[4];
-			if (sendToCncStatus == stateType.off) {
-                   		 lastColoredLine = -1;
-                	}
-                        if (sendToCncStatus == stateType.on) {
-                            $("#generatedDivs *").css("pointer-events", "none");
-                            $("#SendCNCButton").html("Stop CNC");
-                        } else if (sendToCncStatus == stateType.off) {
-                            $("#generatedDivs *").css("pointer-events", "all");
-                            $("#SendCNCButton").html("Start CNC");
-                        }
+    		}else{
+               $("line").attr("stroke", "red")
+            }
+    		lastCoords = msg;
+                    
+    		var coordinates = "";
+            if (msg.indexOf("#") > -1) {
+                coordinates = msg.split("#");
+                if (coordinates.length > 3) {
+                    $("#xCoord").html(coordinates[0]);
+                    $("#yCoord").html(coordinates[1]);
+                    $("#zCoord").html(coordinates[2]);
+                    $("#toggleSpindle").prop('checked', (coordinates[3] == stateType.on));
+                    sendToCncStatus = coordinates[4];
+		            if (sendToCncStatus == stateType.off) {
+               		        lastColoredLine = -1;
+            	    }
+                    if (sendToCncStatus == stateType.on) {
+                        $("#generatedDivs *").css("pointer-events", "none");
+                        $("#SendCNCButton").html("Stop CNC");
+                    } else if (sendToCncStatus == stateType.off) {
+                        $("#generatedDivs *").css("pointer-events", "all");
+                        $("#SendCNCButton").html("Start CNC");
                     }
-
                 }
 
+            }
 		};
 	
 		function connectWs(){
@@ -694,6 +685,17 @@
         function closeConnect(){
             ws.close();
         }
+
+    function setCoords(newX, newY, newZ) {
+            var speed=document.getElementById("speed").value;
+            $.ajax({
+                url: "/CNC/GUI?load=whatever&action=setCoords&newX=" + newX + "&newY=" + newY + "&newZ=" + newZ + "&speed=" + speed,
+                method: "get"
+            }).done(function (msg) {
+            }).fail(function (msg) {
+            });
+        }
+
     </script>
 
 </body>

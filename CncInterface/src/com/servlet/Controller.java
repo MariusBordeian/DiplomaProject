@@ -56,9 +56,9 @@ public class Controller extends HttpServlet {
                     String currZ = request.getParameter("currZ");
                     String incrementScale = request.getParameter("incrementScale");
 
-                    Integer incrementScaleInt;
+                    Float incrementScaleInt;
                     try {
-                        incrementScaleInt = Integer.parseInt(incrementScale);
+                        incrementScaleInt = Float.parseFloat(incrementScale);
                         String commandLine = "";
 
                         if (axis.equals("X")) {
@@ -85,8 +85,8 @@ public class Controller extends HttpServlet {
                         e.printStackTrace();
                     }
                 } else if (action.equals("zeroMachine")) {
-                    Communicator.queue.add(speed + "#" + "0.0\n");
                     Communicator.queue.add(speed + "#" + "0.0#0.0\n");
+                    Communicator.queue.add(speed + "#" + "0.0\n");
                 } else if (action.equals("setCoords")) {
                     String newX = request.getParameter("newX");
                     String newY = request.getParameter("newY");
