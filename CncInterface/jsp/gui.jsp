@@ -352,6 +352,7 @@
             prevHighLithedKey = null;
         }
 
+        var maxSpeed = "300";
         function sendToCNC() {
             if (sendToCncStatus == stateType.off) {
                 var lineElements = document.getElementsByClassName("gcodeLine");
@@ -361,9 +362,9 @@
                 for (var i = 0; i < lineElements.length; i++) {
                     matcher = pattern.exec(lineElements[i].innerHTML);
                     if (!matcher[3]) {
-                        toSendArray.push(speed + "#" + matcher[2] + "\n");
+                        toSendArray.push(((matcher[1] == "G00") ? maxSpeed : speed) + "#" + matcher[2] + "\n");
                     } else {
-                        toSendArray.push(speed + "#" + matcher[2] + "#" + matcher[3] + "\n");
+                        toSendArray.push(((matcher[1] == "G00") ? maxSpeed : speed) + "#" + matcher[2] + "#" + matcher[3] + "\n");
                     }
                 }
 
