@@ -1,4 +1,4 @@
-python gcodetools.py -f output.ngc --tool-diameter 5 --Zsafe 18 --Zsurface 1 --Zdepth 0 --Zstep 1 C:\Users\mbord\Documents\GitHub\DiplomaProject\samples\AC_logo\logo_ac_lines2.svg
+python gcodetools.py -f output.ngc --tool-diameter 1 --Zsafe 2 --Zsurface 0 --Zdepth -0.5 --Zstep 0.5 C:\Users\mbord\Documents\GitHub\DiplomaProject\samples\AC_logo\logo_ac_lines2_ready.svg
 
 --Zsafe     coordonata pe Z pentru G00
 --Zsurface  coordonata suprafetei piesei de decupat

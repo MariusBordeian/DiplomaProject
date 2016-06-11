@@ -247,14 +247,41 @@ void line(float newx, float newy) {
 }
 
 
+int compare(char str1[], char str2[]) {
+	int i = 0;
+	int result = 0;
+	int s1 = strlen(str1);
+	int s2 = strlen(str2);
+
+	if (s1 == s2) {
+		for (i = 0; i < s1; ++i) {
+			if (str1[i] != str2[i]) {
+				result = 1;
+				break;
+			}
+		}
+	} else {
+		result = 1;
+	}
+
+	return result;
+}
+
+
 void handShake() {
+	int i = 0;
 		sprintf(serialCoordinates, "%f#%f#%f\n", getMM(px), getMM(py), getMM(pz));	// as above about the '#' and '\n'
 		while (1) 
 		{
+			for (i = 0; i < 256; ++i) {
+				buffer[i] = 0;
+			}
 			c = TM_USART_Gets(USART1, buffer, 256);
 			if (c) 
 			{
-				break;
+				if ( compare(buffer, "HandShake\n" ) == 0) {
+						break;
+				}
 			}
 			else
 			{

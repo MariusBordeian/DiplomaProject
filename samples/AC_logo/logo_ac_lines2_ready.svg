@@ -9,10 +9,10 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="logo_ac_lines2.svg"
-   viewBox="0 0 377.5 362.5"
-   height="362.5"
-   width="377.5"
+   sodipodi:docname="logo_ac_lines2_ready.svg"
+   viewBox="0 0 637.79529 1062.9921"
+   height="30cm"
+   width="18cm"
    inkscape:version="0.91 r13725"
    version="1.1"
    id="svg2">
@@ -49,15 +49,18 @@
      objecttolerance="10"
      borderopacity="1"
      bordercolor="#666666"
-     pagecolor="#ffffff" />
+     pagecolor="#ffffff"
+     units="cm"
+     inkscape:document-units="cm" />
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 2"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,700.49213)">
     <g
        id="g14805"
-       transform="matrix(-1,0,0,1,390.5156,0)">
+       transform="matrix(-0.29287764,0,0,0.29287764,129.23966,233.73747)">
       <path
          sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
          inkscape:connector-curvature="0"
