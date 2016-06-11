@@ -2,6 +2,8 @@
 <html>
 
 <head>
+	<title>CNC Interface</title>
+	<link rel="icon" href="images/favicon.png">
     <%@ page contentType="text/html;charset=UTF-8" language="java" %>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="js/jquery-1.7.1.min.js"></script>
