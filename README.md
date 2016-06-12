@@ -14,6 +14,7 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 
 ::TODO
  - [ ] Android Wear: "bug-hunt"
+ - [ ] Concurent Client's Access (for more than one client acccessing the Server and Machine)
  - [x] <strike>"Machine Settings" Params for SVG2GCode.py<strike>
  - [x] <strike>SVG2GCode.py from commandline</strike>
  - [x] <strike>redesign interface "/CNC/GUI"</strike>
@@ -28,7 +29,6 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
  - [x] <strike>implement G00 Ploting on the WebGUI [*FIX*]</strike>
  - [x] <strike>initialize (px, py, pz) with last known coords.</strike>
  - [x] <strike>Global pos.Coords on STM.</strike>
- - [ ] <strike>Concurent Client's Access (for more than one client acccessing the Server and Machine)</strike>
  - [ ] <strike>Position tracking using optical sensors from mouse ???</strike>
  - [ ] <strike>Movement feedback (Movement obstruction detected using voltage variation)</strike>
  - [ ] <strike>SVG Paint (lines only, if free time will be available)</strike>
