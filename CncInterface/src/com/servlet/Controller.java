@@ -107,60 +107,49 @@ public class Controller extends HttpServlet {
             Communicator.queue.addAll(Arrays.asList(request.getParameter("data").split(",")));
         } else if (action != null && action.equals("getGCodeFromSVGFile")) {
             String svgFileContent = request.getParameter("data");
-            String zSafe = request.getParameter("zSafe");     //      "Z above all obstacles"
-            String zDepth = request.getParameter("zDepth");       //      "Z depth of cut"
-            String zStep = request.getParameter("zStep");         //      "Z step of cutting"
-            String zSurface = request.getParameter("zSurface");   //      "Z of the surface"
+            String zSafe = request.getParameter("zSafe");     			//      "Z above all obstacles"
+            String zDepth = request.getParameter("zDepth");       		//      "Z depth of cut"
+            String zStep = request.getParameter("zStep");         		//      "Z step of cutting"
+            String zSurface = request.getParameter("zSurface");   		//      "Z of the surface"
             String toolDiameter = request.getParameter("toolDiameter");
-            PrintWriter writer = new PrintWriter(receivedFilePath + "/"+filename+".svg", "UTF-8");
-            writer.print(svgFileContent);
-            writer.close();
 
+            File f1 = new File(receivedFilePath + "/" + filename + ".svg");
+            if (f1.exists() && f1.isFile()) {
+            	f1.delete();
+        	}
 
-            String[] execCommand = new String[] {"python", gcodeTools ,
-                    "-f", filename + ".ngc",
-                    "-d", receivedFilePath ,
-                    "--tool-diameter", toolDiameter,
-                    "--Zsafe", zSafe,
-                    "--Zsurface", zSurface,
-                    "--Zdepth", zDepth,
-                    "--Zstep", zStep,
-                     receivedFilePath + "/" + filename + ".svg",
-                    ">>",receivedFilePath+"/gcodeToolsErrors.log" };
-            String testCmd="python /home/pi/Desktop/DiplomaProject/gcodetools/gcodetools.py -f receivedFile.ngc -d /home/pi/Desktop/SVG2GCode --tool-diameter 5 --Zsafe 30 --Zsurface 3  --Zdepth 1  --Zstep 2 /home/pi/Desktop/SVG2GCode/receivedFile.svg >> /home/pi/Desktop/SVG2GCode/receivedFile.log";
-            /*
-            PrintWriter pipe = new PrintWriter(receivedFilePath + "/svg", "UTF-8");
-            pipe.print(execStr);
-            pipe.close();
-            */
-//            python /home/pi/Desktop/DiplomaProject/gcodetools/gcodetools.py -f receivedFile.ngc -d /home/pi/Desktop/SVG2GCode --tool-diameter 5 --Zsafe 30 --Zsurface 3  --Zdepth 1  --Zstep 2 /home/pi/Desktop/SVG2GCode/receivedFile.svg
-            //Process p = Runtime.getRuntime().exec(execStr);
+        	File f2 = new File(receivedFilePath + "/" + filename + ".ngc");
+            if (f2.exists() && f2.isFile()) {
+            	f2.delete();
+        	}
 
-            ProcessBuilder pp1=new ProcessBuilder("rm -f "+ receivedFilePath + "/"+filename+".ngc > /home/pi/Desktop/SVG2GCode/receivedFile.log");
-            pp1.redirectErrorStream(true);
-            Process p1 =pp1.start();
+        	PrintWriter writer1 = new PrintWriter(receivedFilePath + "/"+filename+".svg", "UTF-8");
+            writer1.print(svgFileContent);															// write received svg to file
+            writer1.close();
 
-            try {
-                p1.waitFor();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            String execCommand = gcodeTools +
+                    " -f " + filename + ".ngc" + 
+                    " -d " + receivedFilePath  + 
+                    " --tool-diameter " + toolDiameter + 
+                    " --Zsafe " + zSafe + 
+                    " --Zsurface " + zSurface + 
+                    " --Zdepth " + zDepth +
+                    " --Zstep " + zStep + 
+                    " " + receivedFilePath + "/" + filename + ".svg" + 
+                    " 2> " + receivedFilePath + "/" + filename + ".log";							// create the gcodetools.py command
+			System.out.println(execCommand);
 
-            ProcessBuilder pp2=new ProcessBuilder(testCmd);
-            pp2.redirectErrorStream(true);
-            Process p2 =pp2.start();
+			PrintWriter writer2 = new PrintWriter(receivedFilePath + "/execCommand", "UTF-8");
+            writer2.print(execCommand);																// write command for gcodetools_listener.py
+            writer2.close();            
+		
+			PrintWriter writer3 = new PrintWriter(receivedFilePath + "/SVGReceived", "UTF-8");		// create "alert" file for gcodetools_listener.py
+            writer3.close();            
 
-            try {
-                p2.waitFor();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            /*
-            File f = new File(receivedFilePath + "/gcode");
-            while (!f.exists() || !f.isFile()) {}
-            f.delete();
-            */
-
+            File d1 = new File(receivedFilePath + "/gcodeDone");
+            while (!d1.exists()) {}
+            d1.delete();
+            
             BufferedReader br;
             StringBuilder gcodeContent = new StringBuilder();
             try {
@@ -181,6 +170,16 @@ public class Controller extends HttpServlet {
             }
 
             response.getWriter().write(gcodeContent.toString());
+
+            File f3 = new File(receivedFilePath + "/execCommand");
+            if (f3.exists() && f3.isFile()) {
+            	f3.delete();
+        	}
+
+            File f4 = new File(receivedFilePath + "/SVGReceived");
+            if (f4.exists() && f4.isFile()) {
+            	f4.delete();
+        	}
         } else if (action != null && action.equals("stopCnc")) {
             Communicator.queue.clear();
         }
