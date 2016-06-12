@@ -13,10 +13,11 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 										 Dezvoltari	: Schimbi capul si cu mici adaptari la *core* - endless possibilities)
 
 ::TODO
- - [ ] "Machine Settings" Params for SVG2GCode.py
- - [ ] SVG2GCode.py from commandline
- - [ ] redesign interface "/CNC/GUI" 
- - [x] Detachable motor wires using couplings
+ - [ ] Android Wear: "bug-hunt"
+ - [x] <strike>"Machine Settings" Params for SVG2GCode.py<strike>
+ - [x] <strike>SVG2GCode.py from commandline</strike>
+ - [x] <strike>redesign interface "/CNC/GUI"</strike>
+ - [x] <strike>Detachable motor wires using couplings</strike>
  - [x] <strike>Single Upload Buttons ::Upload File (*.svg, *.gnc)</strike>
  - [x] <strike>Rename Feed Rate to Machine Speed of movement</strike>
  - [x] <strike>Android App.</strike>
