@@ -1,12 +1,9 @@
 package ro.project.diploma.cncremote;
 
 import android.app.AlertDialog;
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Loader;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,20 +11,20 @@ import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,10 +33,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.w3c.dom.Text;
-
-import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,11 +46,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView coordsY;
     private TextView coordsZ;
     private TextView incrementScaleView;
+    private TextView incrementSpeedView;
     private Button zeroMachine;
     private Switch toggle;
     private StringRequest getSpindleRequest;
-    private Integer incrementScale = 1;
-    private Integer delayBetweenSteps = 460; // minimum working delay!
+    private Double incrementScale = 1.0;
+    private Integer delayBetweenSteps = 300; // minimum working delay!
 
     private float mLastX, mLastY, mLastZ;
     private SensorManager mSensorManager;
@@ -73,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         requestsQueue = Volley.newRequestQueue(context);
 
@@ -89,9 +84,58 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         coordsX = (TextView) findViewById(R.id.text_X);
         coordsY = (TextView) findViewById(R.id.text_Y);
         coordsZ = (TextView) findViewById(R.id.text_Z);
+
         incrementScaleView = (TextView)findViewById(R.id.incrementScale);
         incrementScaleView.setText(""+incrementScale);
-        
+        incrementScaleView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = incrementScaleView.getText().toString();
+                if (str.equals("")) {
+                    incrementScaleView.setText("1.0");
+                    Toast.makeText(context, ";)", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        incrementSpeedView = (TextView)findViewById(R.id.speedScale);
+        incrementSpeedView.setText(""+delayBetweenSteps);
+        incrementSpeedView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = incrementSpeedView.getText().toString();
+                if (!str.equals("")) {
+                    delayBetweenSteps = Integer.parseInt(str);
+                    if (delayBetweenSteps < 50) {
+                        Toast.makeText(context, "WARNING!!! \nHighly unrecommended to set a value lower than 50, \neven for 50 Z-axe can hardly handle it!", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    incrementSpeedView.setText("300");
+                    Toast.makeText(context, ";)", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         zeroMachine = (Button) findViewById(R.id.button_ZeroMachine);
         zeroMachine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        if (!connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
+        if (connManager.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI) {
             Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG).show();
         }
     }
@@ -151,8 +195,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.set_IP:
-                if (!connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
-                    Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG);
+                if (connManager.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI) {
+                    Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG).show();
                 } else {
                     IP = null;
                     getSpindleRequest = null;
@@ -266,17 +310,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void setScale(View v) {
-        incrementScale = Integer.parseInt(incrementScaleView.getText().toString());
-        switch (v.getId()){
-            case R.id.scalePlus:
-                incrementScale++;
-                break;
-            case R.id.scaleMinus:
-                if (incrementScale > 1)
-                    incrementScale--;
-                break;
+        String str = incrementScaleView.getText().toString();
+        if (!str.equals("")) {
+            incrementScale = Double.parseDouble(str);
+            switch (v.getId()) {
+                case R.id.scalePlus:
+                    incrementScale++;
+                    break;
+                case R.id.scaleMinus:
+                    if (incrementScale > 1)
+                        incrementScale--;
+                    break;
+            }
+            incrementScaleView.setText(incrementScale.toString());
         }
-        incrementScaleView.setText(incrementScale.toString());
+    }
+
+    public void setSpeed(View v) {
+        String str = incrementSpeedView.getText().toString();
+        if (!str.equals("")) {
+            delayBetweenSteps = Integer.parseInt(str);
+            switch (v.getId()) {
+                case R.id.speedPlus:
+                    delayBetweenSteps+=10;
+                    break;
+                case R.id.speedMinus:
+                    if (delayBetweenSteps > 60)
+                        delayBetweenSteps-=10;
+                    break;
+            }
+            incrementSpeedView.setText(delayBetweenSteps.toString());
+        }
     }
 
     private void doGet(final String url) {
@@ -348,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             public void run() {
                                 Log.i("Coords\n", "X: " + mLastX + "\nY: " + mLastY + "\nZ: " + mLastZ + "");
                                 if (IP != null) {
-                                    incrementScale = 1;
+                                    incrementScale = 1.0;
                                     incrementScaleView.setText("1");
                                     if (mLastX > NOISE) {
                                         alterPosition(findViewById(R.id.button_Xplus));

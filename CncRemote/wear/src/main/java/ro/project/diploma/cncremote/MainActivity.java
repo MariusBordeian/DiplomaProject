@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     private TextView incrementScaleView;
     private StringRequest getSpindleRequest;
     private Integer incrementScale = 1;
-    private Integer delayBetweenSteps = 460; // minimum working delay!
+    private Integer delayBetweenSteps = 300; // minimum working delay!
 
     private float mLastX, mLastY, mLastZ;
     private SensorManager mSensorManager;
@@ -53,6 +54,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setAmbientEnabled();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         requestsQueue = Volley.newRequestQueue(context);
         connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -163,6 +165,19 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     protected void onPause() {
         super.onPause();
         controlMode(findViewById(R.id.button_manual));
+
+        if (t != null && updateSensorCoords != null) {
+            t.cancel();
+            tt.cancel();
+            tt = null;
+            t.purge();
+            t = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
         if (t != null && updateSensorCoords != null) {
             t.cancel();

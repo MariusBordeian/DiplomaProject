@@ -8,6 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:screenOrientation="portrait"
+    android:keepScreenOn="true"
     tools:context="ro.project.diploma.cncremote.MainActivity" >
 
     <TextView
@@ -97,8 +98,7 @@
         android:longClickable="false"
         android:textStyle="bold"
         android:layout_below="@+id/text_Z"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -161,10 +161,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Increment Scale"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/button_Zplus"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp" />
+        android:id="@+id/incrementTextView"
+        android:layout_below="@+id/button_Zminus"
+        android:layout_alignStart="@id/label_Z"
+        android:paddingTop="20dp"
+        android:paddingLeft="1dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -172,24 +173,24 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="+"
         android:id="@+id/scalePlus"
-        android:layout_alignBaseline="@+id/incrementScale"
-        android:layout_alignStart="@+id/button_Zplus"
         android:textSize="23sp"
         android:textStyle="bold"
         android:padding="10sp"
-        android:onClick="setScale" />
+        android:onClick="setScale"
+        android:layout_alignBottom="@+id/incrementScale"
+        android:layout_toEndOf="@+id/incrementScale" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/incrementScale"
         android:textAlignment="center"
-        android:numeric="integer"
+        android:text="1"
+        android:numeric="decimal"
         android:inputType="numberDecimal"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_alignEnd="@+id/button_Yminus"
-        android:layout_toEndOf="@+id/button_Zminus" />
+        android:layout_below="@+id/incrementTextView"
+        android:layout_alignEnd="@+id/button_Zminus"
+        android:layout_toEndOf="@+id/scaleMinus" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -197,13 +198,62 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="-"
         android:id="@+id/scaleMinus"
-        android:layout_alignTop="@+id/incrementScale"
-        android:layout_alignBaseline="@+id/incrementScale"
-        android:layout_toStartOf="@+id/incrementScale"
         android:textSize="23sp"
         android:textStyle="bold"
         android:padding="10sp"
-        android:onClick="setScale" />
+        android:onClick="setScale"
+        android:layout_alignBottom="@+id/incrementScale"
+        android:layout_toStartOf="@+id/button_Zminus" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Step Delay"
+        android:id="@+id/speedTextView"
+        android:paddingTop="20dp"
+        android:paddingLeft="12dp"
+        android:layout_above="@+id/speedScale"
+        android:layout_toEndOf="@+id/speedMinus"
+        android:layout_alignBottom="@id/incrementTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="+"
+        android:id="@+id/speedPlus"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:padding="10sp"
+        android:onClick="setSpeed"
+        android:layout_alignBottom="@+id/speedScale"
+        android:layout_toEndOf="@+id/speedScale" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/speedScale"
+        android:textAlignment="center"
+        android:text="300"
+        android:numeric="integer"
+        android:inputType="numberDecimal"
+        android:layout_alignBottom="@id/incrementScale"
+        android:layout_alignEnd="@+id/button_Zplus"
+        android:layout_toEndOf="@+id/speedMinus" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="-"
+        android:id="@+id/speedMinus"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:padding="10sp"
+        android:onClick="setSpeed"
+        android:layout_alignBottom="@+id/speedScale"
+        android:layout_toStartOf="@+id/button_Zplus" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -249,4 +299,5 @@
         android:layout_alignBaseline="@+id/button_Xplus"
         android:layout_centerHorizontal="true"
         android:clickable="true" />
+
 </RelativeLayout>
