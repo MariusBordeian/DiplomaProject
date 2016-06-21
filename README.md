@@ -13,8 +13,8 @@ This Repozitory reprezents the work on the Diploma Project for Bachelor's Degree
 										 Dezvoltari	: Schimbi capul si cu mici adaptari la *core* - endless possibilities)
 
 ::TODO
- - [ ] Android Wear: "bug-hunt"
- - [ ] Concurent Client's Access (for more than one client acccessing the Server and Machine)
+ - [x] Android Wear: "bug-hunt"
+ - [x] Concurent Client's Access (for more than one client acccessing the Server and Machine)
  - [x] <strike>"Machine Settings" Params for SVG2GCode.py<strike>
  - [x] <strike>SVG2GCode.py from commandline</strike>
  - [x] <strike>redesign interface "/CNC/GUI"</strike>
