@@ -85,9 +85,16 @@ public class Controller extends HttpServlet {
                         e.printStackTrace();
                     }
                 } else if (action.equals("zeroMachine")) {
+				    String zSafe=request.getParameter("zSafe");
+				    Float zSafeFloat=0.0F;
+				    if(zSafe != null && zSafe.length()>0){
+						zSafeFloat=Float.parseFloat(zSafe);
+				    }
+		    		Communicator.queue.add(speed + "#" + zSafeFloat +"\n");
                     Communicator.queue.add(speed + "#" + "0.0#0.0\n");
-                    Communicator.queue.add(speed + "#" + "0.0\n");
-                } else if (action.equals("setCoords")) {
+                }else if(action.equals("makeHandshake")){
+					Communicator.queue.add("HandShake\n");
+				}else if (action.equals("setCoords")) {
                     String newX = request.getParameter("newX");
                     String newY = request.getParameter("newY");
                     String newZ = request.getParameter("newZ");
@@ -104,7 +111,13 @@ public class Controller extends HttpServlet {
         String gcodeTools = properties.getProperty("gcodeTools");
         String action = request.getParameter("action");
         if (action != null && action.equals("sendToCnc")) {
+            String sId=request.getParameter("id");
+            long id=-1;
+            if(sId!=null && sId.length()!=0){
+                id=Long.parseLong(sId);
+            }
             Communicator.queue.addAll(Arrays.asList(request.getParameter("data").split(",")));
+            Communicator.sessionId=id;
         } else if (action != null && action.equals("getGCodeFromSVGFile")) {
             String svgFileContent = request.getParameter("data");
             String zSafe = request.getParameter("zSafe");     			//      "Z above all obstacles"

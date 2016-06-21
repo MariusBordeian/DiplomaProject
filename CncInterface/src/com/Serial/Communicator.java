@@ -20,6 +20,7 @@ public class Communicator implements Runnable{
     public static volatile String linie="";
     public static volatile Boolean queueIsEmpty=true;
     public static ConcurrentLinkedQueue<String> queue=new ConcurrentLinkedQueue<String>();
+    public static volatile long sessionId=0;
     SerialPort serialPort;
 
     public InputStream in;
@@ -53,7 +54,9 @@ public class Communicator implements Runnable{
                     e.printStackTrace();
                 }
                 waitForResponse(br);
-            }
+            }else {
+				sessionId=0;
+			}
         }
     }
     public void waitForResponse(BufferedReader br){

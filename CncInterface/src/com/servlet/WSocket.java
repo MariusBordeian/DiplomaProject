@@ -21,17 +21,24 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by Andre on 09-Jun-16.
  */
 public class WSocket extends WebSocketServlet {
-//    private static ArrayList<MyMessageInbound> clients = new ArrayList<MyMessageInbound>();
-    private static HashMap<MyMessageInbound,Thread> links=new HashMap<>();
+    //    private static ArrayList<MyMessageInbound> clients = new ArrayList<MyMessageInbound>();
+    private static HashMap<Long,Thread> links=new HashMap<>();
 
 
     @Override
     protected StreamInbound createWebSocketInbound(String s, HttpServletRequest httpServletRequest) {
-        return new MyMessageInbound();
+        String id=httpServletRequest.getParameter("id");
+        //System.out.println(id);
+        return new MyMessageInbound(Long.parseLong(id));
     }
 
     private class MyMessageInbound extends MessageInbound {
         WsOutbound myoutbound;
+        long sessionId=-1;
+
+        public MyMessageInbound(long sessionId) {
+            this.sessionId = sessionId;
+        }
 
         @Override
         public void onOpen(WsOutbound outbound) {
@@ -47,9 +54,10 @@ public class WSocket extends WebSocketServlet {
             Thread t=new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("Connected");
+                    System.out.println(sessionId+" connected.");
                     String oldLine=Communicator.linie + "#" + (Communicator.spindleRunning ? "on" : "off") + "#" + (Communicator.queueIsEmpty ? "off" : "on");
-                    String newLine;
+                    String newLine="";
+                    Boolean sentFlag=false;
                     if(oldLine.length()>0){
                         try {
                             myoutbound.writeTextMessage(CharBuffer.wrap(oldLine));
@@ -58,51 +66,53 @@ public class WSocket extends WebSocketServlet {
                         }
                     }
                     while(true) {
-                        newLine=Communicator.linie+ "#" + (Communicator.spindleRunning ? "on" : "off") + "#" + (Communicator.queueIsEmpty ? "off" : "on");
-                        if(!oldLine.equals(newLine)){
-                            if(newLine.length()>0) {
+                        if( sessionId==Communicator.sessionId || Communicator.sessionId==0) {
+                            newLine = Communicator.linie + "#" + (Communicator.spindleRunning ? "on" : "off") + "#" + (Communicator.queueIsEmpty ? "off" : "on");
+                            if (!oldLine.equals(newLine)) {
+                                if (newLine.length() > 0) {
+                                    try {
+                                        myoutbound.writeTextMessage(CharBuffer.wrap(newLine));
+                                        myoutbound.flush();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                oldLine = newLine;
+
+                            }
+                            sentFlag=false;
+                        }else{
+                            if(!sentFlag){
                                 try {
-                                    myoutbound.writeTextMessage(CharBuffer.wrap(newLine));
-                                    myoutbound.flush();
+                                    myoutbound.writeTextMessage(CharBuffer.wrap("device in use"));
+                                    sentFlag=true;
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             }
-                            oldLine=newLine;
                         }
                     }
                 }
             });
             t.start();
-            links.put(this,t);
+            if(links.containsKey(sessionId)){
+                System.out.println("Already exists :" + sessionId);
+            }else{
+                links.put(sessionId,t);
+            }
 
         }
 
         @Override
         public void onClose(int status) {
-            links.get(this).stop();
-            System.out.println("Close Client.");
-            links.remove(this);
+            links.get(sessionId).stop();
+            System.out.println(sessionId+ " left.");
+            links.remove(this.sessionId);
         }
 
         @Override
         public void onTextMessage(CharBuffer cb) throws IOException {
-            System.out.println("Connected");
-            String oldLine=Communicator.linie;
-            String newLine;
-            if(oldLine.length()>0){
-                myoutbound.writeTextMessage(CharBuffer.wrap(oldLine));
-            }
-            while(true) {
-                newLine=Communicator.linie;
-                if(!oldLine.equals(newLine)){
-                    if(newLine.length()>0) {
-                        myoutbound.writeTextMessage(CharBuffer.wrap(newLine));
-                        myoutbound.flush();
-                    }
-                    oldLine=newLine;
-                }
-            }
+            System.out.println(cb);
         }
 
         @Override
