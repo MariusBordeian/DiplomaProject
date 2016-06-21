@@ -34,16 +34,16 @@
     </div>
     <!-- END LOADER -->
 
-    <!-- TITLE -->
-    <div id="titleCard" class="card-panel light-blue accent-4" style="margin-top: 0; padding: 10px 20px;">
-        <h5><span onclick="hideTitle()" class="cyan-text text-lighten-5" style="cursor:pointer;">CNC Interface</span></h5>
-    </div>
-    <!-- END TITLE -->
-	
-    <div id="applicationContainer">
-        <div class="row">
-            <div class="col s3">
-                <div class="card-panel">
+<!-- TITLE -->
+<div id="titleCard" class="card-panel light-blue accent-4" style="margin-top: 0; padding: 10px 20px;">
+    <h5><span id="titleContent" onclick="hideTitle()" class="cyan-text text-lighten-5" style="cursor:pointer;">CNC Interface (ready to use)</span></h5>
+</div>
+<!-- END TITLE -->
+
+<div id="applicationContainer">
+    <div class="row">
+        <div class="col s3">
+            <div class="card-panel">
 
                     <div class="title-section">
                         <span>Machine Position</span>
@@ -90,6 +90,7 @@
                         </div>
 						<div class="fix">
             <select id="speed">
+		<option value=50>DEBUG</option>
                 <option value=7500>7500 &#181;s</option>
                 <option value=460>460 &#181;s</option>
                 <option value=300>300 &#181;s</option>
@@ -115,58 +116,58 @@
                     <div class="butttons-section cf">
                     </div>
 
-                    <table>
-                        <tr>
-                            <td rowspan="4">
-                                <button onclick="alterPosition('X','minus')" class="waves-effect waves-light btn">X-</button>
-                            </td>
-                            <td>
-                                <button onclick="alterPosition('Z','plus')" class="waves-effect waves-light btn">Z+</button>
-                            </td>
-                            <td rowspan="4">
-                                <button onclick="alterPosition('X','plus')" class="waves-effect waves-light btn">X+</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button onclick="alterPosition('Y','plus')" class="waves-effect waves-light btn">Y+</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button onclick="alterPosition('Y','minus')" class="waves-effect waves-light btn">Y-</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button onclick="alterPosition('Z','minus')" class="waves-effect waves-light btn">Z-</button>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="scaleButtons cf">
-                        <button onclick="alterIScale('minus')" class="btn-floating btn-large waves-effect waves-light">-</button>
-                        <input type="number" id="iScale" value=1 step="0.5">
-                        <button onclick="alterIScale('plus')" class="btn-floating btn-large waves-effect waves-light">+</button>
-                    </div>
+                <table id="manual-controls-container">
+                    <tr>
+                        <td rowspan="4">
+                            <button onclick="alterPosition('X','minus')" class="waves-effect waves-light btn">X-</button>
+                        </td>
+                        <td>
+                            <button onclick="alterPosition('Z','plus')" class="waves-effect waves-light btn">Z+</button>
+                        </td>
+                        <td rowspan="4">
+                            <button onclick="alterPosition('X','plus')" class="waves-effect waves-light btn">X+</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button onclick="alterPosition('Y','plus')" class="waves-effect waves-light btn">Y+</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button onclick="alterPosition('Y','minus')" class="waves-effect waves-light btn">Y-</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button onclick="alterPosition('Z','minus')" class="waves-effect waves-light btn">Z-</button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="scaleButtons cf">
+                    <button onclick="alterIScale('minus')" class="btn-floating btn-large waves-effect waves-light">-</button>
+                    <input type="number" id="iScale" value=1 step="0.5">
+                    <button onclick="alterIScale('plus')" class="btn-floating btn-large waves-effect waves-light">+</button>
                 </div>
             </div>
-            <div class="col s9">
-                <div class="card-panel">
-                    <div class="top-section cf">
-                        <div class="left-section">
-						<div id="materialLoader" class="loader materialLoaderCenter">
-						  <svg class="circular">
-							<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
-						  </svg>
-						</div>
-                            <div class="plotContainer">
-                                <div style="width: 100%;height:550px;overflow:scroll">
-                                    <svg id="plotArea" width="800px" height="550px">
-										<!-- svg goes here -->
-									</svg>
-                                </div>
-                                <div style="width:100%;margin-left: 10px;margin-top: 10px;display: inline-flex;">
-                                    <span style="display: inline-block; line-height: 60px;">Zoom</span>
+        </div>
+        <div class="col s9">
+            <div class="card-panel">
+                <div class="top-section cf">
+                    <div class="left-section">
+                        <div id="materialLoader" class="loader materialLoaderCenter">
+                            <svg class="circular">
+                                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                            </svg>
+                        </div>
+                        <div class="plotContainer">
+                            <div style="width: 100%;height:550px;overflow:scroll">
+                                <svg id="plotArea" width="800px" height="550px">
+                                    <!-- svg goes here -->
+                                </svg>
+                            </div>
+                            <div style="width:100%;margin-left: 10px;margin-top: 10px;display: inline-flex;">
+                                <span style="display: inline-block; line-height: 60px;">Zoom</span>
 
                                     <!-- <div style="width: 80%; margin-left: 20px;" id="slider"></div> -->
                                     <div style="width: 90%; margin-left: 20px;">
@@ -185,74 +186,123 @@
                         </div>
                         <div id="lineCounterContainer">
 
-                        </div>
                     </div>
-                    <div class="bottom-buttons-section">
-                        <!--
-							  <button onclick="plotObjectByGcode()">Plot</button>
-							  <button onclick="startPositionListener()">Get Coordinates</button>
-							  <button onclick="generateDivs()">Generate Divs</button> 
-						-->
-                        <div id="fileDiv"></div>
-                        <button onclick="plotObjectByGcode()" class="waves-effect waves-light btn"><span class="icon-save"></span>Save changes</button>
-                        <button onclick="openFileOption()" class="waves-effect waves-light btn"><span class="icon-upload"></span>Upload File (SVG/GCode)</button>
-                        <button onclick="sendToCNC()" id="SendCNCButton" class="waves-effect waves-light btn"><span class="icon-send"></span>Send to CNC</button>
-                    </div>
+                </div>
+                <div class="bottom-buttons-section">
+                    <!--
+                          <button onclick="plotObjectByGcode()">Plot</button>
+                          <button onclick="startPositionListener()">Get Coordinates</button>
+                          <button onclick="generateDivs()">Generate Divs</button>
+                    -->
+                    <div id="fileDiv"></div>
+                    <button onclick="plotObjectByGcode()" class="waves-effect waves-light btn"><span class="icon-save"></span>Save changes</button>
+                    <button onclick="openFileOption()" class="waves-effect waves-light btn"><span class="icon-upload"></span>Upload File (SVG/GCode)</button>
+                    <button onclick="sendToCNC()" id="SendCNCButton" class="waves-effect waves-light btn"><span class="icon-send"></span>Send to CNC</button>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        var pattern = /^(G00|G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
-        var prevHighLithedKey;
-        var toggleSpindleCounter = 0;
-        var stateType = {
-            off: "off",
-            on: "on"
-        };
-        var sendToCncStatus = stateType.off;
-		var ws ;
-        $(document).ready(function() {
-			// loader 
-			setTimeout(function(){
-				$('body').addClass('loaded');
-			}, 1500);
-			// make select materialized	
-			$("#speed").material_select();
-			// set zoom
-			zoom();
-			
-			/*setTimeout(function(){
-				ws.send("");
-			},1000);*/
-            //startPositionListener();
-        });
-		function zoom(){
-			 $("#plotArea").css("zoom",$("#zoomFactor").val());
-		}
-		function showLoader(){
-			$("#materialLoader").show();
-		}
-		
-		function hideLoader(){
-			$("#materialLoader").hide();
-		}
-		
-		function hideTitle(){
-			 $('#titleCard').slideToggle('slow');
-		}
-		
-        function alterIScale(type) {
-            var currentScale = document.getElementById("iScale").value;
-            switch (type) {
-                case "plus":
-                    document.getElementById("iScale").value = currentScale - 0 + 0.5;
-                    break;
-                case "minus":
-                    document.getElementById("iScale").value = currentScale - 0 - 0.5;
-                    break;
-            }
+</div>
+<script>
+    var pattern = /^(G00|G01)\s(?:X|Z)(-?\d*\.\d*)\s?(?:Y)?(-?\d*\.\d*)?/mi;
+    var prevHighLithedKey;
+    var toggleSpindleCounter = 0;
+    var stateType = {
+        off: "off",
+        on: "on"
+    };
+    var sendToCncStatus = stateType.off;
+    var ws ;
+    var currentTimestamp=new Date().getTime();
+
+    $(document).ready(function() {
+        // loader
+        setTimeout(function(){
+            $('body').addClass('loaded');
+        }, 1500);
+        // make select materialized
+        $("#speed").material_select();
+        // set zoom
+        zoom();
+
+        /*setTimeout(function(){
+         ws.send("");
+         },1000);*/
+        //startPositionListener();
+    });
+
+    function blockInterface(){
+        // change header color and text
+        $("#titleCard").addClass("dev-in-use");
+        $("#titleCard").removeClass("light-blue");
+        $("#titleContent").html("CNC Interface (device in use)");
+
+        // disable zeroMachine
+        $(".zero-machine-section button").prop( "disabled", true );
+        $(".zero-machine-section button").addClass("disabled-element");
+
+        // disable toggleSpindle
+        $("#toggleSpindle").prop( "disabled", true );
+        $("#toggleSpindle").addClass("disabled-element");
+
+        // disable manualControls
+        $("#manual-controls-container button").prop( "disabled", true );
+        $("#manual-controls-container button").addClass("disabled-element");
+
+        // disable Start CNC
+        $("#SendCNCButton").prop( "disabled", true );
+        $("#SendCNCButton").addClass("disabled-element");
+    }
+
+    function unblockInteface(){
+        // change header color and text
+        $("#titleCard").removeClass("dev-in-use");
+        $("#titleCard").addClass("light-blue");
+        $("#titleContent").html("CNC Interface (device ready to use)");
+
+        // enable zeroMachine
+        $(".zero-machine-section button").prop( "disabled", false );
+        $(".zero-machine-section button").removeClass("disabled-element");
+
+        // enable toggleSpindle
+        $("#toggleSpindle").prop( "disabled", false );
+        $("#toggleSpindle").removeClass("disabled-element");
+
+        // enable manualControls
+        $("#manual-controls-container button").prop( "disabled", false );
+        $("#manual-controls-container button").removeClass("disabled-element");
+
+        // enable Start CNC
+        $("#SendCNCButton").prop( "disabled", false );
+        $("#SendCNCButton").removeClass("disabled-element");
+    }
+
+    function zoom(){
+        $("#plotArea").css("zoom",$("#zoomFactor").val());
+    }
+    function showLoader(){
+        $("#materialLoader").show();
+    }
+
+    function hideLoader(){
+        $("#materialLoader").hide();
+    }
+
+    function hideTitle(){
+        $('#titleCard').slideToggle('slow');
+    }
+
+    function alterIScale(type) {
+        var currentScale = document.getElementById("iScale").value;
+        switch (type) {
+            case "plus":
+                document.getElementById("iScale").value = currentScale - 0 + 0.5;
+                break;
+            case "minus":
+                document.getElementById("iScale").value = currentScale - 0 - 0.5;
+                break;
         }
+    }
 
         function manualOverride(axe, dir) {
             var increment = 0;
@@ -285,8 +335,18 @@
         function zeroMachine() {
             resetInterface();
             var speed = document.getElementById("speed").value;
+	    var zSafe = $("#zSafe").val();
             $.ajax({
-                url: "/CNC/GUI?load=whatever&action=zeroMachine&speed=" + speed,
+                url: "/CNC/GUI?load=whatever&action=zeroMachine&speed=" + speed+"&zSafe="+zSafe,
+                method: "get"
+            }).done(function(msg) {
+                //getSpindlePosition();
+            }).fail(function(msg) {});
+        }
+	
+	function makeHandshake() {
+            $.ajax({
+                url: "/CNC/GUI?load=whatever&action=makeHandshake",
                 method: "get"
             }).done(function(msg) {
                 //getSpindlePosition();
@@ -370,29 +430,29 @@
                     }
                 }
 
-                $.ajax({
-                    url: "/CNC/GUI",
-                    type: 'POST',
-                    dataType: "application/json",
-                    data: 'action=sendToCnc&data=' + toSendArray.toString()
-                }).done(function(msg) {
-                    //sendToCncStatus = !sendToCncStatus;
-                }).fail(function(msg) {
-                    //sendToCncStatus=!sendToCncStatus;
-                });
-		sendToCncStatus=stateType.on;
-            } else if (sendToCncStatus == stateType.on) {
-                $.ajax({
-                    url: "/CNC/GUI",
-                    type: 'POST',
-                    dataType: "application/json",
-                    data: 'action=stopCnc'
-                }).done(function(msg) {
-		}).fail(function(msg) {
-		});
-		sendToCncStatus=stateType.off;
-            }
+            $.ajax({
+                url: "/CNC/GUI",
+                type: 'POST',
+                dataType: "application/json",
+                data: 'action=sendToCnc&id='+currentTimestamp+'&data=' + toSendArray.toString()
+            }).done(function(msg) {
+                //sendToCncStatus = !sendToCncStatus;
+            }).fail(function(msg) {
+                //sendToCncStatus=!sendToCncStatus;
+            });
+            sendToCncStatus=stateType.on;
+        } else if (sendToCncStatus == stateType.on) {
+            $.ajax({
+                url: "/CNC/GUI",
+                type: 'POST',
+                dataType: "application/json",
+                data: 'action=stopCnc'
+            }).done(function(msg) {
+            }).fail(function(msg) {
+            });
+            sendToCncStatus=stateType.off;
         }
+    }
 
         function toggleSpindlee() {
             toggleSpindleCounter++;
@@ -632,26 +692,30 @@
             }).fail(function(msg) {});
         }
 		
-		ws = new WebSocket("ws://"+window.location.host+"/CNC/ws");
-		
-		ws.onopen = function(){
-		};
-		
-		ws.onmessage = function(message){
-			var msg=message.data;
-			console.log(lastColoredLine+" " +msg);
+    ws = new WebSocket("ws://"+window.location.host+"/CNC/ws?id="+currentTimestamp);
+
+    ws.onopen = function(){
+        console.log(currentTimestamp);
+    };
+
+    ws.onmessage = function(message){
+        var msg=message.data;
+        //console.log(lastColoredLine+" " +msg);
+        if(msg!="device in use"){
+            unblockInteface();
+            console.log("Device NOT in use");
             if(msg!="0.000000#0.000000#19.998750#off#off"){
-        		lastColoredLine++;
-        		if (lastCoords.substring(0, lastCoords.lastIndexOf("#")) != msg.substring(0, msg.lastIndexOf("#")) 
-        			&& sendToCncStatus == stateType.on) {   
-                            highlightElement(gcodeLines[lastColoredLine+1]);  
-                } 
-    		}else{
-               $("line").attr("stroke", "red")
+                lastColoredLine++;
+                if (lastCoords.substring(0, lastCoords.lastIndexOf("#")) != msg.substring(0, msg.lastIndexOf("#"))
+                        && sendToCncStatus == stateType.on) {
+                    highlightElement(gcodeLines[lastColoredLine+1]);
+                }
+            }else{
+                $("line").attr("stroke", "red")
             }
-    		lastCoords = msg;
-                    
-    		var coordinates = "";
+            lastCoords = msg;
+
+            var coordinates = "";
             if (msg.indexOf("#") > -1) {
                 coordinates = msg.split("#");
                 if (coordinates.length > 3) {
@@ -660,9 +724,9 @@
                     $("#zCoord").html(coordinates[2]);
                     $("#toggleSpindle").prop('checked', (coordinates[3] == stateType.on));
                     sendToCncStatus = coordinates[4];
-		            if (sendToCncStatus == stateType.off) {
-               		        lastColoredLine = -1;
-            	    }
+                    if (sendToCncStatus == stateType.off) {
+                        lastColoredLine = -1;
+                    }
                     if (sendToCncStatus == stateType.on) {
                         $("#generatedDivs *").css("pointer-events", "none");
                         $("#SendCNCButton").html("Stop CNC");
@@ -671,23 +735,19 @@
                         $("#SendCNCButton").html("Start CNC");
                     }
                 }
-
             }
-		};
-	
-		function connectWs(){
-			while(ws.readyState!=1){
-				
-			}
-			ws.send("");
-		}
-	
-         function postToServer(){
-            ws.send("");
+        }else{
+            blockInterface();
+            console.log("Device in use");
         }
-        function closeConnect(){
-            ws.close();
-        }
+    };
+
+    function postToServer(){
+        ws.send("");
+    }
+    function closeConnect(){
+        ws.close();
+    }
 
     function setCoords(newX, newY, newZ) {
             var speed=document.getElementById("speed").value;
