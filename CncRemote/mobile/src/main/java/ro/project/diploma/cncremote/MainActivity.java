@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        if (connManager.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI) {
+        if (connManager.getActiveNetworkInfo() != null && connManager.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI) {
             Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG).show();
         }
     }
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.set_IP:
-                if (connManager.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI) {
+                if (connManager.getActiveNetworkInfo() != null && connManager.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI) {
                     Toast.makeText(context, "Please connect to the network to access the machine via IP Address", Toast.LENGTH_LONG).show();
                 } else {
                     IP = null;

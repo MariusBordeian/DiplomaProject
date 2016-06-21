@@ -27,7 +27,7 @@ import java.util.TimerTask;
 public class MainActivity extends WearableActivity implements SensorEventListener {
     public final Context context = this;
 
-    private static String IP = "http://192.168.1.143:15500";    // demo
+    private final static String IP = "http://192.168.1.143";    // demo
     private RequestQueue requestsQueue;
     private TextView coordsX;
     private TextView coordsY;
@@ -135,7 +135,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                 public void onErrorResponse(VolleyError error) {
                     Log.d("Request : ", IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!");
                     Toast.makeText(context, IP + "/CNC/GUI?load=whatever&action=getSpindlePosition" + " That didn't work!", Toast.LENGTH_SHORT).show();
-                    IP = null;
                     requestsQueue.cancelAll(Request.Priority.NORMAL);
                     Toast.makeText(context, "Force Close and Restart your app!", Toast.LENGTH_SHORT).show();
                 }
@@ -166,12 +165,19 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         super.onPause();
         controlMode(findViewById(R.id.button_manual));
 
-        if (t != null && updateSensorCoords != null) {
+        if (t != null && tt != null) {
             t.cancel();
             tt.cancel();
             tt = null;
             t.purge();
             t = null;
+        }
+        if (timerUpdateSensorCoords != null && updateSensorCoords != null) {
+            timerUpdateSensorCoords.cancel();
+            updateSensorCoords.cancel();
+            updateSensorCoords = null;
+            timerUpdateSensorCoords.purge();
+            timerUpdateSensorCoords = null;
         }
     }
 
@@ -179,12 +185,19 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     protected void onDestroy() {
         super.onDestroy();
 
-        if (t != null && updateSensorCoords != null) {
+        if (t != null && tt != null) {
             t.cancel();
             tt.cancel();
             tt = null;
             t.purge();
             t = null;
+        }
+        if (timerUpdateSensorCoords != null && updateSensorCoords != null) {
+            timerUpdateSensorCoords.cancel();
+            updateSensorCoords.cancel();
+            updateSensorCoords = null;
+            timerUpdateSensorCoords.purge();
+            timerUpdateSensorCoords = null;
         }
     }
 
@@ -208,9 +221,11 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        mLastX = event.values[0];
-        mLastY = event.values[1];
-        mLastZ = event.values[2];
+        if (event != null) {
+            mLastX = event.values[0];
+            mLastY = event.values[1];
+            mLastZ = event.values[2];
+        }
     }
 
     @Override
@@ -219,41 +234,39 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     }
 
     private void updateDisplay() {
-        if (isAmbient()) {
-            coordsX.setTextColor(getResources().getColor(android.R.color.white));
-            coordsY.setTextColor(getResources().getColor(android.R.color.white));
-            coordsZ.setTextColor(getResources().getColor(android.R.color.white));
-        } else {
-            coordsX.setTextColor(getResources().getColor(android.R.color.black));
-            coordsY.setTextColor(getResources().getColor(android.R.color.black));
-            coordsZ.setTextColor(getResources().getColor(android.R.color.black));
-        }
+        if (coordsX != null && coordsY != null && coordsZ != null)
+            if (isAmbient()) {
+                coordsX.setTextColor(getResources().getColor(android.R.color.white));
+                coordsY.setTextColor(getResources().getColor(android.R.color.white));
+                coordsZ.setTextColor(getResources().getColor(android.R.color.white));
+            } else {
+                coordsX.setTextColor(getResources().getColor(android.R.color.black));
+                coordsY.setTextColor(getResources().getColor(android.R.color.black));
+                coordsZ.setTextColor(getResources().getColor(android.R.color.black));
+            }
     }
 
     public void alterPosition(View v) {
-        if (IP != null)
-        {
-            String incrementStr = incrementScaleView.getText().toString();
-            switch (v.getId()) {
-                case R.id.button_Xminus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=X&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Xplus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=X&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Yminus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Y&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Yplus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Y&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Zminus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Z&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-                case R.id.button_Zplus:
-                    doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Z&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
-                    break;
-            }
+        String incrementStr = incrementScaleView.getText().toString();
+        switch (v.getId()) {
+            case R.id.button_Xminus:
+                doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=X&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                break;
+            case R.id.button_Xplus:
+                doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=X&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                break;
+            case R.id.button_Yminus:
+                doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Y&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                break;
+            case R.id.button_Yplus:
+                doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Y&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                break;
+            case R.id.button_Zminus:
+                doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Z&dir=minus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                break;
+            case R.id.button_Zplus:
+                doGet(IP + "/CNC/GUI?load=whatever&action=alterPosition&speed=" + delayBetweenSteps + "&incrementScale=" + incrementStr + "&axis=Z&dir=plus&currX=" + coordsX.getText().toString() + "&currY=" + coordsY.getText().toString() + "&currZ=" + coordsZ.getText().toString());
+                break;
         }
     }
 
@@ -302,7 +315,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     public void controlMode(View v) {
         switch (v.getId()) {
             case R.id.button_manual:
-                mSensorManager.unregisterListener(this);
+                if (mSensorManager != null)
+                    mSensorManager.unregisterListener(this);
 
                 if (timerUpdateSensorCoords != null && updateSensorCoords != null) {
                     timerUpdateSensorCoords.cancel();
@@ -327,47 +341,48 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
                 break;
             case R.id.button_sensors:
-                mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+                if (mSensorManager != null) {
+                    mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
-                timerUpdateSensorCoords = new Timer();
-                updateSensorCoords = new TimerTask() {
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.i("Coords\n", "X: " + mLastX + "\nY: " + mLastY + "\nZ: " + mLastZ + "");
-                                if (IP != null) {
-                                    incrementScale = 1;
-                                    incrementScaleView.setText("1");
-                                    if (mLastX > NOISE) {
-                                        alterPosition(findViewById(R.id.button_Xplus));
-                                    } else if (mLastX < -NOISE) {
-                                        alterPosition(findViewById(R.id.button_Xminus));
-                                    } else if (mLastY > NOISE) {
-                                        alterPosition(findViewById(R.id.button_Yminus));
-                                    } else if (mLastY < -NOISE) {
-                                        alterPosition(findViewById(R.id.button_Yplus));
+                    timerUpdateSensorCoords = new Timer();
+                    updateSensorCoords = new TimerTask() {
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.i("Coords\n", "X: " + mLastX + "\nY: " + mLastY + "\nZ: " + mLastZ + "");
+                                    if (IP != null) {
+                                        incrementScale = 1;
+                                        incrementScaleView.setText("1");
+                                        if (mLastX > NOISE) {
+                                            alterPosition(findViewById(R.id.button_Xplus));
+                                        } else if (mLastX < -NOISE) {
+                                            alterPosition(findViewById(R.id.button_Xminus));
+                                        } else if (mLastY > NOISE) {
+                                            alterPosition(findViewById(R.id.button_Yminus));
+                                        } else if (mLastY < -NOISE) {
+                                            alterPosition(findViewById(R.id.button_Yplus));
+                                        }
                                     }
                                 }
-                            }
-                        });
-                    }
-                };
-                timerUpdateSensorCoords.schedule(updateSensorCoords,0,1000);
+                            });
+                        }
+                    };
+                    timerUpdateSensorCoords.schedule(updateSensorCoords, 0, 1000);
 
-                findViewById(R.id.button_manual).setEnabled(true);
-                findViewById(R.id.button_sensors).setEnabled(false);
+                    findViewById(R.id.button_manual).setEnabled(true);
+                    findViewById(R.id.button_sensors).setEnabled(false);
 
-                findViewById(R.id.button_Xminus).setEnabled(false);
-                findViewById(R.id.button_Xplus).setEnabled(false);
-                findViewById(R.id.button_Yminus).setEnabled(false);
-                findViewById(R.id.button_Yplus).setEnabled(false);
-                findViewById(R.id.button_Zminus).setEnabled(false);
-                findViewById(R.id.button_Zplus).setEnabled(false);
-                findViewById(R.id.button_ZeroMachine).setEnabled(false);
+                    findViewById(R.id.button_Xminus).setEnabled(false);
+                    findViewById(R.id.button_Xplus).setEnabled(false);
+                    findViewById(R.id.button_Yminus).setEnabled(false);
+                    findViewById(R.id.button_Yplus).setEnabled(false);
+                    findViewById(R.id.button_Zminus).setEnabled(false);
+                    findViewById(R.id.button_Zplus).setEnabled(false);
+                    findViewById(R.id.button_ZeroMachine).setEnabled(false);
 
-                findViewById(R.id.incrementScale).setEnabled(false);
-
+                    findViewById(R.id.incrementScale).setEnabled(false);
+                }
                 break;
         }
     }
