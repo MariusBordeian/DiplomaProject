@@ -126,8 +126,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 String str = incrementSpeedView.getText().toString();
                 if (!str.equals("")) {
                     delayBetweenSteps = Integer.parseInt(str);
-                    if (delayBetweenSteps < 50) {
-                        Toast.makeText(context, "WARNING!!! \nHighly unrecommended to set a value lower than 50, \neven for 50 Z-axe can hardly handle it!", Toast.LENGTH_LONG).show();
+                    if (delayBetweenSteps < 60) {
+                        incrementSpeedView.setText("300");
+                        Toast.makeText(context, "sorry, can not set a value lower than 60, \neven for 60 the Z-axe can hardly handle it!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     incrementSpeedView.setText("300");

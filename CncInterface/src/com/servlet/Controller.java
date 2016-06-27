@@ -85,6 +85,7 @@ public class Controller extends HttpServlet {
                         e.printStackTrace();
                     }
                 } else if (action.equals("zeroMachine")) {
+                	speed = 300;
 				    String zSafe=request.getParameter("zSafe");
 				    Float zSafeFloat=0.0F;
 				    if(zSafe != null && zSafe.length()>0){

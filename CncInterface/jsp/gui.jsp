@@ -90,11 +90,12 @@
                         </div>
 						<div class="fix">
             <select id="speed">
-		<option value=50>DEBUG</option>
+				<!-- <option value=60>DEBUG</option> -->
                 <option value=7500>7500 &#181;s</option>
-                <option value=460>460 &#181;s</option>
+                <option value=6500>6500 &#181;s</option>
+                <option value=5500>5500 &#181;s</option>
+                <option value=4500>4500 &#181;s</option>
                 <option value=300>300 &#181;s</option>
-               <!--  <option value=50>50 &#181;s</option> -->
 			</select>
 							<label class="active" >Delay between steps : </label>
 						</div>	
