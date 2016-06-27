@@ -95,6 +95,9 @@
                 <option value=6500>6500 &#181;s</option>
                 <option value=5500>5500 &#181;s</option>
                 <option value=4500>4500 &#181;s</option>
+                <option value=3500>3500 &#181;s</option>
+                <option value=2500>2500 &#181;s</option>
+                <option value=1500>1500 &#181;s</option>
                 <option value=300>300 &#181;s</option>
 			</select>
 							<label class="active" >Delay between steps : </label>
