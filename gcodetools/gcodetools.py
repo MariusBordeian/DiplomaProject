@@ -3577,7 +3577,7 @@ class Gcodetools(inkex.Effect):
 
 		self.OptionParser.add_option("",   "--biarc-tolerance",				action="store", type="float", 		dest="biarc_tolerance", default="1",				help="Tolerance used when calculating biarc interpolation.")
 		self.OptionParser.add_option("",   "--biarc-max-split-depth",		action="store", type="int", 		dest="biarc_max_split_depth", default="4",			help="Defines maximum depth of splitting while approximating using biarcs.")
-		self.OptionParser.add_option("",   "--path-to-gcode-order",			action="store", type="string", 		dest="path_to_gcode_order", default="subpath by subpath",	help="Defines cutting order path by path or layer by layer.")
+		self.OptionParser.add_option("",   "--path-to-gcode-order",			action="store", type="string", 		dest="path_to_gcode_order", default="path by path",	help="Defines cutting order path by path or layer by layer. [ subpath by subpath ] or [ path by path ]")
 		self.OptionParser.add_option("",   "--path-to-gcode-depth-function",action="store", type="string", 		dest="path_to_gcode_depth_function", default="d",	help="Path to gcode depth function.")
 		self.OptionParser.add_option("",   "--path-to-gcode-sort-paths",	action="store", type="inkbool",		dest="path_to_gcode_sort_paths", default=True,		help="Sort paths to reduse rapid distance.")
 		self.OptionParser.add_option("",   "--comment-gcode",				action="store", type="string", 		dest="comment_gcode", default="",					help="Comment Gcode")
