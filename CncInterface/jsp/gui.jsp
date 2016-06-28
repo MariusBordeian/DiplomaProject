@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="zero-machine-section">
-                        <button onclick="zeroMachine()" class="waves-effect waves-teal btn">Zero Machine (G92)</button>
+                        <button onclick="zeroMachine()" class="waves-effect waves-teal btn">Move to Origin (G28)</button>
                     </div>
                     <div class="splindle-settings">
                         <span>Machine Settings</span>
